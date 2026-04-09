@@ -5,205 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DHCM Project Implementation Roadmap</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
-// ════════════════════ GITHUB SYNC ════════════════════
-const GH_FILE = 'roadmap-state.json';
-
-function ghConfig() {
-  return {
-    username: localStorage.getItem('gh_username') || '',
-    repo:     localStorage.getItem('gh_repo')     || 'dhcm-roadmap',
-    token:    localStorage.getItem('gh_token')    || '',
-  };
-}
-
-function openGhModal() {
-  const cfg = ghConfig();
-  document.getElementById('ghUsername').value = cfg.username || 'claudiogualdino';
-  document.getElementById('ghRepo').value     = cfg.repo || 'dhcm-roadmap';
-  document.getElementById('ghToken').value    = cfg.token;
-  document.getElementById('ghModal').classList.add('show');
-}
-
-function closeGhModal() {
-  document.getElementById('ghModal').classList.remove('show');
-}
-
-function saveGhConfig() {
-  const u = document.getElementById('ghUsername').value.trim();
-  const r = document.getElementById('ghRepo').value.trim();
-  const t = document.getElementById('ghToken').value.trim();
-  if (!u || !r || !t) { alert('Preenche todos os campos.'); return; }
-  localStorage.setItem('gh_username', u);
-  localStorage.setItem('gh_repo', r);
-  localStorage.setItem('gh_token', t);
-  closeGhModal();
-  setGhStatus('ok', '✓ Config guardada');
-  setTimeout(() => setGhStatus('hidden', ''), 3000);
-}
-
-async function testGhConnection() {
-  const cfg = ghConfig();
-  const u = document.getElementById('ghUsername').value.trim() || cfg.username;
-  const r = document.getElementById('ghRepo').value.trim()     || cfg.repo;
-  const t = document.getElementById('ghToken').value.trim()    || cfg.token;
-  if (!u || !r || !t) { alert('Preenche todos os campos primeiro.'); return; }
-  const btn = document.getElementById('btnGhTest');
-  btn.textContent = 'A testar…'; btn.disabled = true;
-  try {
-    const res = await fetch(`https://api.github.com/repos/${u}/${r}`, {
-      headers: { Authorization: `token ${t}`, Accept: 'application/vnd.github.v3+json' }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      btn.textContent = '✓ Ligação OK!';
-      btn.style.color = '#3fb950';
-      setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
-    } else {
-      btn.textContent = '✗ Erro ' + res.status;
-      btn.style.color = 'var(--red)';
-      setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
-    }
-  } catch(e) {
-    btn.textContent = '✗ Sem ligação';
-    btn.style.color = 'var(--red)';
-    setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
-  }
-}
-
-function setGhStatus(type, msg) {
-  const el = document.getElementById('ghStatus');
-  el.className = 'gh-status ' + type;
-  el.textContent = msg;
-}
-
-async function githubSave() {
-  const cfg = ghConfig();
-  if (!cfg.username || !cfg.token) { openGhModal(); return; }
-
-  setGhStatus('saving', '↑ A guardar…');
-  document.getElementById('btnGhSave').classList.add('loading');
-
-  const state = {
-    version: 3,
-    savedAt: new Date().toISOString(),
-    params: getParams(),
-    projects: JSON.parse(JSON.stringify(projects)),
-    absences: JSON.parse(JSON.stringify(absences)),
-    scenarios: JSON.parse(JSON.stringify(scenarios)),
-  };
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
-
-  try {
-    // Check if file exists to get SHA (needed for update)
-    const checkRes = await fetch(
-      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
-      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
-    );
-    let sha = undefined;
-    if (checkRes.ok) { const d = await checkRes.json(); sha = d.sha; }
-
-    const body = {
-      message: `roadmap: update ${new Date().toISOString().slice(0,16).replace('T',' ')}`,
-      content,
-      ...(sha ? { sha } : {})
-    };
-
-    const res = await fetch(
-      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
-      {
-        method: 'PUT',
-        headers: {
-          Authorization: `token ${cfg.token}`,
-          Accept: 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      }
-    );
-
-    if (res.ok) {
-      setGhStatus('ok', '✓ Guardado no GitHub');
-      setTimeout(() => setGhStatus('hidden', ''), 4000);
-    } else {
-      const err = await res.json();
-      setGhStatus('error', '✗ Erro: ' + (err.message || res.status));
-    }
-  } catch(e) {
-    setGhStatus('error', '✗ ' + e.message);
-  }
-  document.getElementById('btnGhSave').classList.remove('loading');
-}
-
-async function githubLoad() {
-  const cfg = ghConfig();
-  if (!cfg.username || !cfg.token) { openGhModal(); return; }
-
-  setGhStatus('saving', '↓ A carregar…');
-  document.getElementById('btnGhLoad').classList.add('loading');
-
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
-      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
-    );
-
-    if (!res.ok) {
-      if (res.status === 404) {
-        setGhStatus('error', '✗ Nenhum estado guardado ainda');
-      } else {
-        setGhStatus('error', '✗ Erro ' + res.status);
-      }
-      document.getElementById('btnGhLoad').classList.remove('loading');
-      return;
-    }
-
-    const file = await res.json();
-    const decoded = decodeURIComponent(escape(atob(file.content.replace(/\n/g, ''))));
-    const state = JSON.parse(decoded);
-
-    if (!state.projects || !Array.isArray(state.projects)) {
-      setGhStatus('error', '✗ Ficheiro inválido'); return;
-    }
-
-    projects = state.projects;
-    projects.forEach(p => {
-      p.progress  = p.progress  || 0;
-      p.deps      = p.deps      || [];
-      p.estimated = p.estimated || false;
-    });
-    if (state.absences)  absences  = state.absences;
-    if (state.scenarios) scenarios = state.scenarios;
-    if (state.params) {
-      document.getElementById('ctrlDevs').value  = state.params.devs        || 1.5;
-      document.getElementById('ctrlHours').value = state.params.hoursPerDev || 90;
-      document.getElementById('ctrlWeeks').value = state.params.weeksSprint || 3;
-      document.getElementById('ctrlStart').value = state.params.startDate   || '';
-    }
-    updateScenarioSlots();
-    render();
-
-    const savedDate = state.savedAt ? new Date(state.savedAt).toLocaleString('pt-PT') : '?';
-    setGhStatus('ok', `✓ Carregado · guardado em ${savedDate}`);
-    setTimeout(() => setGhStatus('hidden', ''), 5000);
-  } catch(e) {
-    setGhStatus('error', '✗ ' + e.message);
-  }
-  document.getElementById('btnGhLoad').classList.remove('loading');
-}
-
-// Auto-load from GitHub on page open if config exists
-window.addEventListener('load', () => {
-  // Pre-fill defaults if first time
-  if (!localStorage.getItem('gh_username')) localStorage.setItem('gh_username', 'claudiogualdino');
-  if (!localStorage.getItem('gh_repo'))     localStorage.setItem('gh_repo',     'dhcm-roadmap');
-  const cfg = ghConfig();
-  if (cfg.username && cfg.token) {
-    setTimeout(() => githubLoad(), 800);
-  }
-});
-
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
     --bg-primary: #0f1729; --bg-secondary: #1a2540; --bg-tertiary: #223052;
@@ -1799,6 +1601,206 @@ function handleLoadState(e) {
 ['ctrlDevs','ctrlHours','ctrlWeeks','ctrlStart'].forEach(id=>{document.getElementById(id).addEventListener('change',render);document.getElementById(id).addEventListener('input',()=>{clearTimeout(window._rt);window._rt=setTimeout(render,300)})});
 
 render();
+
+
+// ════════════════════ GITHUB SYNC ════════════════════
+const GH_FILE = 'roadmap-state.json';
+
+function ghConfig() {
+  return {
+    username: localStorage.getItem('gh_username') || '',
+    repo:     localStorage.getItem('gh_repo')     || 'dhcm-roadmap',
+    token:    localStorage.getItem('gh_token')    || '',
+  };
+}
+
+function openGhModal() {
+  const cfg = ghConfig();
+  document.getElementById('ghUsername').value = cfg.username || 'claudiogualdino';
+  document.getElementById('ghRepo').value     = cfg.repo || 'dhcm-roadmap';
+  document.getElementById('ghToken').value    = cfg.token;
+  document.getElementById('ghModal').classList.add('show');
+}
+
+function closeGhModal() {
+  document.getElementById('ghModal').classList.remove('show');
+}
+
+function saveGhConfig() {
+  const u = document.getElementById('ghUsername').value.trim();
+  const r = document.getElementById('ghRepo').value.trim();
+  const t = document.getElementById('ghToken').value.trim();
+  if (!u || !r || !t) { alert('Preenche todos os campos.'); return; }
+  localStorage.setItem('gh_username', u);
+  localStorage.setItem('gh_repo', r);
+  localStorage.setItem('gh_token', t);
+  closeGhModal();
+  setGhStatus('ok', '✓ Config guardada');
+  setTimeout(() => setGhStatus('hidden', ''), 3000);
+}
+
+async function testGhConnection() {
+  const cfg = ghConfig();
+  const u = document.getElementById('ghUsername').value.trim() || cfg.username;
+  const r = document.getElementById('ghRepo').value.trim()     || cfg.repo;
+  const t = document.getElementById('ghToken').value.trim()    || cfg.token;
+  if (!u || !r || !t) { alert('Preenche todos os campos primeiro.'); return; }
+  const btn = document.getElementById('btnGhTest');
+  btn.textContent = 'A testar…'; btn.disabled = true;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${u}/${r}`, {
+      headers: { Authorization: `token ${t}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      btn.textContent = '✓ Ligação OK!';
+      btn.style.color = '#3fb950';
+      setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
+    } else {
+      btn.textContent = '✗ Erro ' + res.status;
+      btn.style.color = 'var(--red)';
+      setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
+    }
+  } catch(e) {
+    btn.textContent = '✗ Sem ligação';
+    btn.style.color = 'var(--red)';
+    setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
+  }
+}
+
+function setGhStatus(type, msg) {
+  const el = document.getElementById('ghStatus');
+  el.className = 'gh-status ' + type;
+  el.textContent = msg;
+}
+
+async function githubSave() {
+  const cfg = ghConfig();
+  if (!cfg.username || !cfg.token) { openGhModal(); return; }
+
+  setGhStatus('saving', '↑ A guardar…');
+  document.getElementById('btnGhSave').classList.add('loading');
+
+  const state = {
+    version: 3,
+    savedAt: new Date().toISOString(),
+    params: getParams(),
+    projects: JSON.parse(JSON.stringify(projects)),
+    absences: JSON.parse(JSON.stringify(absences)),
+    scenarios: JSON.parse(JSON.stringify(scenarios)),
+  };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
+
+  try {
+    // Check if file exists to get SHA (needed for update)
+    const checkRes = await fetch(
+      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
+      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    let sha = undefined;
+    if (checkRes.ok) { const d = await checkRes.json(); sha = d.sha; }
+
+    const body = {
+      message: `roadmap: update ${new Date().toISOString().slice(0,16).replace('T',' ')}`,
+      content,
+      ...(sha ? { sha } : {})
+    };
+
+    const res = await fetch(
+      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${cfg.token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    if (res.ok) {
+      setGhStatus('ok', '✓ Guardado no GitHub');
+      setTimeout(() => setGhStatus('hidden', ''), 4000);
+    } else {
+      const err = await res.json();
+      setGhStatus('error', '✗ Erro: ' + (err.message || res.status));
+    }
+  } catch(e) {
+    setGhStatus('error', '✗ ' + e.message);
+  }
+  document.getElementById('btnGhSave').classList.remove('loading');
+}
+
+async function githubLoad() {
+  const cfg = ghConfig();
+  if (!cfg.username || !cfg.token) { openGhModal(); return; }
+
+  setGhStatus('saving', '↓ A carregar…');
+  document.getElementById('btnGhLoad').classList.add('loading');
+
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
+      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        setGhStatus('error', '✗ Nenhum estado guardado ainda');
+      } else {
+        setGhStatus('error', '✗ Erro ' + res.status);
+      }
+      document.getElementById('btnGhLoad').classList.remove('loading');
+      return;
+    }
+
+    const file = await res.json();
+    const decoded = decodeURIComponent(escape(atob(file.content.replace(/\n/g, ''))));
+    const state = JSON.parse(decoded);
+
+    if (!state.projects || !Array.isArray(state.projects)) {
+      setGhStatus('error', '✗ Ficheiro inválido'); return;
+    }
+
+    projects = state.projects;
+    projects.forEach(p => {
+      p.progress  = p.progress  || 0;
+      p.deps      = p.deps      || [];
+      p.estimated = p.estimated || false;
+    });
+    if (state.absences)  absences  = state.absences;
+    if (state.scenarios) scenarios = state.scenarios;
+    if (state.params) {
+      document.getElementById('ctrlDevs').value  = state.params.devs        || 1.5;
+      document.getElementById('ctrlHours').value = state.params.hoursPerDev || 90;
+      document.getElementById('ctrlWeeks').value = state.params.weeksSprint || 3;
+      document.getElementById('ctrlStart').value = state.params.startDate   || '';
+    }
+    updateScenarioSlots();
+    render();
+
+    const savedDate = state.savedAt ? new Date(state.savedAt).toLocaleString('pt-PT') : '?';
+    setGhStatus('ok', `✓ Carregado · guardado em ${savedDate}`);
+    setTimeout(() => setGhStatus('hidden', ''), 5000);
+  } catch(e) {
+    setGhStatus('error', '✗ ' + e.message);
+  }
+  document.getElementById('btnGhLoad').classList.remove('loading');
+}
+
+// Auto-load from GitHub on page open if config exists
+window.addEventListener('load', () => {
+  // Pre-fill defaults if first time
+  if (!localStorage.getItem('gh_username')) localStorage.setItem('gh_username', 'claudiogualdino');
+  if (!localStorage.getItem('gh_repo'))     localStorage.setItem('gh_repo',     'dhcm-roadmap');
+  const cfg = ghConfig();
+  if (cfg.username && cfg.token) {
+    setTimeout(() => githubLoad(), 800);
+  }
+});
+
+
 </script>
 </body>
 </html>
