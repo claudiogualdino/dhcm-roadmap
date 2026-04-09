@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHCM Project Implementation Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+// ════════════════════ GITHUB SYNC ════════════════════
+const GH_FILE = 'roadmap-state.json';
+
+function ghConfig() {
+  return {
+    username: localStorage.getItem('gh_username') || '',
+    repo:     localStorage.getItem('gh_repo')     || 'dhcm-roadmap',
+    token:    localStorage.getItem('gh_token')    || '',
+  };
+}
+
+function openGhModal() {
+  const cfg = ghConfig();
+  document.getElementById('ghUsername').value = cfg.username;
+  document.getElementById('ghRepo').value     = cfg.repo;
+  document.getElementById('ghToken').value    = cfg.token;
+  document.getElementById('ghModal').classList.add('show');
+}
+
+function closeGhModal() {
+  document.getElementById('ghModal').classList.remove('show');
+}
+
+function saveGhConfig() {
+  const u = document.getElementById('ghUsername').value.trim();
+  const r = document.getElementById('ghRepo').value.trim();
+  const t = document.getElementById('ghToken').value.trim();
+  if (!u || !r || !t) { alert('Preenche todos os campos.'); return; }
+  localStorage.setItem('gh_username', u);
+  localStorage.setItem('gh_repo', r);
+  localStorage.setItem('gh_token', t);
+  closeGhModal();
+  setGhStatus('ok', '✓ Config guardada');
+  setTimeout(() => setGhStatus('hidden', ''), 3000);
+}
+
+async function testGhConnection() {
+  const cfg = ghConfig();
+  const u = document.getElementById('ghUsername').value.trim() || cfg.username;
+  const r = document.getElementById('ghRepo').value.trim()     || cfg.repo;
+  const t = document.getElementById('ghToken').value.trim()    || cfg.token;
+  if (!u || !r || !t) { alert('Preenche todos os campos primeiro.'); return; }
+  const btn = document.getElementById('btnGhTest');
+  btn.textContent = 'A testar…'; btn.disabled = true;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${u}/${r}`, {
+      headers: { Authorization: `token ${t}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      btn.textContent = '✓ Ligação OK!';
+      btn.style.color = '#3fb950';
+      setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
+    } else {
+      btn.textContent = '✗ Erro ' + res.status;
+      btn.style.color = 'var(--red)';
+      setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
+    }
+  } catch(e) {
+    btn.textContent = '✗ Sem ligação';
+    btn.style.color = 'var(--red)';
+    setTimeout(() => { btn.textContent = 'Testar Ligação'; btn.style.color = ''; btn.disabled = false; }, 2500);
+  }
+}
+
+function setGhStatus(type, msg) {
+  const el = document.getElementById('ghStatus');
+  el.className = 'gh-status ' + type;
+  el.textContent = msg;
+}
+
+async function githubSave() {
+  const cfg = ghConfig();
+  if (!cfg.username || !cfg.token) { openGhModal(); return; }
+
+  setGhStatus('saving', '↑ A guardar…');
+  document.getElementById('btnGhSave').classList.add('loading');
+
+  const state = {
+    version: 3,
+    savedAt: new Date().toISOString(),
+    params: getParams(),
+    projects: JSON.parse(JSON.stringify(projects)),
+    absences: JSON.parse(JSON.stringify(absences)),
+    scenarios: JSON.parse(JSON.stringify(scenarios)),
+  };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
+
+  try {
+    // Check if file exists to get SHA (needed for update)
+    const checkRes = await fetch(
+      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
+      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    let sha = undefined;
+    if (checkRes.ok) { const d = await checkRes.json(); sha = d.sha; }
+
+    const body = {
+      message: `roadmap: update ${new Date().toISOString().slice(0,16).replace('T',' ')}`,
+      content,
+      ...(sha ? { sha } : {})
+    };
+
+    const res = await fetch(
+      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${cfg.token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    if (res.ok) {
+      setGhStatus('ok', '✓ Guardado no GitHub');
+      setTimeout(() => setGhStatus('hidden', ''), 4000);
+    } else {
+      const err = await res.json();
+      setGhStatus('error', '✗ Erro: ' + (err.message || res.status));
+    }
+  } catch(e) {
+    setGhStatus('error', '✗ ' + e.message);
+  }
+  document.getElementById('btnGhSave').classList.remove('loading');
+}
+
+async function githubLoad() {
+  const cfg = ghConfig();
+  if (!cfg.username || !cfg.token) { openGhModal(); return; }
+
+  setGhStatus('saving', '↓ A carregar…');
+  document.getElementById('btnGhLoad').classList.add('loading');
+
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
+      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        setGhStatus('error', '✗ Nenhum estado guardado ainda');
+      } else {
+        setGhStatus('error', '✗ Erro ' + res.status);
+      }
+      document.getElementById('btnGhLoad').classList.remove('loading');
+      return;
+    }
+
+    const file = await res.json();
+    const decoded = decodeURIComponent(escape(atob(file.content.replace(/\n/g, ''))));
+    const state = JSON.parse(decoded);
+
+    if (!state.projects || !Array.isArray(state.projects)) {
+      setGhStatus('error', '✗ Ficheiro inválido'); return;
+    }
+
+    projects = state.projects;
+    projects.forEach(p => {
+      p.progress  = p.progress  || 0;
+      p.deps      = p.deps      || [];
+      p.estimated = p.estimated || false;
+    });
+    if (state.absences)  absences  = state.absences;
+    if (state.scenarios) scenarios = state.scenarios;
+    if (state.params) {
+      document.getElementById('ctrlDevs').value  = state.params.devs        || 1.5;
+      document.getElementById('ctrlHours').value = state.params.hoursPerDev || 90;
+      document.getElementById('ctrlWeeks').value = state.params.weeksSprint || 3;
+      document.getElementById('ctrlStart').value = state.params.startDate   || '';
+    }
+    updateScenarioSlots();
+    render();
+
+    const savedDate = state.savedAt ? new Date(state.savedAt).toLocaleString('pt-PT') : '?';
+    setGhStatus('ok', `✓ Carregado · guardado em ${savedDate}`);
+    setTimeout(() => setGhStatus('hidden', ''), 5000);
+  } catch(e) {
+    setGhStatus('error', '✗ ' + e.message);
+  }
+  document.getElementById('btnGhLoad').classList.remove('loading');
+}
+
+// Auto-load from GitHub on page open if config exists
+window.addEventListener('load', () => {
+  const cfg = ghConfig();
+  if (cfg.username && cfg.token) {
+    setTimeout(() => githubLoad(), 800);
+  }
+});
+
+</script>
+<style>
+  :root {
+    --bg-primary: #0f1729; --bg-secondary: #1a2540; --bg-tertiary: #223052;
+    --bg-row: #1e2d4a; --bg-row-hover: #263556;
+    --text-primary: #e8ecf4; --text-secondary: #8899b8; --text-muted: #5a6d8f;
+    --border: #2a3a5c; --green: #2dd4a0; --blue: #3b82f6; --orange: #f59e0b;
+    --red: #ef4444; --purple: #a855f7; --cyan: #06b6d4; --gold: #fbbf24;
+    --pink: #ec4899; --lime: #84cc16;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --radius: 10px; --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+  .dashboard{max-width:1500px;margin:0 auto;padding:24px 32px}
+
+  /* HEADER */
+  .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+  .header-left h1{font-size:24px;font-weight:800;letter-spacing:-0.5px}
+  .header-left .subtitle{font-size:12px;color:var(--text-secondary);margin-top:3px;font-family:var(--font-mono)}
+  .header-right{display:flex;gap:6px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:7px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-secondary);font-family:var(--font-body);font-size:11px;font-weight:600;cursor:pointer;transition:all var(--transition);white-space:nowrap}
+  .btn:hover{background:var(--bg-tertiary);color:var(--text-primary)}
+  .btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .btn-primary:hover{background:#2563eb}
+  .btn-purple{background:var(--purple);color:#fff;border-color:var(--purple)}
+  .btn-purple:hover{background:#9333ea}
+  .btn-orange{background:var(--orange);color:#0f1729;border-color:var(--orange);font-weight:700}
+  .btn-orange:hover{background:#e8930a}
+  .btn svg{width:13px;height:13px}
+  .btn.active{box-shadow:0 0 0 2px rgba(59,130,246,0.5)}
+
+  /* KPI */
+
+  /* KPI ENHANCED */
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  .kpi-card{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;text-align:center;transition:transform var(--transition),box-shadow var(--transition);position:relative;overflow:hidden}
+  .kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.3)}
+  .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+  .kpi-card.kc-green::before{background:var(--green)}
+  .kpi-card.kc-blue::before{background:var(--blue)}
+  .kpi-card.kc-orange::before{background:var(--orange)}
+  .kpi-card.kc-purple::before{background:var(--purple)}
+  .kpi-value{font-size:28px;font-weight:800;font-family:var(--font-mono);line-height:1.2}
+  .kpi-label{font-size:9px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.8px;margin-top:3px;font-weight:600}
+  .kpi-sub{font-size:9px;color:var(--text-muted);margin-top:5px;font-family:var(--font-mono)}
+  .kpi-breakdown{display:flex;justify-content:center;gap:8px;margin-top:7px;flex-wrap:wrap}
+  .kpi-badge{font-size:8px;font-weight:700;font-family:var(--font-mono);padding:2px 7px;border-radius:8px}
+  .kpi-badge.green{background:rgba(45,212,160,0.15);color:var(--green)}
+  .kpi-badge.blue{background:rgba(59,130,246,0.15);color:var(--blue)}
+  .kpi-badge.orange{background:rgba(245,158,11,0.15);color:var(--orange)}
+  .kpi-badge.red{background:rgba(239,68,68,0.15);color:var(--red)}
+  .kpi-badge.muted{background:rgba(100,116,139,0.12);color:var(--text-muted)}
+
+  /* SPRINT LOAD CHART */
+  .sprint-load-section{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px}
+  .sprint-load-section h3{font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px}
+  .sprint-load-chart{display:flex;align-items:flex-end;gap:4px;height:80px;padding:0 4px}
+  .sprint-load-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+  .sprint-load-bar-track{width:100%;flex:1;background:var(--bg-tertiary);border-radius:4px 4px 0 0;position:relative;overflow:hidden;cursor:pointer;transition:filter var(--transition)}
+  .sprint-load-bar-track:hover{filter:brightness(1.15)}
+  .sprint-load-bar-fill{position:absolute;bottom:0;left:0;right:0;border-radius:4px 4px 0 0;transition:height 0.5s cubic-bezier(0.4,0,0.2,1)}
+  .sprint-load-bar-fill.sl-under{background:linear-gradient(180deg,#10b981,#059669)}
+  .sprint-load-bar-fill.sl-near{background:linear-gradient(180deg,#f59e0b,#d97706)}
+  .sprint-load-bar-fill.sl-over{background:linear-gradient(180deg,#ef4444,#dc2626)}
+  .sprint-load-cap-line{position:absolute;left:0;right:0;height:2px;background:rgba(255,255,255,0.2);border-radius:1px}
+  .sprint-load-label{font-size:7.5px;font-family:var(--font-mono);color:var(--text-muted);font-weight:600;white-space:nowrap}
+  .sprint-load-pct{font-size:7px;font-family:var(--font-mono);font-weight:700}
+  .sprint-load-legend{display:flex;gap:12px;margin-top:10px;justify-content:flex-end}
+  .sl-legend-item{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-muted)}
+  .sl-legend-dot{width:8px;height:8px;border-radius:2px}
+
+  /* RISK FLAGS */
+  .risk-flag{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;padding:1px 5px;border-radius:6px;flex-shrink:0;white-space:nowrap}
+  .risk-flag.rf-blocked{background:rgba(239,68,68,0.18);color:var(--red);border:1px solid rgba(239,68,68,0.35)}
+  .risk-flag.rf-estimated{background:rgba(245,158,11,0.15);color:var(--orange);border:1px solid rgba(245,158,11,0.3)}
+  .risk-flag.rf-review{background:rgba(168,85,247,0.15);color:var(--purple);border:1px solid rgba(168,85,247,0.3)}
+  .risk-flag.rf-ok{background:rgba(45,212,160,0.12);color:var(--green);border:1px solid rgba(45,212,160,0.25)}
+
+
+  /* CONTROLS */
+  .controls-panel{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .section-label{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+  .control-group{display:flex;align-items:center;gap:6px}
+  .control-group label{font-size:11px;color:var(--text-secondary);font-weight:500;white-space:nowrap}
+  .control-group input,.control-group select{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-family:var(--font-mono);font-size:11px;padding:5px 8px;width:72px;outline:none;transition:border-color var(--transition)}
+  .control-group input[type="date"]{width:130px}
+  .control-group input:focus,.control-group select:focus{border-color:var(--blue)}
+  .divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+  .filter-pills{display:flex;gap:5px;margin-left:auto}
+  .pill{padding:4px 10px;border-radius:16px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-secondary);transition:all var(--transition);font-family:var(--font-body)}
+  .pill.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .pill:hover:not(.active){background:var(--bg-tertiary)}
+
+  /* COLLAPSIBLE PANELS */
+  .panel{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;display:none}
+  .panel.show{display:block}
+  .panel h3{font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .panel h3 svg{width:15px;height:15px}
+
+  /* ABSENCES */
+  .absence-grid{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .absence-card{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:11px;display:flex;align-items:center;gap:12px;transition:all var(--transition)}
+  .absence-card:hover{border-color:var(--text-muted)}
+  .absence-name{font-weight:700;color:var(--orange);min-width:50px}
+  .absence-dates{color:var(--text-secondary);font-family:var(--font-mono);font-size:10px}
+  .absence-hours{color:var(--text-muted);font-size:10px}
+  .absence-impact{color:var(--red);font-weight:600;font-family:var(--font-mono);font-size:10px}
+  .absence-remove{cursor:pointer;color:var(--text-muted);font-size:14px;line-height:1;transition:color var(--transition)}
+  .absence-remove:hover{color:var(--red)}
+  .absence-form{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;padding:10px;background:var(--bg-tertiary);border-radius:8px;border:1px dashed var(--border)}
+  .absence-form .fg{display:flex;flex-direction:column;gap:3px}
+  .absence-form .fg label{font-size:9px;color:var(--text-muted);text-transform:uppercase;font-weight:600;letter-spacing:0.5px}
+  .absence-form .fg input,.absence-form .fg select{background:var(--bg-primary);border:1px solid var(--border);border-radius:5px;color:var(--text-primary);font-size:11px;padding:5px 8px;font-family:var(--font-mono)}
+  .absence-form .fg input[type="date"]{width:120px}
+  .absence-form .fg input[type="number"]{width:60px}
+  .absence-form .fg input[type="text"]{width:100px}
+
+  /* Sprint capacity indicator for absences */
+  .capacity-absence-marker{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--orange);border-radius:0 0 4px 4px;opacity:0.8}
+
+  /* CAPACITY */
+  .capacity-section{margin-bottom:14px}
+  .capacity-section h3{font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+  .capacity-grid{display:flex;gap:5px}
+  .capacity-bar-wrapper{flex:1;text-align:center}
+  .capacity-bar-track{height:28px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden;position:relative;cursor:pointer}
+  .capacity-bar-track:hover{outline:1px solid var(--text-muted)}
+  .capacity-bar-fill{height:100%;border-radius:4px;transition:width 0.5s ease;position:relative}
+  .capacity-bar-fill.under{background:linear-gradient(90deg,#10b981,#059669)}
+  .capacity-bar-fill.near{background:linear-gradient(90deg,#f59e0b,#d97706)}
+  .capacity-bar-fill.over{background:linear-gradient(90deg,#ef4444,#dc2626)}
+  .capacity-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:var(--font-mono);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
+  .capacity-bar-label{font-size:8px;color:var(--text-muted);margin-top:3px;font-weight:600}
+  .capacity-bar-sublabel{font-size:7px;color:var(--orange);font-weight:600}
+
+  /* GANTT */
+  .gantt-section{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;overflow-x:auto;position:relative}
+  .gantt-table{width:100%;min-width:1000px}
+  .gantt-header-row{display:flex}
+  .gantt-proj-col{min-width:240px;flex-shrink:0;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;padding:4px 0}
+  .gantt-timeline-col{flex:1;display:flex;min-width:800px}
+  .sprint-hdr{flex:1;text-align:center;padding:5px 2px;border-radius:5px;margin:0 1px;font-size:10px;font-weight:700;color:#fff}
+  .sprint-hdr .s-dates{display:block;font-size:7.5px;opacity:0.7;margin-top:1px;font-weight:500}
+  .sprint-hdr .s-cap{display:block;font-size:7px;opacity:0.6;margin-top:0px}
+  .week-row{display:flex;margin:3px 0 2px}
+  .week-cell{flex:1;text-align:center;font-size:7.5px;color:var(--text-muted);font-family:var(--font-mono)}
+
+  .gantt-row{display:flex;align-items:center;min-height:28px;border-bottom:1px solid rgba(42,58,92,0.3);transition:background var(--transition);cursor:grab}
+  .gantt-row:hover{background:rgba(34,48,82,0.3)}
+  .gantt-row.dragging{opacity:0.5}
+  .gantt-row.drag-over{border-top:2px solid var(--blue)}
+  .gantt-row.dep-conflict{background:rgba(239,68,68,0.12)}
+  .proj-info{min-width:240px;flex-shrink:0;display:flex;align-items:center;gap:5px;padding:2px 0;font-size:11px}
+  .drag-handle{color:var(--text-muted);font-size:9px;cursor:grab;opacity:0.3;transition:opacity var(--transition);user-select:none}
+  .gantt-row:hover .drag-handle{opacity:1}
+  .color-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+  .proj-id{font-weight:700;color:var(--text-secondary);font-size:10px;font-family:var(--font-mono);min-width:58px}
+  .proj-name{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:88px}
+  .dep-icon{font-size:9px;cursor:pointer;opacity:0.5;transition:opacity var(--transition)}
+  .dep-icon:hover{opacity:1}
+  .dep-icon.has-deps{color:var(--purple);opacity:0.8}
+  .gantt-progress-pill{display:inline-flex;align-items:center;cursor:pointer;border-radius:8px;padding:1px 5px;font-size:8px;font-weight:700;font-family:var(--font-mono);border:1px solid transparent;transition:all var(--transition);user-select:none;flex-shrink:0;min-width:24px;justify-content:center}
+  .gantt-progress-pill:hover{filter:brightness(1.25);border-color:rgba(255,255,255,0.2);transform:scale(1.05)}
+  .gantt-progress-pill.done{background:rgba(45,212,160,0.18);color:var(--green);border-color:rgba(45,212,160,0.35)}
+  .gantt-progress-pill.in-progress{background:rgba(59,130,246,0.18);color:var(--blue);border-color:rgba(59,130,246,0.35)}
+  .gantt-progress-pill.not-started{background:rgba(100,116,139,0.1);color:var(--text-muted);border-color:rgba(100,116,139,0.2)}
+  .gantt-progress-input{width:36px;background:var(--bg-primary);border:1px solid var(--blue);border-radius:4px;color:var(--text-primary);font-size:9px;font-family:var(--font-mono);font-weight:700;text-align:center;padding:1px 2px;outline:none}
+  .gantt-progress-pill{display:inline-flex;align-items:center;gap:3px;cursor:pointer;border-radius:10px;padding:1px 5px;font-size:8.5px;font-weight:700;font-family:var(--font-mono);border:1px solid transparent;transition:all var(--transition);user-select:none;flex-shrink:0}
+  .gantt-progress-pill:hover{filter:brightness(1.2);border-color:rgba(255,255,255,0.15)}
+  .gantt-progress-pill.done{background:rgba(45,212,160,0.15);color:var(--green);border-color:rgba(45,212,160,0.3)}
+  .gantt-progress-pill.in-progress{background:rgba(59,130,246,0.15);color:var(--blue);border-color:rgba(59,130,246,0.3)}
+  .gantt-progress-pill.not-started{background:rgba(100,116,139,0.12);color:var(--text-muted);border-color:rgba(100,116,139,0.2)}
+  .gantt-progress-input{width:38px;background:var(--bg-primary);border:1px solid var(--blue);border-radius:4px;color:var(--text-primary);font-size:9px;font-family:var(--font-mono);font-weight:700;text-align:center;padding:1px 2px;outline:none}
+  .bar-area{flex:1;position:relative;height:24px;min-width:780px}
+  .today-line{position:absolute;top:0;bottom:0;width:2px;background:var(--red);z-index:10;pointer-events:none}
+  .today-line::before{content:'TODAY';position:absolute;top:-13px;left:-14px;font-size:6.5px;font-weight:800;color:var(--red);font-family:var(--font-mono);letter-spacing:0.5px}
+  .gantt-bar{position:absolute;height:18px;top:3px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:var(--font-mono);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.3);min-width:8px;cursor:pointer;transition:filter var(--transition),transform var(--transition);overflow:hidden}
+  .gantt-bar:hover{filter:brightness(1.15);transform:scaleY(1.2);z-index:20}
+  .bar-progress{position:absolute;left:0;top:0;bottom:0;background:rgba(255,255,255,0.2);border-radius:4px 0 0 4px;pointer-events:none;transition:width 0.4s ease}
+  .bar-remaining{position:absolute;right:0;top:0;bottom:0;background:rgba(0,0,0,0.15);border-radius:0 4px 4px 0;pointer-events:none}
+  .bar-label{position:relative;z-index:2}
+  .grid-line{position:absolute;top:0;bottom:0;width:1px;background:rgba(42,58,92,0.25);pointer-events:none}
+  .dep-svg{position:absolute;top:0;left:240px;right:0;bottom:0;pointer-events:none;z-index:5}
+  .dep-arrow{stroke:var(--purple);stroke-width:1.5;fill:none;opacity:0.6}
+  .dep-arrow-head{fill:var(--purple);opacity:0.6}
+  .dep-arrow.conflict{stroke:var(--red)}
+  .dep-arrow-head.conflict{fill:var(--red)}
+
+  /* DEP EDITOR */
+  .dep-editor{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:4px 0;font-size:11px;display:none}
+  .dep-editor.show{display:block}
+  .dep-editor label{font-size:10px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:4px}
+  .dep-editor select{background:var(--bg-primary);border:1px solid var(--border);border-radius:5px;color:var(--text-primary);font-size:11px;padding:4px 8px;width:100%;font-family:var(--font-mono)}
+  .dep-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+  .dep-tag{background:rgba(168,85,247,0.15);color:var(--purple);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;display:flex;align-items:center;gap:4px}
+  .dep-tag .remove-dep{cursor:pointer;opacity:0.6;font-size:12px}
+  .dep-tag .remove-dep:hover{opacity:1}
+
+  /* TOOLTIP */
+  .tooltip{position:fixed;background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:11px;z-index:1000;pointer-events:none;opacity:0;transition:opacity 0.15s;box-shadow:0 12px 40px rgba(0,0,0,0.5);max-width:300px}
+  .tooltip.visible{opacity:1}
+  .tooltip .tt-title{font-weight:700;font-size:12px;margin-bottom:5px}
+  .tooltip .tt-row{display:flex;justify-content:space-between;gap:14px;padding:2px 0;font-size:10px}
+  .tooltip .tt-label{color:var(--text-secondary)}
+  .tooltip .tt-value{font-weight:600;font-family:var(--font-mono)}
+  .tooltip .tt-progress-bar{height:5px;background:rgba(255,255,255,0.1);border-radius:3px;margin-top:6px;overflow:hidden}
+  .tooltip .tt-progress-fill{height:100%;border-radius:3px;background:var(--green)}
+  .tooltip .tt-deps{margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:10px;color:var(--text-secondary)}
+  .tooltip .tt-deps span{color:var(--purple);font-weight:600}
+
+  /* SCENARIO PANEL */
+  .scenario-slots{display:flex;gap:10px;margin-bottom:10px}
+  .scenario-slot{flex:1;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:all var(--transition)}
+  .scenario-slot:hover{border-color:var(--text-muted)}
+  .scenario-slot.active-slot{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+  .scenario-slot .slot-name{font-size:12px;font-weight:700;margin-bottom:4px}
+  .scenario-slot .slot-meta{font-size:10px;color:var(--text-secondary);font-family:var(--font-mono)}
+  .scenario-slot .slot-empty{font-size:11px;color:var(--text-muted);font-style:italic}
+  .scenario-diff{background:var(--bg-tertiary);border-radius:8px;padding:12px;font-size:11px;display:none}
+  .scenario-diff.show{display:block}
+  .scenario-diff h4{font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:8px}
+  .diff-row{display:flex;justify-content:space-between;padding:4px 8px;border-radius:4px;margin-bottom:2px}
+  .diff-row.better{background:rgba(45,212,160,0.08)}
+  .diff-row.worse{background:rgba(239,68,68,0.08)}
+  .diff-row .diff-label{color:var(--text-secondary)}
+  .diff-row .diff-val{font-family:var(--font-mono);font-weight:600}
+  .diff-row .diff-val.pos{color:var(--green)}
+  .diff-row .diff-val.neg{color:var(--red)}
+  .diff-row .diff-val.neutral{color:var(--text-primary)}
+  .scenario-actions{display:flex;gap:6px;margin-top:10px}
+
+  /* DETAILS TABLE */
+  .details-section{margin-top:8px}
+  .details-section h2{font-size:18px;font-weight:800;margin-bottom:12px}
+  .details-table{width:100%;border-collapse:separate;border-spacing:0 3px}
+  .details-table thead th{font-size:9px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+  .details-table thead th.center{text-align:center}
+  .details-table tbody tr{background:var(--bg-row);transition:background var(--transition)}
+  .details-table tbody tr:hover{background:var(--bg-row-hover)}
+  .details-table tbody td{padding:9px 12px;font-size:11px}
+  .details-table tbody td:first-child{border-radius:7px 0 0 7px}
+  .details-table tbody td:last-child{border-radius:0 7px 7px 0}
+  .details-table .center{text-align:center}
+  .details-table .mono{font-family:var(--font-mono);font-size:10px}
+  .id-cell{display:flex;align-items:center;gap:7px;font-weight:700;font-family:var(--font-mono);font-size:10px}
+  .effort-est{color:var(--gold)}
+  .sprint-single{color:var(--green);font-weight:700}
+  .sprint-multi{color:var(--orange);font-weight:700}
+  .mini-progress{display:flex;align-items:center;gap:6px;justify-content:center}
+  .mini-progress-bar{width:40px;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+  .mini-progress-fill{height:100%;border-radius:3px;transition:width 0.3s}
+  .mini-progress-text{font-size:10px;font-family:var(--font-mono);font-weight:600;min-width:28px;text-align:right}
+  .details-table tfoot td{padding:12px;font-weight:700;font-size:12px;border-top:2px solid var(--border);background:var(--bg-secondary)}
+  .details-table tfoot td:first-child{border-radius:7px 0 0 7px}
+  .details-table tfoot td:last-child{border-radius:0 7px 7px 0}
+
+  .footer{text-align:center;margin-top:20px;padding:14px;font-size:10px;color:var(--text-muted);border-top:1px solid var(--border)}
+
+  /* EDITABLE CELLS */
+  .editable{cursor:pointer;position:relative;transition:background var(--transition);border-radius:4px;padding:2px 4px !important}
+  .editable:hover{background:rgba(59,130,246,0.1)}
+  .editable:hover::after{content:'✎';position:absolute;right:2px;top:2px;font-size:8px;color:var(--text-muted);opacity:0.6}
+  .editable input,.editable textarea{background:var(--bg-tertiary);border:1px solid var(--blue);border-radius:4px;color:var(--text-primary);font-family:var(--font-mono);font-size:10px;padding:3px 6px;outline:none;width:100%}
+  .editable input[type="number"]{width:50px;text-align:center}
+  .editable textarea{font-family:var(--font-body);font-size:10px;resize:none;min-height:28px;line-height:1.4}
+  .notes-cell{font-size:10px;color:var(--text-secondary);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+  .notes-cell:hover{color:var(--text-primary)}
+  .notes-cell.empty{font-style:italic;color:var(--text-muted);font-size:9px}
+
+  /* EXPORT DROPDOWN */
+  .export-dropdown{position:relative}
+  .export-menu{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 32px rgba(0,0,0,0.4);min-width:160px;z-index:100;overflow:hidden}
+  .export-menu.show{display:block}
+  .export-menu button{display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;border:none;background:none;color:var(--text-secondary);font-family:var(--font-body);font-size:11px;font-weight:600;cursor:pointer;transition:all var(--transition);text-align:left}
+  .export-menu button:hover{background:var(--bg-tertiary);color:var(--text-primary)}
+  .export-menu button svg{width:14px;height:14px;flex-shrink:0}
+  .export-menu button+button{border-top:1px solid var(--border)}
+
+  /* IMPORT PANEL */
+  .import-dropzone{border:2px dashed var(--border);border-radius:10px;padding:28px 20px;text-align:center;transition:all var(--transition);cursor:pointer;margin-bottom:12px}
+  .import-dropzone:hover,.import-dropzone.dragover{border-color:var(--blue);background:rgba(59,130,246,0.05)}
+  .import-dropzone svg{width:32px;height:32px;color:var(--text-muted);margin-bottom:8px}
+  .import-dropzone .dz-title{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+  .import-dropzone .dz-sub{font-size:10px;color:var(--text-muted)}
+  .import-preview{background:var(--bg-tertiary);border-radius:8px;padding:12px;margin-top:10px;display:none;max-height:260px;overflow-y:auto}
+  .import-preview.show{display:block}
+  .import-preview h4{font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:8px}
+  .import-preview table{width:100%;border-collapse:collapse;font-size:10px;font-family:var(--font-mono)}
+  .import-preview table th{background:var(--bg-secondary);padding:6px 8px;text-align:left;color:var(--text-secondary);font-weight:600;border-bottom:1px solid var(--border);position:sticky;top:0}
+  .import-preview table td{padding:5px 8px;border-bottom:1px solid rgba(42,58,92,0.3);color:var(--text-primary)}
+  .import-preview table tr:hover td{background:rgba(34,48,82,0.3)}
+  .import-actions{display:flex;gap:8px;margin-top:10px;align-items:center}
+  .import-count{font-size:11px;color:var(--text-secondary);margin-left:auto}
+  .import-format{background:var(--bg-tertiary);border-radius:8px;padding:10px 14px;margin-top:10px;font-size:10px;color:var(--text-muted);line-height:1.6}
+  .import-format code{background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);color:var(--cyan);font-size:9px}
+
+  @media print{
+    body{background:#0f1729 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .controls-panel,.header-right,.drag-handle,.panel,.dep-icon,.dep-editor{display:none !important}
+    .gantt-row{cursor:default}
+  }
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .animate-in{animation:fadeInUp 0.35s ease forwards;opacity:0}
+
+  /* GITHUB INTEGRATION */
+  .gh-btn{background:linear-gradient(135deg,#238636,#1a7f2e);color:#fff;border-color:#238636}
+  .gh-btn:hover{background:linear-gradient(135deg,#2ea043,#238636)}
+  .gh-btn.loading{opacity:0.7;cursor:wait}
+  .gh-status{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-family:var(--font-mono);padding:3px 8px;border-radius:8px;font-weight:700;transition:all 0.3s}
+  .gh-status.ok{background:rgba(35,134,54,0.15);color:#3fb950;border:1px solid rgba(35,134,54,0.35)}
+  .gh-status.error{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.35)}
+  .gh-status.saving{background:rgba(245,158,11,0.15);color:var(--orange);border:1px solid rgba(245,158,11,0.35)}
+  .gh-status.hidden{display:none}
+  .gh-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+  .gh-modal-overlay.show{display:flex}
+  .gh-modal{background:var(--bg-secondary);border:1px solid var(--border);border-radius:14px;padding:28px 32px;width:460px;max-width:95vw;box-shadow:0 24px 60px rgba(0,0,0,0.5)}
+  .gh-modal h2{font-size:16px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .gh-modal .gh-subtitle{font-size:11px;color:var(--text-secondary);margin-bottom:20px}
+  .gh-field{margin-bottom:14px}
+  .gh-field label{display:block;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:5px}
+  .gh-field input{width:100%;background:var(--bg-primary);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text-primary);font-family:var(--font-mono);font-size:11px;outline:none;transition:border-color 0.2s}
+  .gh-field input:focus{border-color:var(--blue)}
+  .gh-field .gh-hint{font-size:9px;color:var(--text-muted);margin-top:4px}
+  .gh-field .gh-hint a{color:var(--blue);text-decoration:none}
+  .gh-modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+  .gh-token-warning{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:10px 12px;font-size:10px;color:var(--orange);margin-bottom:16px;line-height:1.5}
+
+</style>
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- FH BRANDED HEADER -->
+  <div style="display:flex;align-items:center;gap:16px;padding:12px 0 14px;margin-bottom:10px;border-bottom:3px solid #C41E3A">
+    <div style="display:flex;align-items:center;gap:12px">
+      <svg width="36" height="36" viewBox="0 0 36 36"><path d="M18 33c-1.5-1.2-12-10.2-12-19.5C6 7.7 9.7 4 14.5 4c2.4 0 4.5 1.2 5.5 3 1-1.8 3.1-3 5.5-3C30.3 4 34 7.7 34 13.5 34 22.8 23.5 31.8 22 33l-4-0z" fill="#C41E3A"/><circle cx="18" cy="15" r="2" fill="white"/><circle cx="14" cy="13" r="1.5" fill="white" opacity="0.7"/><circle cx="22" cy="13" r="1.5" fill="white" opacity="0.7"/><circle cx="16" cy="18" r="1.2" fill="white" opacity="0.5"/><circle cx="20" cy="18" r="1.2" fill="white" opacity="0.5"/></svg>
+      <div>
+        <div style="font-size:16px;font-weight:800;line-height:1.1;color:var(--text-primary);letter-spacing:-0.3px"><span style="color:var(--text-primary)">Future</span> <span style="color:var(--text-secondary)">healthcare</span></div>
+      </div>
+    </div>
+    <div style="width:1px;height:28px;background:var(--border);margin:0 4px"></div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#C41E3A;letter-spacing:1px;line-height:1.3">LIGAMOS A SAÚDE,</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text-primary);letter-spacing:1.5px;line-height:1.3">PREPARAMOS O FUTURO</div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header animate-in">
+    <div class="header-left">
+      <h1>DHCM Project Implementation Roadmap</h1>
+      <div class="subtitle" id="dateRange"></div>
+    </div>
+    <div class="header-right">
+      <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFileSelect(event)">
+      <input type="file" id="stateInput" accept=".json" style="display:none" onchange="handleLoadState(event)">
+      <button class="btn btn-primary" onclick="togglePanel('importPanel','btnImport')" id="btnImport" title="Import project list from CSV/XLSX">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Import
+      </button>
+      <button class="btn btn-green" onclick="saveState()" title="Save full dashboard state to continue later">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save
+      </button>
+      <button class="btn" onclick="document.getElementById('stateInput').click()" title="Load a previously saved dashboard state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+        Load
+      </button>
+      <span class="gh-status hidden" id="ghStatus"></span>
+      <button class="btn gh-btn" onclick="githubSave()" id="btnGhSave" title="Guardar roadmap no GitHub">
+        <svg height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        ↑ GitHub
+      </button>
+      <button class="btn" onclick="githubLoad()" id="btnGhLoad" title="Carregar roadmap do GitHub" style="border-color:rgba(35,134,54,0.4);color:#3fb950">
+        <svg height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        ↓ GitHub
+      </button>
+      <button class="btn" onclick="openGhModal()" title="Configurar GitHub Sync" style="padding:7px 8px">⚙ GitHub</button>
+      <div class="export-dropdown">
+        <button class="btn" onclick="toggleExportMenu()" id="btnExport" title="Export dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export ▾
+        </button>
+        <div class="export-menu" id="exportMenu">
+          <button onclick="exportCSV();closeExportMenu()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Export as CSV
+          </button>
+          <button onclick="window.print();closeExportMenu()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Export as PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <!-- SPRINT LOAD CHART -->
+  <div class="sprint-load-section animate-in" id="sprintLoadSection" style="animation-delay:0.08s">
+    <h3>Sprint Load Chart</h3>
+    <div class="sprint-load-chart" id="sprintLoadChart"></div>
+    <div class="sprint-load-legend">
+      <div class="sl-legend-item"><div class="sl-legend-dot" style="background:#10b981"></div>Under capacity</div>
+      <div class="sl-legend-item"><div class="sl-legend-dot" style="background:#f59e0b"></div>Near capacity (≥80%)</div>
+      <div class="sl-legend-item"><div class="sl-legend-dot" style="background:#ef4444"></div>Overloaded (≥100%)</div>
+      <div class="sl-legend-item"><div class="sl-legend-dot" style="background:rgba(255,255,255,0.2)"></div>Capacity limit</div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls-panel animate-in" style="animation-delay:0.05s">
+    <span class="section-label">Parameters</span>
+    <div class="control-group"><label>Devs</label><input type="number" id="ctrlDevs" value="1.5" step="0.5" min="0.5" max="10"></div>
+    <div class="control-group"><label>h/Dev</label><input type="number" id="ctrlHours" value="90" step="10" min="10" max="200"></div>
+    <div class="control-group"><label>Weeks</label><select id="ctrlWeeks"><option value="1">1w</option><option value="2">2w</option><option value="3" selected>3w</option><option value="4">4w</option></select></div>
+    <div class="control-group"><label>Start</label><input type="date" id="ctrlStart" value="2026-04-01"></div>
+    <div class="divider"></div>
+    <button class="btn btn-orange" onclick="togglePanel('absencePanel','btnAbsences')" id="btnAbsences" title="Manage developer absences" style="padding:5px 10px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="10" y1="14" x2="14" y2="18"/><line x1="14" y1="14" x2="10" y2="18"/></svg>
+      Absences
+    </button>
+    <button class="btn btn-purple" onclick="togglePanel('scenarioPanel','btnScenarios')" id="btnScenarios" title="Compare scenarios" style="padding:5px 10px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="2" y="3" width="7" height="18" rx="1"/><rect x="15" y="3" width="7" height="18" rx="1"/><path d="M9 12h6"/></svg>
+      Scenarios
+    </button>
+    <div class="divider"></div>
+    <div class="filter-pills">
+      <button class="pill active" data-filter="all" onclick="setFilter('all')">All</button>
+      <button class="pill" data-filter="confirmed" onclick="setFilter('confirmed')">Confirmed</button>
+      <button class="pill" data-filter="estimated" onclick="setFilter('estimated')">Estimated</button>
+    </div>
+  </div>
+
+  <!-- IMPORT PANEL -->
+  <div class="panel" id="importPanel">
+    <h3>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--blue)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Import Project List
+    </h3>
+
+    <!-- FORMAT REFERENCE -->
+    <div style="background:var(--bg-tertiary);border-radius:8px;padding:14px 16px;margin-bottom:12px;border:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:11px;font-weight:700;color:var(--text-primary)">Expected File Format (CSV or XLSX)</span>
+        <button class="btn" onclick="downloadTemplate()" style="padding:4px 10px;font-size:10px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Template
+        </button>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:10px">
+          <thead><tr style="background:var(--bg-secondary)">
+            <th style="padding:6px 10px;text-align:left;color:var(--cyan);border-bottom:1px solid var(--border);font-weight:600">ID</th>
+            <th style="padding:6px 10px;text-align:left;color:var(--cyan);border-bottom:1px solid var(--border);font-weight:600">Project</th>
+            <th style="padding:6px 10px;text-align:left;color:var(--cyan);border-bottom:1px solid var(--border);font-weight:600">Effort (h)</th>
+            <th style="padding:6px 10px;text-align:left;color:var(--cyan);border-bottom:1px solid var(--border);font-weight:600">Estimated</th>
+            <th style="padding:6px 10px;text-align:left;color:var(--cyan);border-bottom:1px solid var(--border);font-weight:600">Progress (%)</th>
+            <th style="padding:6px 10px;text-align:left;color:var(--cyan);border-bottom:1px solid var(--border);font-weight:600">Dependencies</th>
+            <th style="padding:6px 10px;text-align:left;color:var(--cyan);border-bottom:1px solid var(--border);font-weight:600">Notes</th>
+            <th style="padding:6px 10px;text-align:left;color:var(--cyan);border-bottom:1px solid var(--border);font-weight:600">Jira URL</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="padding:4px 10px;color:var(--text-secondary)">DH84</td><td style="padding:4px 10px;color:var(--text-secondary)">Scribe F2</td><td style="padding:4px 10px;color:var(--text-secondary)">32</td><td style="padding:4px 10px;color:var(--text-secondary)">no</td><td style="padding:4px 10px;color:var(--text-secondary)">100</td><td style="padding:4px 10px;color:var(--text-secondary)"></td><td style="padding:4px 10px;color:var(--text-secondary)">Done</td><td style="padding:4px 10px;color:var(--blue)">https://fh.atlassian.net/browse/GDP-xxx</td></tr>
+            <tr><td style="padding:4px 10px;color:var(--text-secondary)">DH84-02</td><td style="padding:4px 10px;color:var(--text-secondary)">Scribe F3</td><td style="padding:4px 10px;color:var(--text-secondary)">69</td><td style="padding:4px 10px;color:var(--text-secondary)">no</td><td style="padding:4px 10px;color:var(--text-secondary)">0</td><td style="padding:4px 10px;color:var(--text-secondary)">DH84</td><td style="padding:4px 10px;color:var(--text-secondary)">Waiting on F2</td><td style="padding:4px 10px;color:var(--text-muted)"></td></tr>
+            <tr><td style="padding:4px 10px;color:var(--text-secondary)">DH66</td><td style="padding:4px 10px;color:var(--text-secondary)">Prescription app</td><td style="padding:4px 10px;color:var(--text-secondary)">160</td><td style="padding:4px 10px;color:var(--gold)">yes</td><td style="padding:4px 10px;color:var(--text-secondary)">0</td><td style="padding:4px 10px;color:var(--text-secondary)"></td><td style="padding:4px 10px;color:var(--text-secondary)">Needs Bluebee API</td><td style="padding:4px 10px;color:var(--text-muted)"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:8px;font-size:9px;color:var(--text-muted);line-height:1.6">
+        <strong style="color:var(--text-secondary)">Required:</strong> <code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);color:var(--green);font-size:9px">ID</code> <code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);color:var(--green);font-size:9px">Project</code> <code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);color:var(--green);font-size:9px">Effort (h)</code>
+        &nbsp;·&nbsp;
+        <strong style="color:var(--text-secondary)">Optional:</strong> <code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);color:var(--text-muted);font-size:9px">Estimated</code> <code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);color:var(--text-muted);font-size:9px">Progress (%)</code> <code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);color:var(--text-muted);font-size:9px">Dependencies</code> <code style="background:var(--bg-primary);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);color:var(--text-muted);font-size:9px">Notes</code><br>
+        Estimated: <code style="background:var(--bg-primary);padding:1px 4px;border-radius:3px;font-family:var(--font-mono);color:var(--text-muted);font-size:9px">yes/no</code> or <code style="background:var(--bg-primary);padding:1px 4px;border-radius:3px;font-family:var(--font-mono);color:var(--text-muted);font-size:9px">true/false</code> &nbsp;·&nbsp; Dependencies: semicolon-separated IDs &nbsp;·&nbsp; Row order = priority &nbsp;·&nbsp; Dates are calculated from capacity
+      </div>
+    </div>
+
+    <!-- DROPZONE -->
+    <div class="import-dropzone" id="dropZone" onclick="document.getElementById('fileInput').click()"
+         ondragover="event.preventDefault();this.classList.add('dragover')"
+         ondragleave="this.classList.remove('dragover')"
+         ondrop="event.preventDefault();this.classList.remove('dragover');handleFileDrop(event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <div class="dz-title">Drop CSV or XLSX file here, or click to browse</div>
+    </div>
+    <div class="import-preview" id="importPreview">
+      <h4 id="importPreviewTitle">Preview</h4>
+      <div id="importPreviewTable"></div>
+      <div class="import-actions">
+        <button class="btn btn-primary" onclick="confirmImport()">Confirm Import</button>
+        <button class="btn" onclick="cancelImport()">Cancel</button>
+        <span class="import-count" id="importCount"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABSENCE PANEL -->
+  <div class="panel" id="absencePanel">
+    <h3>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--orange)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="10" y1="14" x2="14" y2="18"/><line x1="14" y1="14" x2="10" y2="18"/></svg>
+      Developer Absences &amp; Vacations
+      <span style="font-weight:400;font-size:10px;color:var(--text-muted);margin-left:8px">Reduces effective sprint capacity during absence periods</span>
+    </h3>
+    <div class="absence-grid" id="absenceGrid"></div>
+    <div class="absence-form">
+      <div class="fg"><label>Developer</label><input type="text" id="absName" placeholder="e.g. Dev A"></div>
+      <div class="fg"><label>From</label><input type="date" id="absFrom"></div>
+      <div class="fg"><label>To</label><input type="date" id="absTo"></div>
+      <div class="fg"><label>h/day lost</label><input type="number" id="absHours" value="6" min="1" max="12" step="1"></div>
+      <button class="btn btn-orange" onclick="addAbsence()" style="margin-bottom:1px">+ Add Absence</button>
+    </div>
+  </div>
+
+  <!-- SCENARIO PANEL -->
+  <div class="panel" id="scenarioPanel">
+    <h3>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--purple)"><rect x="2" y="3" width="7" height="18" rx="1"/><rect x="15" y="3" width="7" height="18" rx="1"/><path d="M9 12h6"/></svg>
+      Scenario Comparison
+    </h3>
+    <div class="scenario-slots">
+      <div class="scenario-slot" id="slotA" onclick="loadScenario('A')"><div class="slot-name" style="color:var(--cyan)">Scenario A</div><div class="slot-meta" id="slotAMeta"><span class="slot-empty">Click "Save → A" to capture</span></div></div>
+      <div class="scenario-slot" id="slotB" onclick="loadScenario('B')"><div class="slot-name" style="color:var(--orange)">Scenario B</div><div class="slot-meta" id="slotBMeta"><span class="slot-empty">Click "Save → B" to capture</span></div></div>
+    </div>
+    <div class="scenario-actions">
+      <button class="btn" onclick="saveScenario('A')" style="border-color:var(--cyan);color:var(--cyan)">Save → A</button>
+      <button class="btn" onclick="saveScenario('B')" style="border-color:var(--orange);color:var(--orange)">Save → B</button>
+      <button class="btn" onclick="compareScenarios()">Compare A vs B</button>
+      <button class="btn" onclick="clearScenarios()" style="color:var(--red);border-color:var(--red)">Clear</button>
+    </div>
+    <div class="scenario-diff" id="scenarioDiff"></div>
+  </div>
+
+  <!-- CAPACITY -->
+  <div class="capacity-section animate-in" style="animation-delay:0.1s">
+    <h3>Sprint Capacity Utilization</h3>
+    <div class="capacity-grid" id="capacityGrid"></div>
+  </div>
+
+  <!-- GANTT -->
+  <div class="gantt-section animate-in" style="animation-delay:0.15s">
+    <div class="gantt-table" id="ganttChart"></div>
+  </div>
+
+  <!-- DETAILS TABLE -->
+  <div class="details-section animate-in" style="animation-delay:0.2s">
+    <h2>Project Timeline Details</h2>
+    <table class="details-table">
+      <thead><tr>
+        <th style="width:80px">ID</th><th>Project</th>
+        <th class="center" style="width:65px">Effort</th>
+        <th class="center" style="width:70px">Progress</th>
+        <th class="center" style="width:100px">Start</th>
+        <th class="center" style="width:100px">End</th>
+        <th class="center" style="width:90px">Sprint(s)</th>
+        <th class="center" style="width:70px">Duration</th>
+        <th class="center" style="width:70px">Depends</th>
+        <th style="min-width:120px">Notes</th>
+        <th class="center" style="width:60px">Jira</th>
+      </tr></thead>
+      <tbody id="detailsBody"></tbody>
+      <tfoot id="detailsFoot"></tfoot>
+    </table>
+  </div>
+
+
+  <!-- GITHUB MODAL -->
+  <div class="gh-modal-overlay" id="ghModal">
+    <div class="gh-modal">
+      <h2>
+        <svg height="20" viewBox="0 0 16 16" fill="currentColor" style="color:#3fb950"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub Sync
+      </h2>
+      <div class="gh-subtitle">Liga o teu dashboard ao GitHub para guardar e carregar o roadmap de qualquer dispositivo.</div>
+      <div class="gh-token-warning">
+        ⚠️ O token é guardado apenas no teu browser (localStorage). Nunca é enviado a terceiros — só diretamente ao GitHub.
+      </div>
+      <div class="gh-field">
+        <label>GitHub Username</label>
+        <input type="text" id="ghUsername" placeholder="ex: claudio-fh">
+      </div>
+      <div class="gh-field">
+        <label>Repository Name</label>
+        <input type="text" id="ghRepo" placeholder="dhcm-roadmap" value="dhcm-roadmap">
+      </div>
+      <div class="gh-field">
+        <label>Personal Access Token</label>
+        <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+        <div class="gh-hint">
+          Cria em: <a href="https://github.com/settings/tokens/new?scopes=repo&description=dhcm-roadmap" target="_blank">github.com/settings/tokens</a> → scope: <strong>repo</strong>
+        </div>
+      </div>
+      <div class="gh-modal-actions">
+        <button class="btn" onclick="closeGhModal()">Cancelar</button>
+        <button class="btn" onclick="testGhConnection()" id="btnGhTest">Testar Ligação</button>
+        <button class="btn gh-btn" onclick="saveGhConfig()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+          Guardar Config
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FH BRANDED FOOTER -->
+  <div style="margin-top:20px">
+    <div style="height:3px;background:linear-gradient(90deg,#C41E3A 0%,#C41E3A 40%,transparent 100%);border-radius:2px;margin-bottom:12px"></div>
+    <div class="footer" id="footerText" style="border-top:none;padding-top:0"></div>
+    <div style="text-align:center;font-size:9px;color:var(--text-muted);padding-bottom:8px">© 2026 Future Healthcare® — FUTURE HEALTHCARE, SGPS, S.A.</div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// ════════════════════ DATA ════════════════════
+let projects = [
+  {
+    "id": "DH84",
+    "name": "Scribe F1",
+    "effort": 32,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH92",
+    "name": "Video",
+    "effort": 16,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH61",
+    "name": "Pack - Points Reuse",
+    "effort": 48,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH54",
+    "name": "Group Sessions",
+    "effort": 90,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH46",
+    "name": "Healthy Companies",
+    "effort": 40,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH84-02",
+    "name": "Scribe F2 e F3",
+    "effort": 69,
+    "estimated": false,
+    "progress": 0,
+    "deps": [
+      "DH84"
+    ],
+    "notes": ""
+  },
+  {
+    "id": "DH95",
+    "name": "Alergias Alerta",
+    "effort": 40,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH96",
+    "name": "Conteúdos Pack Saúde",
+    "effort": 40,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH45-03",
+    "name": "Nif Optional QC",
+    "effort": 8,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "CREQ-132",
+    "name": "Configured Last Answer",
+    "effort": 6,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH80",
+    "name": "Telefone e Nif Estrangeiros",
+    "effort": 32,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH45-04",
+    "name": "Me1st Pre Registration",
+    "effort": 100,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH66",
+    "name": "Prescription App - Bluebee",
+    "effort": 160,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH99",
+    "name": "Client Portal - Reschedule",
+    "effort": 56,
+    "estimated": false,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH101",
+    "name": "Infermedica Integration",
+    "effort": 200,
+    "estimated": true,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH100",
+    "name": "Apps Integration",
+    "effort": 320,
+    "estimated": true,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH87",
+    "name": "FHvc NPS Survey Client Portal",
+    "effort": 120,
+    "estimated": true,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH102",
+    "name": "Calendar Slots Available CM",
+    "effort": 40,
+    "estimated": true,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH59",
+    "name": "Voucher/Pontos/Descritivo Atos",
+    "effort": 180,
+    "estimated": true,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH93",
+    "name": "CM Wait Time SAP",
+    "effort": 180,
+    "estimated": true,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  },
+  {
+    "id": "DH71",
+    "name": "VBHC",
+    "effort": 360,
+    "notes": "should be reviewed",
+    "estimated": false,
+    "progress": 0,
+    "deps": []
+  },
+  {
+    "id": "DH60-02",
+    "name": "Soft Login 2",
+    "effort": 100,
+    "estimated": true,
+    "progress": 0,
+    "deps": [
+      "DH71"
+    ],
+    "notes": ""
+  },
+  {
+    "id": "DH88",
+    "name": "Manage Card - Client Portal",
+    "effort": 110,
+    "estimated": true,
+    "progress": 0,
+    "deps": [],
+    "notes": ""
+  }
+];
+
+let absences = [];
+
+const BAR_COLORS=['#10b981','#3b82f6','#ef4444','#f59e0b','#a855f7','#06b6d4','#ec4899','#84cc16','#f43f5e','#0ea5e9','#eab308','#f97316','#6366f1','#14b8a6','#fbbf24','#ef4444','#a855f7','#10b981'];
+const SPRINT_BG=['#3b82f6','#6366f1','#8b5cf6','#a855f7','#d946ef','#ec4899','#f43f5e','#f59e0b','#10b981','#06b6d4','#3b82f6','#6366f1','#8b5cf6','#a855f7','#d946ef','#ec4899'];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let currentFilter='all', showDeps=true;
+let scenarios={A:null,B:null};
+
+function fmtDate(d){return`${String(d.getDate()).padStart(2,'0')} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`}
+function fmtDateShort(d){return`${String(d.getDate()).padStart(2,'0')} ${MONTHS[d.getMonth()]}`}
+function truncate(s,n){return s.length>n?s.slice(0,n-1)+'…':s}
+function parseDate(s){return new Date(s+'T00:00:00')}
+function daysBetween(a,b){return(b-a)/(864e5)}
+function getParams(){return{devs:parseFloat(document.getElementById('ctrlDevs').value)||1.5,hoursPerDev:parseInt(document.getElementById('ctrlHours').value)||90,weeksSprint:parseInt(document.getElementById('ctrlWeeks').value)||3,startDate:document.getElementById('ctrlStart').value||'2026-02-03'}}
+
+// ════════════════════ ABSENCES ════════════════════
+function getAbsenceHoursInRange(rangeStart, rangeEnd) {
+  let total = 0;
+  absences.forEach(a => {
+    const aFrom = parseDate(a.from), aTo = parseDate(a.to);
+    const overlapStart = Math.max(rangeStart.getTime(), aFrom.getTime());
+    const overlapEnd = Math.min(rangeEnd.getTime(), aTo.getTime());
+    if (overlapEnd >= overlapStart) {
+      let days = 0;
+      const d = new Date(overlapStart);
+      while (d.getTime() <= overlapEnd) {
+        const dow = d.getDay();
+        if (dow !== 0 && dow !== 6) days++; // weekdays only
+        d.setDate(d.getDate() + 1);
+      }
+      total += days * a.hoursPerDay;
+    }
+  });
+  return total;
+}
+
+function addAbsence(){
+  const name=document.getElementById('absName').value.trim();
+  const from=document.getElementById('absFrom').value;
+  const to=document.getElementById('absTo').value;
+  const hrs=parseInt(document.getElementById('absHours').value)||6;
+  if(!name||!from||!to){alert('Please fill all absence fields');return}
+  if(from>to){alert('End date must be after start date');return}
+  absences.push({name,from,to,hoursPerDay:hrs});
+  document.getElementById('absName').value='';
+  document.getElementById('absFrom').value='';
+  document.getElementById('absTo').value='';
+  document.getElementById('ctrlWeeks').value='3';
+render();
+}
+
+function removeAbsence(idx){absences.splice(idx,1);render()}
+
+function renderAbsences(){
+  const grid=document.getElementById('absenceGrid');
+  if(!absences.length){grid.innerHTML='<span style="font-size:11px;color:var(--text-muted);font-style:italic">No absences configured. Add below to reduce sprint capacity during vacation periods.</span>';return}
+  grid.innerHTML=absences.map((a,i)=>{
+    const from=parseDate(a.from),to=parseDate(a.to);
+    let wdays=0;const d=new Date(from);while(d<=to){if(d.getDay()!==0&&d.getDay()!==6)wdays++;d.setDate(d.getDate()+1)}
+    const totalH=wdays*a.hoursPerDay;
+    return`<div class="absence-card"><span class="absence-name">${a.name}</span><span class="absence-dates">${fmtDateShort(from)} → ${fmtDateShort(to)}</span><span class="absence-hours">${a.hoursPerDay}h/day</span><span class="absence-impact">-${totalH}h (${wdays}d)</span><span class="absence-remove" onclick="removeAbsence(${i})" title="Remove">×</span></div>`;
+  }).join('');
+}
+
+// ════════════════════ COMPUTE ════════════════════
+function compute(){
+  const p=getParams(),baseCapacity=p.devs*p.hoursPerDev,hPerWeek=baseCapacity/p.weeksSprint;
+  const firstMonday=parseDate(p.startDate);
+  const filtered=currentFilter==='all'?projects:currentFilter==='estimated'?projects.filter(x=>x.estimated):projects.filter(x=>!x.estimated);
+  const totalHours=filtered.reduce((s,x)=>s+x.effort,0);
+
+  // Build enough sprints (generous upper bound)
+  const maxSprints=Math.max(20, Math.ceil(totalHours/(baseCapacity*0.3))+2);
+  const sprintStarts=[],sprintEnds=[],sprintEffCap=[];
+  for(let i=0;i<maxSprints;i++){
+    const s=new Date(firstMonday);s.setDate(s.getDate()+i*p.weeksSprint*7);
+    const e=new Date(s);e.setDate(e.getDate()+p.weeksSprint*7-1);
+    sprintStarts.push(s);sprintEnds.push(e);
+    const absH=getAbsenceHoursInRange(s,e);
+    sprintEffCap.push(Math.max(0,baseCapacity-absH));
+  }
+
+  const totalAbsenceHours=absences.reduce((s,a)=>{
+    const from=parseDate(a.from),to=parseDate(a.to);
+    let wdays=0;const d=new Date(from);while(d<=to){if(d.getDay()!==0&&d.getDay()!==6)wdays++;d.setDate(d.getDate()+1)}
+    return s+wdays*a.hoursPerDay;
+  },0);
+
+  // ── Sequential capacity-based scheduling ──
+  // Walk through sprints, fill each to its effective capacity, then overflow.
+  // sprintRemaining[i] = hours still available in sprint i.
+  const sprintRemaining=sprintEffCap.map(c=>c);
+  const sprintHoursUsed=new Array(maxSprints).fill(0);
+  let currentSprintIdx=0; // pointer to first sprint with available capacity
+
+  const scheduled=filtered.map((proj,idx)=>{
+    let hoursLeft=proj.effort;
+
+    // Advance pointer past any fully-consumed sprints
+    while(currentSprintIdx<maxSprints-1 && sprintRemaining[currentSprintIdx]<=0) currentSprintIdx++;
+
+    const startSprintIdx=currentSprintIdx;
+
+    // Calculate start date: position within the sprint based on how much is already used
+    const usedInStartSprint=sprintEffCap[startSprintIdx]-sprintRemaining[startSprintIdx];
+    const fracIntoStartSprint=sprintEffCap[startSprintIdx]>0?usedInStartSprint/sprintEffCap[startSprintIdx]:0;
+    const startDate=new Date(sprintStarts[startSprintIdx].getTime()+fracIntoStartSprint*p.weeksSprint*7*864e5);
+
+    // Consume hours across sprints
+    let si=currentSprintIdx;
+    while(hoursLeft>0 && si<maxSprints){
+      const take=Math.min(hoursLeft, sprintRemaining[si]);
+      if(take>0){
+        sprintRemaining[si]-=take;
+        sprintHoursUsed[si]+=take;
+        hoursLeft-=take;
+      }
+      if(hoursLeft>0) si++;
+    }
+    const endSprintIdx=si<maxSprints?si:maxSprints-1;
+
+    // Calculate end date: position within the end sprint
+    const usedInEndSprint=sprintEffCap[endSprintIdx]-sprintRemaining[endSprintIdx];
+    const fracIntoEndSprint=sprintEffCap[endSprintIdx]>0?usedInEndSprint/sprintEffCap[endSprintIdx]:1;
+    const endDate=new Date(sprintStarts[endSprintIdx].getTime()+fracIntoEndSprint*p.weeksSprint*7*864e5);
+
+    const durationWeeks=Math.max(0.1,daysBetween(startDate,endDate)/7);
+
+    return{
+      ...proj,
+      color:BAR_COLORS[idx%BAR_COLORS.length],
+      startDate, endDate,
+      startDay:daysBetween(firstMonday,startDate),
+      endDay:daysBetween(firstMonday,endDate),
+      durationWeeks,
+      startSprint:startSprintIdx+1,
+      endSprint:endSprintIdx+1,
+    };
+  });
+
+  // Trim display to only used sprints + 1 padding
+  let lastUsedSprint=0;
+  for(let i=0;i<maxSprints;i++){if(sprintHoursUsed[i]>0)lastUsedSprint=i}
+  const numSprintsDisplay=Math.min(maxSprints, lastUsedSprint+2);
+  const totalWeeks=numSprintsDisplay*p.weeksSprint;
+  const totalDays=totalWeeks*7;
+
+  const totalWeeksCalc=scheduled.length>0?daysBetween(scheduled[0].startDate,scheduled[scheduled.length-1].endDate)/7:0;
+  const today=new Date(),todayPct=daysBetween(firstMonday,today)/totalDays;
+  const avgProgress=filtered.length>0?Math.round(filtered.reduce((s,x)=>s+(x.progress||0),0)/filtered.length):0;
+
+  // Dependency conflicts: dep must finish before dependent starts
+  const depConflicts=[];
+  const idToIdx={};scheduled.forEach((s,i)=>idToIdx[s.id]=i);
+  scheduled.forEach((s,i)=>{(s.deps||[]).forEach(depId=>{const di=idToIdx[depId];if(di!==undefined){const depEnd=scheduled[di].endDate;if(depEnd>s.startDate)depConflicts.push({from:depId,to:s.id})}})});
+
+  // Trim arrays for display
+  const dispSprintStarts=sprintStarts.slice(0,numSprintsDisplay);
+  const dispSprintEnds=sprintEnds.slice(0,numSprintsDisplay);
+  const dispSprintEffCap=sprintEffCap.slice(0,numSprintsDisplay);
+  const dispSprintHours=sprintHoursUsed.slice(0,numSprintsDisplay);
+
+  return{scheduled,totalHours,numSprintsDisplay,totalWeeks,totalDays,totalWeeksCalc,baseCapacity,sprintStarts:dispSprintStarts,sprintEnds:dispSprintEnds,sprintEffCap:dispSprintEffCap,sprintHours:dispSprintHours,todayPct,weeksSprint:p.weeksSprint,firstMonday,avgProgress,depConflicts,idToIdx,totalAbsenceHours};
+}
+
+// ════════════════════ RENDER ════════════════════
+function render(){
+  const data=compute();
+  renderAbsences();renderKPIs(data);renderCapacity(data);renderSprintLoad(data);renderGantt(data);renderDetails(data);renderFooter(data);
+  document.getElementById('dateRange').textContent=data.scheduled.length>0?`${fmtDate(data.scheduled[0].startDate)} → ${fmtDate(data.scheduled[data.scheduled.length-1].endDate)}`:'';
+}
+
+function renderKPIs(data){
+  const sched = data.scheduled;
+  const totalH = data.totalHours;
+  const doneH = sched.reduce((s,p)=>s+Math.round((p.effort||0)*(p.progress||0)/100),0);
+  const remainH = totalH - doneH;
+  const donePct = totalH>0?Math.round(doneH/totalH*100):0;
+
+  const notStarted = sched.filter(p=>!p.progress||p.progress===0).length;
+  const inProgress = sched.filter(p=>p.progress>0&&p.progress<100).length;
+  const done = sched.filter(p=>p.progress===100).length;
+
+  const confirmed = sched.filter(p=>!p.estimated).length;
+  const estimated = sched.filter(p=>p.estimated).length;
+  const confirmedH = sched.filter(p=>!p.estimated).reduce((s,p)=>s+(p.effort||0),0);
+  const estimatedH = sched.filter(p=>p.estimated).reduce((s,p)=>s+(p.effort||0),0);
+
+  const numSprints = Math.ceil(data.totalWeeksCalc/data.weeksSprint)||1;
+  const avgLoad = numSprints>0?Math.round(totalH/numSprints):0;
+  const absInfo = data.totalAbsenceHours>0?`<div class="kpi-sub">-${data.totalAbsenceHours}h absences</div>`:'';
+
+  const cards = [
+    {
+      cls:'kc-green', valColor:'var(--green)',
+      value: remainH.toLocaleString()+'h',
+      label: 'Remaining Effort',
+      extra: `<div class="kpi-sub">${doneH}h done · ${donePct}% complete</div>
+              <div class="kpi-breakdown">
+                <span class="kpi-badge green">✓ ${done} done</span>
+                <span class="kpi-badge blue">◑ ${inProgress} active</span>
+                <span class="kpi-badge muted">○ ${notStarted} pending</span>
+              </div>`
+    },
+    {
+      cls:'kc-blue', valColor:'var(--blue)',
+      value: numSprints,
+      label: 'Total Sprints',
+      extra: `<div class="kpi-sub">${Math.round(data.totalWeeksCalc)}w · ${avgLoad}h avg/sprint</div>
+              <div class="kpi-breakdown">
+                <span class="kpi-badge blue">Cap ${Math.round(data.baseCapacity)}h/sprint</span>
+                ${data.totalAbsenceHours>0?`<span class="kpi-badge orange">-${data.totalAbsenceHours}h abs</span>`:''}
+              </div>`
+    },
+    {
+      cls:'kc-orange', valColor: estimated>0?'var(--orange)':'var(--green)',
+      value: estimated>0?estimated+' estimated':confirmed+' confirmed',
+      label: 'Effort Confidence',
+      extra: `<div class="kpi-sub">${estimatedH}h estimated · ${confirmedH}h confirmed</div>
+              <div class="kpi-breakdown">
+                <span class="kpi-badge green">✓ ${confirmed} confirmed</span>
+                ${estimated>0?`<span class="kpi-badge orange">~ ${estimated} estimated</span>`:''}
+              </div>`
+    },
+    {
+      cls:'kc-purple', valColor: data.avgProgress>=50?'var(--green)':data.avgProgress>0?'var(--orange)':'var(--text-muted)',
+      value: data.avgProgress+'%',
+      label: 'Avg Progress',
+      extra: `<div class="kpi-sub">${sched.length} projects total</div>
+              <div class="kpi-breakdown">
+                <span class="kpi-badge green">✓ ${done}</span>
+                <span class="kpi-badge blue">◑ ${inProgress}</span>
+                <span class="kpi-badge muted">○ ${notStarted}</span>
+              </div>`
+    }
+  ];
+
+  document.getElementById('kpiRow').innerHTML = cards.map(c=>`
+    <div class="kpi-card ${c.cls}">
+      <div class="kpi-value" style="color:${c.valColor}">${c.value}</div>
+      <div class="kpi-label">${c.label}</div>
+      ${c.extra||''}
+    </div>`).join('');
+}
+
+function renderCapacity(data){
+  const grid=document.getElementById('capacityGrid');grid.innerHTML='';
+  for(let i=0;i<data.numSprintsDisplay;i++){
+    const used=data.sprintHours[i]||0;
+    const effCap=data.sprintEffCap[i];
+    const pct=effCap>0?Math.round((used/effCap)*100):0;
+    const cls=pct>=100?'over':pct>=80?'near':'under';
+    const hasAbsence=effCap<data.baseCapacity;
+    const absMarker=hasAbsence?`<div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--orange);border-radius:0 0 4px 4px;opacity:0.8"></div>`:'';
+    const capLabel=hasAbsence?`<div class="capacity-bar-sublabel">${Math.round(effCap)}h eff</div>`:'';
+    grid.innerHTML+=`<div class="capacity-bar-wrapper"><div class="capacity-bar-track" title="Sprint ${i+1}: ${Math.round(used)}h / ${Math.round(effCap)}h effective (${pct}%)${hasAbsence?' — reduced by absences':''}"><div class="capacity-bar-fill ${cls}" style="width:${Math.min(pct,100)}%"><span class="capacity-pct">${pct>12?pct+'%':''}</span></div>${absMarker}</div><div class="capacity-bar-label">S${i+1}</div>${capLabel}</div>`;
+  }
+}
+
+function renderSprintLoad(data){
+  const chart = document.getElementById('sprintLoadChart');
+  if(!chart) return;
+  const maxH = Math.max(...data.sprintHours.map((h,i)=>Math.max(h, data.sprintEffCap[i]||1)), 1);
+  let html = '';
+  for(let i=0;i<data.numSprintsDisplay;i++){
+    const used = data.sprintHours[i]||0;
+    const effCap = data.sprintEffCap[i]||data.baseCapacity;
+    const pct = effCap>0?Math.min(Math.round((used/effCap)*100),120):0;
+    const cls = pct>=100?'sl-over':pct>=80?'sl-near':'sl-under';
+    const fillH = Math.round((used/maxH)*100);
+    const capLineH = Math.round((effCap/maxH)*100);
+    const pctColor = pct>=100?'var(--red)':pct>=80?'var(--orange)':'var(--green)';
+    const hasAbsence = effCap < data.baseCapacity;
+    html += `<div class="sprint-load-bar-wrap" title="Sprint ${i+1}: ${Math.round(used)}h / ${Math.round(effCap)}h (${pct}%)${hasAbsence?' · reduced by absences':''}">
+      <div class="sprint-load-pct" style="color:${pctColor}">${pct}%</div>
+      <div class="sprint-load-bar-track">
+        <div class="sprint-load-bar-fill ${cls}" style="height:${fillH}%"></div>
+        <div class="sprint-load-cap-line" style="bottom:${capLineH}%" title="Capacity: ${Math.round(effCap)}h"></div>
+      </div>
+      <div class="sprint-load-label" style="${hasAbsence?'color:var(--orange)':''}">S${i+1}</div>
+    </div>`;
+  }
+  chart.innerHTML = html;
+}
+
+function renderGantt(data){
+  const{scheduled,numSprintsDisplay,totalWeeks,totalDays,sprintStarts,sprintEnds,sprintEffCap,weeksSprint,todayPct,depConflicts,baseCapacity}=data;
+  let html='';
+
+  // Sprint headers with effective capacity
+  html+='<div class="gantt-header-row"><div class="gantt-proj-col">Project</div><div class="gantt-timeline-col">';
+  for(let i=0;i<numSprintsDisplay;i++){
+    const cap=sprintEffCap[i];
+    const capInfo=cap<baseCapacity?`<span class="s-cap">${Math.round(cap)}h eff</span>`:'';
+    html+=`<div class="sprint-hdr" style="background:${SPRINT_BG[i%SPRINT_BG.length]}">Sprint ${i+1}<span class="s-dates">${fmtDateShort(sprintStarts[i])} - ${fmtDateShort(sprintEnds[i])}</span>${capInfo}</div>`;
+  }
+  html+='</div></div>';
+
+  // Weeks
+  html+='<div class="gantt-header-row"><div class="gantt-proj-col"></div><div class="gantt-timeline-col week-row">';
+  for(let w=0;w<totalWeeks;w++)html+=`<div class="week-cell">W${w+1}</div>`;
+  html+='</div></div>';
+
+  const conflictIds=new Set();depConflicts.forEach(c=>{conflictIds.add(c.from);conflictIds.add(c.to)});
+
+  // Rows
+  scheduled.forEach((p,idx)=>{
+    const leftPct=Math.max(0,(p.startDay/totalDays)*100);
+    const widthPct=Math.max(0.6,((p.endDay-p.startDay)/totalDays)*100);
+    const progress=p.progress||0;
+    const barLabel=p.effort>=40?(progress>0?`${p.effort}h·${progress}%`:p.effort+'h'):'';
+    let gridLines='';for(let i=1;i<numSprintsDisplay;i++)gridLines+=`<div class="grid-line" style="left:${(i/numSprintsDisplay)*100}%"></div>`;
+    let todayLine='';if(idx===0&&todayPct>0&&todayPct<1)todayLine=`<div class="today-line" style="left:${todayPct*100}%"></div>`;
+    const hasDeps=(p.deps&&p.deps.length>0);
+    const isConflict=conflictIds.has(p.id)&&showDeps;
+    const rowCls=isConflict?'gantt-row dep-conflict':'gantt-row';
+
+    html+=`<div class="${rowCls}" draggable="true" data-idx="${idx}" data-id="${p.id}" ondragstart="onDragStart(event)" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+      <div class="proj-info">
+        <span class="drag-handle">⋮⋮</span>
+        <div class="color-dot" style="background:${p.color}"></div>
+        <span class="proj-id">${p.id}</span>
+        <span class="proj-name" title="${p.name}">${truncate(p.name,14)}</span>
+        ${isConflict?'<span class="risk-flag rf-blocked">⛔ DEP</span>':p.estimated?'<span class="risk-flag rf-estimated">~ EST</span>':p.notes&&p.notes.toLowerCase().includes('review')?'<span class="risk-flag rf-review">👁 REVIEW</span>':'<span class="risk-flag rf-ok">✓</span>'}
+        <span class="dep-icon ${hasDeps?'has-deps':''}" onclick="event.stopPropagation();toggleDepEditor('${p.id}')" title="${hasDeps?'Depends on: '+p.deps.join(', '):'Add dependency'}">⛓</span>
+        <span class="gantt-progress-pill ${progress===100?'done':progress>0?'in-progress':'not-started'}" id="gpill-${p.id}" onclick="event.stopPropagation();editGanttProgress('${p.id}')" title="Click to edit progress">${progress===100?'✓ Done':progress>0?progress+'%':'—'}</span>
+      </div>
+      <div class="bar-area">
+        ${gridLines}${todayLine}
+        <div class="gantt-bar" style="left:${leftPct}%;width:${widthPct}%;background:${p.color}" onmouseenter="showTooltip(event,${idx})" onmousemove="moveTooltip(event)" onmouseleave="hideTooltip()">
+          <div class="bar-progress" style="width:${progress}%;opacity:${progress>0?1:0.12}"></div>${progress>0&&progress<100?`<div class="bar-remaining" style="width:${100-progress}%;left:${progress}%"></div>`:''}
+          <span class="bar-label">${barLabel}</span>
+        </div>
+      </div>
+    </div>
+    <div class="dep-editor" id="dep-editor-${p.id}">
+      <label>Dependencies for ${p.id}:</label>
+      <div class="dep-tags" id="dep-tags-${p.id}"></div>
+      <select onchange="addDep('${p.id}',this.value);this.value=''" style="margin-top:6px">
+        <option value="">+ Add dependency…</option>
+        ${projects.filter(x=>x.id!==p.id&&!(p.deps||[]).includes(x.id)).map(x=>`<option value="${x.id}">${x.id} — ${truncate(x.name,25)}</option>`).join('')}
+      </select>
+    </div>`;
+  });
+
+  if(showDeps)html+=`<svg class="dep-svg" id="depSvg"></svg>`;
+  document.getElementById('ganttChart').innerHTML=html;
+
+  // Dep tags
+  scheduled.forEach(p=>{const c=document.getElementById('dep-tags-'+p.id);if(c)(p.deps||[]).forEach(d=>{c.innerHTML+=`<span class="dep-tag">${d}<span class="remove-dep" onclick="removeDep('${p.id}','${d}')">×</span></span>`})});
+
+  if(showDeps)requestAnimationFrame(()=>drawDepArrows(data));
+}
+
+function drawDepArrows(data){
+  const svg=document.getElementById('depSvg');if(!svg)return;
+  const rect=svg.getBoundingClientRect();
+  svg.setAttribute('width',rect.width);svg.setAttribute('height',rect.height);
+  svg.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);
+  let paths='';
+  const rows=document.querySelectorAll('.gantt-row[data-id]');
+  const rowMap={};
+  rows.forEach(r=>{const bar=r.querySelector('.gantt-bar');if(bar){const b=bar.getBoundingClientRect();rowMap[r.dataset.id]={left:b.left-rect.left-210,right:b.right-rect.left-210,cy:b.top+b.height/2-rect.top}}});
+  data.scheduled.forEach(p=>{(p.deps||[]).forEach(depId=>{
+    const from=rowMap[depId],to=rowMap[p.id];if(!from||!to)return;
+    const isC=data.depConflicts.some(c=>c.from===depId&&c.to===p.id);const cls=isC?'conflict':'';
+    const x1=from.right+2,y1=from.cy,x2=to.left-4,y2=to.cy,mx=(x1+x2)/2;
+    paths+=`<path class="dep-arrow ${cls}" d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}"/>`;
+    paths+=`<polygon class="dep-arrow-head ${cls}" points="${x2},${y2} ${x2-6},${y2-3} ${x2-6},${y2+3}"/>`;
+  })});
+  svg.innerHTML=paths;
+}
+
+function renderDetails(data){
+  const{scheduled,totalHours,totalWeeksCalc,avgProgress,baseCapacity,weeksSprint}=data;
+  const numSprints=Math.ceil(totalWeeksCalc/weeksSprint)||1;
+  document.getElementById('detailsBody').innerHTML=scheduled.map(p=>{
+    const estIcon=p.estimated?'<span style="color:var(--gold)" title="Estimated">⚬</span>':'<span style="color:var(--green)" title="Confirmed">●</span>';
+    const effortColor=p.estimated?'color:var(--gold)':'';
+    const sprintText=p.startSprint===p.endSprint?`Sprint ${p.startSprint}`:`Sprint ${p.startSprint}-${p.endSprint}`;
+    const sprintCls=p.startSprint===p.endSprint?'center sprint-single':'center sprint-multi';
+    const prog=p.progress||0;
+    const progColor=prog>=100?'var(--green)':prog>=50?'var(--cyan)':prog>0?'var(--orange)':'var(--text-muted)';
+    const depList=(p.deps||[]).join(', ')||'—';
+    const depColor=(p.deps||[]).length>0?'var(--purple)':'var(--text-muted)';
+    const notes=p.notes||'';
+    const notesDisplay=notes?truncate(notes,30):'+ add note';
+    const notesCls=notes?'notes-cell':'notes-cell empty';
+
+    return`<tr>
+      <td><div class="id-cell"><div class="color-dot" style="background:${p.color}"></div>${p.id}</div></td>
+      <td style="font-size:11px">${p.name}</td>
+      <td class="center mono editable" style="${effortColor}" onclick="editEffort('${p.id}',this)" title="Click to edit effort">${estIcon} ${p.effort}h</td>
+      <td class="center editable" onclick="editProgress('${p.id}',this)" title="Click to edit progress"><div class="mini-progress"><div class="mini-progress-bar"><div class="mini-progress-fill" style="width:${prog}%;background:${progColor}"></div></div><span class="mini-progress-text" style="color:${progColor}">${prog}%</span></div></td>
+      <td class="center" style="font-size:11px">${fmtDate(p.startDate)}</td>
+      <td class="center" style="font-size:11px">${fmtDate(p.endDate)}</td>
+      <td class="${sprintCls}">${sprintText}</td>
+      <td class="center" style="color:var(--text-secondary);font-size:11px">${p.durationWeeks.toFixed(1)}w</td>
+      <td class="center mono" style="color:${depColor};font-size:10px">${depList}</td>
+      <td class="${notesCls}" onclick="editNotes('${p.id}',this)" title="Click to edit notes">${notesDisplay}</td>
+      <td class="center">${p.jiraUrl?`<a href="${p.jiraUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:3px;color:var(--blue);font-size:10px;font-weight:700;text-decoration:none;padding:2px 6px;border-radius:5px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);transition:all 0.2s" onmouseover="this.style.background='rgba(59,130,246,0.2)'" onmouseout="this.style.background='rgba(59,130,246,0.1)'">🔗 Epic</a>`:'<span style="color:var(--text-muted);font-size:10px">—</span>'}</td>
+    </tr>`;
+  }).join('');
+  if(!scheduled.length){document.getElementById('detailsFoot').innerHTML='';return}
+  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="2"></td></tr>`;
+}
+
+function toggleEstimated(id){
+  const proj=projects.find(p=>p.id===id);
+  if(proj){proj.estimated=!proj.estimated;render()}
+}
+
+// ═══ INLINE EDITING ═══
+function editEffort(id, cell) {
+  const proj=projects.find(p=>p.id===id);if(!proj)return;
+  const estIcon=proj.estimated?'⚬':'●';
+  cell.innerHTML=`<div style="display:flex;align-items:center;gap:4px;justify-content:center">
+    <span style="cursor:pointer;color:${proj.estimated?'var(--gold)':'var(--green)'}" onclick="event.stopPropagation();toggleEstimated('${id}')" title="Toggle estimated/confirmed">${estIcon}</span>
+    <input type="number" value="${proj.effort}" min="1" max="9999" style="width:55px"
+      onclick="event.stopPropagation()"
+      onblur="commitEffort('${id}',this.value)"
+      onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){this.value=${proj.effort};this.blur()}">
+    <span style="font-size:9px;color:var(--text-muted)">h</span>
+  </div>`;
+  const input=cell.querySelector('input');input.focus();input.select();
+}
+
+function commitEffort(id, val) {
+  const proj=projects.find(p=>p.id===id);if(!proj)return;
+  const num=parseInt(val);
+  if(!isNaN(num)&&num>0) proj.effort=num;
+  render();
+}
+
+function editGanttProgress(id) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj) return;
+  const pill = document.getElementById('gpill-' + id);
+  if (!pill) return;
+  const cur = proj.progress || 0;
+  pill.innerHTML = `<input class="gantt-progress-input" type="number" value="${cur}" min="0" max="100"
+    onclick="event.stopPropagation()"
+    onblur="commitGanttProgress('${id}',this.value)"
+    onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){this.value=${cur};this.blur()}">`;
+  const inp = pill.querySelector('input');
+  inp.focus(); inp.select();
+}
+
+function commitGanttProgress(id, val) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj) return;
+  const num = parseInt(val);
+  if (!isNaN(num)) proj.progress = Math.max(0, Math.min(100, num));
+  render();
+}
+
+function editProgress(id, cell) {
+  const proj=projects.find(p=>p.id===id);if(!proj)return;
+  cell.innerHTML=`<input type="number" value="${proj.progress||0}" min="0" max="100" style="width:50px;text-align:center"
+    onclick="event.stopPropagation()"
+    onblur="commitProgress('${id}',this.value)"
+    onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){this.value=${proj.progress||0};this.blur()}">`;
+  const input=cell.querySelector('input');input.focus();input.select();
+}
+
+function commitProgress(id, val) {
+  const proj=projects.find(p=>p.id===id);if(!proj)return;
+  const num=parseInt(val);
+  if(!isNaN(num)) proj.progress=Math.max(0,Math.min(100,num));
+  render();
+}
+
+function editNotes(id, cell) {
+  const proj=projects.find(p=>p.id===id);if(!proj)return;
+  cell.innerHTML=`<textarea onclick="event.stopPropagation()"
+    onblur="commitNotes('${id}',this.value)"
+    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();this.blur()};if(event.key==='Escape')this.blur()"
+    style="width:100%;min-height:30px">${proj.notes||''}</textarea>`;
+  const ta=cell.querySelector('textarea');ta.focus();
+  ta.setSelectionRange(ta.value.length,ta.value.length);
+}
+
+function commitNotes(id, val) {
+  const proj=projects.find(p=>p.id===id);if(!proj)return;
+  proj.notes=val.trim();
+  render();
+}
+
+function renderFooter(data){
+  const absInfo=data.totalAbsenceHours>0?`  |  ${data.totalAbsenceHours}h absences registered`:'';
+  document.getElementById('footerText').innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:12px"><span style="font-weight:700;color:var(--text-secondary)">Future Healthcare</span><span style="color:var(--border)">|</span><span>Generated on ${fmtDate(new Date())}  ·  DHCM Development Team  ·  ${data.scheduled.length} projects  ·  ${data.totalHours}h total  ·  ${data.avgProgress}% avg progress${absInfo}</span></div>`;
+}
+
+// ════════════════════ TOOLTIP ════════════════════
+const tooltip=document.getElementById('tooltip');
+function showTooltip(e,idx){
+  const data=compute(),p=data.scheduled[idx];if(!p)return;
+  const prog=p.progress||0;
+  let depHtml='';
+  if(p.deps&&p.deps.length>0){
+    const isConflict=data.depConflicts.some(c=>c.to===p.id);
+    depHtml=`<div class="tt-deps">${isConflict?'⚠️ ':''}Depends on: ${p.deps.map(d=>`<span>${d}</span>`).join(', ')}${isConflict?' <span style="color:var(--red)">(conflict — dep ends after this starts)</span>':''}</div>`;
+  }
+  tooltip.innerHTML=`<div class="tt-title" style="color:${p.color}">${p.id} — ${p.name}</div>
+    <div class="tt-row"><span class="tt-label">Effort</span><span class="tt-value" style="${p.estimated?'color:var(--gold)':''}">${p.effort}h ${p.estimated?'(est)':''}</span></div>
+    <div class="tt-row"><span class="tt-label">Start</span><span class="tt-value">${fmtDate(p.startDate)}</span></div>
+    <div class="tt-row"><span class="tt-label">End</span><span class="tt-value">${fmtDate(p.endDate)}</span></div>
+    <div class="tt-row"><span class="tt-label">Sprint</span><span class="tt-value">${p.startSprint===p.endSprint?'Sprint '+p.startSprint:'Sprint '+p.startSprint+'–'+p.endSprint}</span></div>
+    <div class="tt-row"><span class="tt-label">Duration</span><span class="tt-value">${p.durationWeeks.toFixed(1)} weeks</span></div>
+    <div class="tt-row"><span class="tt-label">Progress</span><span class="tt-value" style="color:${prog>=50?'var(--green)':'var(--orange)'}">${prog}%</span></div>
+    ${prog>0?`<div class="tt-progress-bar"><div class="tt-progress-fill" style="width:${prog}%"></div></div>`:''}${depHtml}`;
+  tooltip.classList.add('visible');moveTooltip(e);
+}
+function moveTooltip(e){let x=e.clientX+14,y=e.clientY+14;if(x+280>window.innerWidth)x=e.clientX-280-14;const r=tooltip.getBoundingClientRect();if(y+r.height>window.innerHeight)y=e.clientY-r.height-14;tooltip.style.left=x+'px';tooltip.style.top=y+'px'}
+function hideTooltip(){tooltip.classList.remove('visible')}
+
+// ════════════════════ DRAG & DROP ════════════════════
+let dragIdx=null;
+function onDragStart(e){dragIdx=parseInt(e.currentTarget.dataset.idx);e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move'}
+function onDragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over')}
+function onDragLeave(e){e.currentTarget.classList.remove('drag-over')}
+function onDrop(e){e.preventDefault();e.currentTarget.classList.remove('drag-over');const ti=parseInt(e.currentTarget.dataset.idx);if(dragIdx===null||dragIdx===ti)return;const filtered=currentFilter==='all'?projects:currentFilter==='estimated'?projects.filter(x=>x.estimated):projects.filter(x=>!x.estimated);if(currentFilter==='all'){const[m]=projects.splice(dragIdx,1);projects.splice(ti,0,m)}else{const s=filtered[dragIdx],t=filtered[ti],si=projects.indexOf(s);projects.splice(si,1);const ni=projects.indexOf(t),ii=dragIdx<ti?ni+1:ni;projects.splice(ii,0,s)}dragIdx=null;render()}
+
+// ════════════════════ DEPENDENCIES ════════════════════
+// ════════════════════ EXPORT MENU ════════════════════
+function toggleExportMenu(){document.getElementById('exportMenu').classList.toggle('show')}
+function closeExportMenu(){document.getElementById('exportMenu').classList.remove('show')}
+document.addEventListener('click',e=>{if(!e.target.closest('.export-dropdown'))closeExportMenu()});
+function toggleDepEditor(id){const el=document.getElementById('dep-editor-'+id);if(el)el.classList.toggle('show')}
+function addDep(pid,did){if(!did)return;const proj=projects.find(p=>p.id===pid);if(proj){if(!proj.deps)proj.deps=[];if(!proj.deps.includes(did))proj.deps.push(did);render()}}
+function removeDep(pid,did){const proj=projects.find(p=>p.id===pid);if(proj&&proj.deps){proj.deps=proj.deps.filter(d=>d!==did);render()}}
+
+// ════════════════════ PANELS ════════════════════
+function togglePanel(panelId,btnId){const p=document.getElementById(panelId);p.classList.toggle('show');document.getElementById(btnId).classList.toggle('active',p.classList.contains('show'))}
+
+// ════════════════════ SCENARIOS ════════════════════
+function saveScenario(slot){const data=compute();scenarios[slot]={projects:JSON.parse(JSON.stringify(projects)),absences:JSON.parse(JSON.stringify(absences)),params:getParams(),summary:{totalHours:data.totalHours,numSprints:Math.ceil(data.totalWeeksCalc/data.weeksSprint)||1,totalWeeks:Math.round(data.totalWeeksCalc),numProjects:data.scheduled.length,endDate:data.scheduled.length?fmtDate(data.scheduled[data.scheduled.length-1].endDate):'—',absHours:data.totalAbsenceHours},savedAt:new Date().toLocaleTimeString()};updateScenarioSlots()}
+function loadScenario(slot){if(!scenarios[slot])return;projects=JSON.parse(JSON.stringify(scenarios[slot].projects));absences=JSON.parse(JSON.stringify(scenarios[slot].absences));const p=scenarios[slot].params;document.getElementById('ctrlDevs').value=p.devs;document.getElementById('ctrlHours').value=p.hoursPerDev;document.getElementById('ctrlWeeks').value=p.weeksSprint;document.getElementById('ctrlStart').value=p.startDate;render();document.querySelectorAll('.scenario-slot').forEach(s=>s.classList.remove('active-slot'));document.getElementById('slot'+slot).classList.add('active-slot')}
+function updateScenarioSlots(){['A','B'].forEach(slot=>{const m=document.getElementById('slot'+slot+'Meta');if(scenarios[slot]){const s=scenarios[slot].summary;m.innerHTML=`${s.totalHours}h · ${s.numSprints} spr · ${s.totalWeeks}w · ends ${s.endDate}${s.absHours?` · -${s.absHours}h abs`:''}<br><span style="color:var(--text-muted);font-size:9px">Saved ${scenarios[slot].savedAt}</span>`}else{m.innerHTML='<span class="slot-empty">Click "Save" to capture</span>'}})}
+function compareScenarios(){if(!scenarios.A||!scenarios.B){document.getElementById('scenarioDiff').innerHTML='<p style="color:var(--text-muted);font-size:11px">Save both scenarios first.</p>';document.getElementById('scenarioDiff').classList.add('show');return}
+  const a=scenarios.A.summary,b=scenarios.B.summary;
+  function dr(l,va,vb,u,lib){const d=vb-va;if(d===0)return`<div class="diff-row"><span class="diff-label">${l}</span><span class="diff-val neutral">${va}${u} = ${vb}${u}</span></div>`;const better=lib?(d<0):(d>0);const cls=better?'better':'worse';const s=d>0?'+':'';const vc=better?'pos':'neg';return`<div class="diff-row ${cls}"><span class="diff-label">${l}</span><span class="diff-val ${vc}">${va}${u} → ${vb}${u} (${s}${d}${u})</span></div>`}
+  let h=`<h4>Scenario A vs B</h4>`;h+=dr('Total Hours',a.totalHours,b.totalHours,'h',true);h+=dr('Sprints',a.numSprints,b.numSprints,'',true);h+=dr('Weeks',a.totalWeeks,b.totalWeeks,'w',true);h+=dr('Projects',a.numProjects,b.numProjects,'',false);h+=dr('Absence Hours',a.absHours||0,b.absHours||0,'h',true);
+  document.getElementById('scenarioDiff').innerHTML=h;document.getElementById('scenarioDiff').classList.add('show')}
+function clearScenarios(){scenarios={A:null,B:null};updateScenarioSlots();document.getElementById('scenarioDiff').classList.remove('show');document.querySelectorAll('.scenario-slot').forEach(s=>s.classList.remove('active-slot'))}
+
+// ════════════════════ FILTER & EXPORT ════════════════════
+function setFilter(f){currentFilter=f;document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));document.querySelector(`.pill[data-filter="${f}"]`).classList.add('active');render()}
+function exportCSV(){const data=compute();let csv='ID,Project,Effort (h),Estimated,Progress (%),Start Date,End Date,Sprint(s),Duration (weeks),Dependencies,Notes,Jira URL\n';data.scheduled.forEach(p=>{const sp=p.startSprint===p.endSprint?`Sprint ${p.startSprint}`:`Sprint ${p.startSprint}-${p.endSprint}`;const notes=(p.notes||'').replace(/"/g,'""');const jiraUrl=(p.jiraUrl||'');csv+=`"${p.id}","${p.name}",${p.effort},${p.estimated?'yes':'no'},${p.progress||0},${fmtDate(p.startDate)},${fmtDate(p.endDate)},"${sp}",${p.durationWeeks.toFixed(1)},"${(p.deps||[]).join(';')}","${notes}","${jiraUrl}"\n`});const blob=new Blob([csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='DHCM_Roadmap.csv';a.click()}
+
+function downloadTemplate(){
+  const csv='ID,Project,Effort (h),Estimated,Progress (%),Dependencies,Notes,Jira URL\nDH84,Scribe F2,32,no,100,,Done,https://fh.atlassian.net/browse/GDP-xxx\nDH84-02,Scribe F3,69,no,0,DH84,Waiting on F2,\nDH66,Prescription app - Bluebee,160,yes,0,,Needs Bluebee API,\n';
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='DHCM_Roadmap_Template.csv';a.click();
+}
+
+// ════════════════════ IMPORT ════════════════════
+let pendingImport = null;
+
+function handleFileSelect(e) { if(e.target.files.length) processFile(e.target.files[0]); e.target.value=''; }
+function handleFileDrop(e) { if(e.dataTransfer.files.length) processFile(e.dataTransfer.files[0]); }
+
+function processFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (ext === 'csv') {
+    const reader = new FileReader();
+    reader.onload = (e) => { parseCSV(e.target.result, file.name); };
+    reader.readAsText(file);
+  } else if (ext === 'xlsx' || ext === 'xls') {
+    if (typeof XLSX === 'undefined') {
+      alert('XLSX library not loaded. Please use CSV format, or ensure internet access for the SheetJS CDN.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const csv = XLSX.utils.sheet_to_csv(ws);
+      parseCSV(csv, file.name);
+    };
+    reader.readAsArrayBuffer(file);
+  } else {
+    alert('Unsupported file type. Please use CSV or XLSX.');
+  }
+}
+
+function parseCSV(text, fileName) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) { alert('File is empty or has no data rows.'); return; }
+
+  const headerLine = lines[0];
+  const headers = parseCSVLine(headerLine).map(h => h.trim().toLowerCase());
+
+  // Column mapping — no start/end dates, engine calculates them
+  const colMap = {
+    id: headers.findIndex(h => ['id','project id','key','epic key'].some(p => h.includes(p))),
+    name: headers.findIndex(h => ['project','name','summary','description'].some(p => h.includes(p))),
+    effort: headers.findIndex(h => ['effort','hours','estimate','remaining'].some(p => h.includes(p))),
+    progress: headers.findIndex(h => ['progress','%','completion','done'].some(p => h.includes(p))),
+    estimated: headers.findIndex(h => ['estimated','est','estimate flag','confirmed'].some(p => h.includes(p))),
+    deps: headers.findIndex(h => ['dependencies','depends','deps','blocked'].some(p => h.includes(p))),
+    notes: headers.findIndex(h => ['notes','note','comments','remarks','obs'].some(p => h.includes(p))),
+    jiraUrl: headers.findIndex(h => ['jira','url','link','jira url','epic url','jira link'].some(p => h.includes(p))),
+  };
+
+  // Fallback: use column positions if mapping fails
+  if (colMap.id === -1) colMap.id = 0;
+  if (colMap.name === -1) colMap.name = 1;
+  if (colMap.effort === -1) colMap.effort = 2;
+
+  const parsed = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCSVLine(lines[i]);
+    if (!cols.length || !cols[colMap.id]?.trim()) continue;
+
+    const id = cols[colMap.id]?.trim() || '';
+    const name = cols[colMap.name]?.trim() || '';
+    const effort = parseInt(cols[colMap.effort]) || 0;
+    const progress = colMap.progress >= 0 ? (parseInt(cols[colMap.progress]) || 0) : 0;
+    const depsRaw = colMap.deps >= 0 ? cols[colMap.deps]?.trim() : '';
+    const deps = depsRaw ? depsRaw.split(/[;,]/).map(d => d.trim()).filter(Boolean) : [];
+
+    // Parse estimated flag — accept yes/true/1/estimated, "confirmed" column inverts logic
+    let estimated = false;
+    if (colMap.estimated >= 0) {
+      const val = (cols[colMap.estimated] || '').trim().toLowerCase();
+      const isConfirmedCol = headers[colMap.estimated].includes('confirmed');
+      if (isConfirmedCol) {
+        estimated = !['yes','true','1','confirmed','y'].includes(val);
+      } else {
+        estimated = ['yes','true','1','estimated','y'].includes(val);
+      }
+    }
+
+    parsed.push({ id, name, effort, estimated, progress, deps, notes: colMap.notes >= 0 ? (cols[colMap.notes]?.trim() || '') : '', jiraUrl: colMap.jiraUrl >= 0 ? (cols[colMap.jiraUrl]?.trim() || '') : '' });
+  }
+
+  if (!parsed.length) { alert('No valid rows found in the file.'); return; }
+
+  pendingImport = parsed;
+  showImportPreview(parsed, fileName, colMap, headers);
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '', inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"' && line[i+1] === '"') { current += '"'; i++; }
+      else if (ch === '"') inQuotes = false;
+      else current += ch;
+    } else {
+      if (ch === '"') inQuotes = true;
+      else if (ch === ',') { result.push(current); current = ''; }
+      else current += ch;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function showImportPreview(data, fileName, colMap, headers) {
+  document.getElementById('importPanel').classList.add('show');
+  document.getElementById('btnImport').classList.add('active');
+  const preview = document.getElementById('importPreview');
+  preview.classList.add('show');
+  document.getElementById('importPreviewTitle').textContent = `Preview — ${fileName}`;
+  document.getElementById('importCount').textContent = `${data.length} projects found`;
+
+  // Mapping info
+  const mapped = Object.entries(colMap).filter(([k,v]) => v >= 0).map(([k,v]) => `${k}→"${headers[v]}"`).join(', ');
+
+  let html = `<div style="font-size:9px;color:var(--text-muted);margin-bottom:6px">Column mapping: ${mapped}</div>`;
+  html += '<table><thead><tr><th>ID</th><th>Project</th><th>Effort</th><th>Est?</th><th>Progress</th><th>Deps</th><th>Notes</th><th>Jira URL</th></tr></thead><tbody>';
+  data.forEach(p => {
+    const estLabel = p.estimated ? '<span style="color:var(--gold)">Yes</span>' : '<span style="color:var(--green)">No</span>';
+    html += `<tr><td>${p.id}</td><td>${truncate(p.name,25)}</td><td>${p.effort}h</td><td>${estLabel}</td><td>${p.progress}%</td><td>${p.deps.join('; ')||'—'}</td><td>${truncate(p.notes||'',20)||'—'}</td><td>${p.jiraUrl?'<a href="'+p.jiraUrl+'" target="_blank" style="color:var(--blue);font-size:9px">🔗 Jira</a>':'—'}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('importPreviewTable').innerHTML = html;
+}
+
+function confirmImport() {
+  if (!pendingImport) return;
+  // File order = priority order (first row = highest priority)
+  projects = pendingImport;
+  pendingImport = null;
+  document.getElementById('importPreview').classList.remove('show');
+  document.getElementById('importPanel').classList.remove('show');
+  document.getElementById('btnImport').classList.remove('active');
+  render();
+}
+
+function cancelImport() {
+  pendingImport = null;
+  document.getElementById('importPreview').classList.remove('show');
+}
+
+// ════════════════════ SAVE / LOAD STATE ════════════════════
+function saveState() {
+  const state = {
+    version: 3,
+    savedAt: new Date().toISOString(),
+    params: getParams(),
+    projects: JSON.parse(JSON.stringify(projects)),
+    absences: JSON.parse(JSON.stringify(absences)),
+    scenarios: JSON.parse(JSON.stringify(scenarios)),
+  };
+  const json = JSON.stringify(state, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.download = `DHCM_Roadmap_${dateStr}.json`;
+  a.click();
+}
+
+function handleLoadState(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  e.target.value = '';
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const state = JSON.parse(ev.target.result);
+      if (!state.projects || !Array.isArray(state.projects)) {
+        alert('Invalid state file: no projects found.');
+        return;
+      }
+      // Restore projects
+      projects = state.projects;
+      projects.forEach(p => {
+        p.progress = p.progress || 0;
+        p.deps = p.deps || [];
+        p.estimated = p.estimated || false;
+      });
+      // Restore absences
+      if (state.absences) absences = state.absences;
+      // Restore parameters
+      if (state.params) {
+        document.getElementById('ctrlDevs').value = state.params.devs || 1.5;
+        document.getElementById('ctrlHours').value = state.params.hoursPerDev || 90;
+        document.getElementById('ctrlWeeks').value = state.params.weeksSprint || 3;
+        document.getElementById('ctrlStart').value = state.params.startDate || '2026-02-03';
+      }
+      // Restore scenarios
+      if (state.scenarios) scenarios = state.scenarios;
+      updateScenarioSlots();
+      render();
+      const savedDate = state.savedAt ? new Date(state.savedAt).toLocaleString() : 'unknown';
+      console.log(`State loaded: ${state.projects.length} projects, saved ${savedDate}`);
+    } catch (err) {
+      alert('Failed to parse state file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ════════════════════ CONTROLS ════════════════════
+['ctrlDevs','ctrlHours','ctrlWeeks','ctrlStart'].forEach(id=>{document.getElementById(id).addEventListener('change',render);document.getElementById(id).addEventListener('input',()=>{clearTimeout(window._rt);window._rt=setTimeout(render,300)})});
+
+render();
+</script>
+</body>
+</html>
