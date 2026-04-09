@@ -19,8 +19,8 @@ function ghConfig() {
 
 function openGhModal() {
   const cfg = ghConfig();
-  document.getElementById('ghUsername').value = cfg.username;
-  document.getElementById('ghRepo').value     = cfg.repo;
+  document.getElementById('ghUsername').value = cfg.username || 'claudiogualdino';
+  document.getElementById('ghRepo').value     = cfg.repo || 'dhcm-roadmap';
   document.getElementById('ghToken').value    = cfg.token;
   document.getElementById('ghModal').classList.add('show');
 }
@@ -194,6 +194,9 @@ async function githubLoad() {
 
 // Auto-load from GitHub on page open if config exists
 window.addEventListener('load', () => {
+  // Pre-fill defaults if first time
+  if (!localStorage.getItem('gh_username')) localStorage.setItem('gh_username', 'claudiogualdino');
+  if (!localStorage.getItem('gh_repo'))     localStorage.setItem('gh_repo',     'dhcm-roadmap');
   const cfg = ghConfig();
   if (cfg.username && cfg.token) {
     setTimeout(() => githubLoad(), 800);
