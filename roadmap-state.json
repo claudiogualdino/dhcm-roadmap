@@ -1,0 +1,228 @@
+{
+  "version": 3,
+  "savedAt": "2026-04-10T11:21:18.623Z",
+  "params": {
+    "devs": 1.5,
+    "hoursPerDev": 90,
+    "weeksSprint": 3,
+    "startDate": "2025-12-24"
+  },
+  "projects": [
+    {
+      "id": "DH84",
+      "name": "Scribe F1",
+      "effort": 32,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH92",
+      "name": "Video",
+      "effort": 16,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH61",
+      "name": "Pack - Points Reuse",
+      "effort": 48,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH54",
+      "name": "Group Sessions",
+      "effort": 90,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH46",
+      "name": "Healthy Companies",
+      "effort": 40,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH84-02",
+      "name": "Scribe F2 e F3",
+      "effort": 69,
+      "estimated": false,
+      "progress": 0,
+      "deps": [
+        "DH84"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "DH95",
+      "name": "Alergias Alerta",
+      "effort": 40,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH96",
+      "name": "Conteúdos Pack Saúde",
+      "effort": 40,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH45-03",
+      "name": "Nif Optional QC",
+      "effort": 8,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "CREQ-132",
+      "name": "Configured Last Answer",
+      "effort": 6,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH80",
+      "name": "Telefone e Nif Estrangeiros",
+      "effort": 32,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH45-04",
+      "name": "Me1st Pre Registration",
+      "effort": 100,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH66",
+      "name": "Prescription App - Bluebee",
+      "effort": 160,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH99",
+      "name": "Client Portal - Reschedule",
+      "effort": 56,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH101",
+      "name": "Infermedica Integration",
+      "effort": 200,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH100",
+      "name": "Apps Integration",
+      "effort": 320,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH87",
+      "name": "FHvc NPS Survey Client Portal",
+      "effort": 120,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH102",
+      "name": "Calendar Slots Available CM",
+      "effort": 40,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH59",
+      "name": "Voucher/Pontos/Descritivo Atos",
+      "effort": 180,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH93",
+      "name": "CM Wait Time SAP",
+      "effort": 180,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH71",
+      "name": "VBHC",
+      "effort": 360,
+      "notes": "should be reviewed",
+      "estimated": false,
+      "progress": 0,
+      "deps": []
+    },
+    {
+      "id": "DH60-02",
+      "name": "Soft Login 2",
+      "effort": 100,
+      "estimated": true,
+      "progress": 0,
+      "deps": [
+        "DH71"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "DH88",
+      "name": "Manage Card - Client Portal",
+      "effort": 110,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    }
+  ],
+  "absences": [],
+  "scenarios": {
+    "A": null,
+    "B": null
+  }
+}
