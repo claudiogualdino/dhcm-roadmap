@@ -335,6 +335,33 @@
   .gh-modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
   .gh-token-warning{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:10px 12px;font-size:10px;color:var(--orange);margin-bottom:16px;line-height:1.5}
 
+
+  /* READ-ONLY MODE */
+  .readonly-banner{display:none;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(6,182,212,0.08));border:1px solid rgba(59,130,246,0.3);border-radius:var(--radius);padding:10px 16px;margin-bottom:14px;gap:12px}
+  .readonly-banner.show{display:flex}
+  .readonly-banner-left{display:flex;align-items:center;gap:8px;font-size:11px}
+  .readonly-banner-icon{font-size:16px}
+  .readonly-banner-text{color:var(--text-primary);font-weight:600}
+  .readonly-banner-sub{color:var(--text-secondary);font-size:10px;margin-top:1px}
+  .readonly-banner-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .share-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:7px;background:var(--blue);color:#fff;border:none;font-size:10px;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:var(--font-body)}
+  .share-btn:hover{background:#2563eb;transform:translateY(-1px)}
+  .share-btn.copied{background:var(--green)}
+  .edit-mode-badge{display:none;align-items:center;gap:5px;font-size:9px;font-weight:700;font-family:var(--font-mono);padding:3px 8px;border-radius:8px;background:rgba(245,158,11,0.15);color:var(--orange);border:1px solid rgba(245,158,11,0.3)}
+  .edit-mode-badge.show{display:inline-flex}
+  body.readonly .controls-panel{display:none !important}
+  body.readonly .drag-handle{display:none !important}
+  body.readonly .dep-icon{display:none !important}
+  body.readonly .dep-editor{display:none !important}
+  body.readonly .gantt-progress-pill{pointer-events:none;cursor:default}
+  body.readonly .editable{pointer-events:none;cursor:default}
+  body.readonly #btnImport{display:none !important}
+  body.readonly #btnGhSave{display:none !important}
+  body.readonly #btnGhLoad{display:none !important}
+  body.readonly .btn-green{display:none !important}
+  body.readonly [onclick*="saveState"]{display:none !important}
+  body.readonly [onclick*="loadState"]{display:none !important}
+
 </style>
 </head>
 <body>
@@ -386,6 +413,10 @@
         ↓ GitHub
       </button>
       <button class="btn" onclick="openGhModal()" title="Configurar GitHub Sync" style="padding:7px 8px">⚙ GitHub</button>
+      <button class="share-btn" onclick="copyShareLink()" title="Copiar link para partilhar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Partilhar
+      </button>
       <div class="export-dropdown">
         <button class="btn" onclick="toggleExportMenu()" id="btnExport" title="Export dashboard">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -403,6 +434,28 @@
         </div>
       </div>
     </div>
+  </div>
+
+
+  <!-- READ-ONLY BANNER (shown when no token) -->
+  <div class="readonly-banner" id="readonlyBanner">
+    <div class="readonly-banner-left">
+      <span class="readonly-banner-icon">👁</span>
+      <div>
+        <div class="readonly-banner-text">Modo de Visualização</div>
+        <div class="readonly-banner-sub">Estás a ver a versão mais recente do roadmap · Apenas o autor pode editar</div>
+      </div>
+    </div>
+    <div class="readonly-banner-right">
+      <button class="share-btn" id="shareLinkBtn" onclick="copyShareLink()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Copiar Link
+      </button>
+    </div>
+  </div>
+  <!-- EDIT MODE BADGE (shown when token present) -->
+  <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+    <span class="edit-mode-badge" id="editModeBadge">✏️ Modo Edição</span>
   </div>
 
   <!-- KPI -->
@@ -1790,13 +1843,72 @@ async function githubLoad() {
 }
 
 // Auto-load from GitHub on page open if config exists
+// Public raw URL for read-only access (no token needed)
+const GH_PUBLIC_RAW = 'https://raw.githubusercontent.com/claudiogualdino/dhcm-roadmap/main/roadmap-state.json';
+const SHARE_URL = 'https://claudiogualdino.github.io/dhcm-roadmap/DHCM_Roadmap.html';
+
+function copyShareLink() {
+  navigator.clipboard.writeText(SHARE_URL).then(() => {
+    const btns = document.querySelectorAll('#shareLinkBtn, .share-btn');
+    btns.forEach(b => { b.classList.add('copied'); b.textContent = '✓ Link copiado!'; });
+    setTimeout(() => {
+      btns.forEach(b => { b.classList.remove('copied'); b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Partilhar'; });
+    }, 2500);
+  });
+}
+
+async function loadPublicState() {
+  try {
+    setGhStatus('saving', '↓ A carregar roadmap…');
+    const res = await fetch(GH_PUBLIC_RAW + '?t=' + Date.now()); // cache-bust
+    if (!res.ok) { setGhStatus('hidden',''); return; }
+    const state = await res.json();
+    if (!state.projects || !Array.isArray(state.projects)) return;
+    projects = state.projects;
+    projects.forEach(p => { p.progress=p.progress||0; p.deps=p.deps||[]; p.estimated=p.estimated||false; });
+    if (state.absences)  absences  = state.absences;
+    if (state.scenarios) scenarios = state.scenarios;
+    if (state.params) {
+      document.getElementById('ctrlDevs').value  = state.params.devs        || 1.5;
+      document.getElementById('ctrlHours').value = state.params.hoursPerDev || 90;
+      document.getElementById('ctrlWeeks').value = state.params.weeksSprint || 3;
+      document.getElementById('ctrlStart').value = state.params.startDate   || '';
+    }
+    updateScenarioSlots();
+    render();
+    const savedDate = state.savedAt ? new Date(state.savedAt).toLocaleString('pt-PT') : '?';
+    setGhStatus('ok', `✓ Roadmap atualizado em ${savedDate}`);
+    setTimeout(() => setGhStatus('hidden',''), 5000);
+  } catch(e) {
+    setGhStatus('hidden','');
+  }
+}
+
+function setReadonlyMode(isReadonly) {
+  if (isReadonly) {
+    document.body.classList.add('readonly');
+    document.getElementById('readonlyBanner').classList.add('show');
+    document.getElementById('editModeBadge').classList.remove('show');
+  } else {
+    document.body.classList.remove('readonly');
+    document.getElementById('readonlyBanner').classList.remove('show');
+    document.getElementById('editModeBadge').classList.add('show');
+  }
+}
+
 window.addEventListener('load', () => {
   // Pre-fill defaults if first time
   if (!localStorage.getItem('gh_username')) localStorage.setItem('gh_username', 'claudiogualdino');
   if (!localStorage.getItem('gh_repo'))     localStorage.setItem('gh_repo',     'dhcm-roadmap');
   const cfg = ghConfig();
-  if (cfg.username && cfg.token) {
+  if (cfg.token) {
+    // EDIT MODE — has token, load via authenticated API
+    setReadonlyMode(false);
     setTimeout(() => githubLoad(), 800);
+  } else {
+    // READ-ONLY MODE — no token, load via public raw URL
+    setReadonlyMode(true);
+    setTimeout(() => loadPublicState(), 400);
   }
 });
 
