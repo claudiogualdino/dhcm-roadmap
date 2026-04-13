@@ -2236,9 +2236,39 @@ function closeJiraSyncModal() {
 }
 
 function openClaudeForSync() {
-  const projectIds = projects.filter(p => p.jiraUrl).map(p => p.id).join(', ');
-  const msg = encodeURIComponent(`Sincroniza os estados Jira do roadmap DHCM. Os projetos com URL Jira são: ${projectIds}. Por favor vai buscar o estado de cada epic via MCP Atlassian e atualiza o ficheiro roadmap-state.json no GitHub com o campo jiraStatuses.`);
-  window.open(`https://claude.ai/new?q=${msg}`, '_blank');
+  const cfg = ghConfig();
+  const ghRepo = `https://github.com/${cfg.username || 'claudiogualdino'}/${cfg.repo || 'dhcm-roadmap'}`;
+  const ghFile = `${ghRepo}/blob/main/roadmap-state.json`;
+
+  // Build list with ID + Jira URL for each project that has one
+  const jiraList = projects
+    .filter(p => p.jiraUrl)
+    .map(p => `  - ${p.id} (${p.name}): ${p.jiraUrl}`)
+    .join('\n');
+
+  const noJiraList = projects
+    .filter(p => !p.jiraUrl)
+    .map(p => p.id)
+    .join(', ');
+
+  const msg = `Sincroniza os estados Jira do roadmap DHCM.
+
+Repositório GitHub: ${ghRepo}
+Ficheiro a atualizar: roadmap-state.json (campo "jiraStatuses")
+
+Epics com URL Jira (vai buscar o estado actual de cada um via MCP Atlassian):
+${jiraList}
+
+${noJiraList ? `Epics sem URL Jira (ignorar): ${noJiraList}` : ''}
+
+Passos:
+1. Para cada epic acima, usa o MCP Atlassian para obter o estado actual (campo status.name)
+2. Constrói um objeto jiraStatuses: { "DH84": "In Progress", "DH101": "To Do", ... }
+3. Lê o roadmap-state.json actual do GitHub
+4. Adiciona/atualiza o campo jiraStatuses e jiraStatusesSyncedAt com a data de hoje
+5. Guarda o ficheiro atualizado no GitHub`;
+
+  window.open(`https://claude.ai/new?q=${encodeURIComponent(msg)}`, '_blank');
   closeJiraSyncModal();
 }
 
