@@ -1,47 +1,39 @@
 [
   {
     "date": "2026-04-13",
-    "time": "00:41",
-    "type": "remove",
-    "id": "DH46",
-    "name": "Healthy Companies",
-    "detail": "Removido do roadmap (60h)"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "00:42",
-    "type": "edit",
-    "id": "DH92",
-    "name": "Video",
-    "detail": "Esforço: 32h → 58h"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "00:42",
+    "time": "00:50",
     "type": "edit",
     "id": "DH61",
     "name": "Pack - Points Reuse",
-    "detail": "Esforço: 80h → 105h"
+    "detail": "Notas atualizadas"
   },
   {
     "date": "2026-04-13",
-    "time": "00:43",
+    "time": "00:50",
+    "type": "edit",
+    "id": "DH95",
+    "name": "Alergias Alerta",
+    "detail": "Notas atualizadas"
+  },
+  {
+    "date": "2026-04-13",
+    "time": "00:50",
     "type": "edit",
     "id": "DH96",
     "name": "Conteúdos Pack Saúde",
-    "detail": "Esforço: 40h → 65h"
+    "detail": "Notas atualizadas"
   },
   {
     "date": "2026-04-13",
-    "time": "00:44",
+    "time": "00:50",
     "type": "edit",
-    "id": "DH54",
-    "name": "Group Sessions",
-    "detail": "Esforço: 148h → 132h"
+    "id": "DH72-01",
+    "name": "VBHC - Gestão de Entidades",
+    "detail": "Notas atualizadas"
   },
   {
     "date": "2026-04-13",
-    "time": "00:44",
+    "time": "00:51",
     "type": "save",
     "id": "",
     "name": "Versão guardada",
