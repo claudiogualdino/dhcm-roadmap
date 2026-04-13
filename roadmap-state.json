@@ -4,7 +4,27 @@
   "jiraStatuses": {
     "DH84": "Closed",
     "DH92": "Closed",
-    "DH95": "In Progress"
+    "DH61": "In Progress",
+    "DH95": "In Progress",
+    "DH96": "Implemented",
+    "DH71-01": "QA Testing",
+    "DH46": "Cancelled",
+    "DH54": "QA Testing",
+    "DH45-03": "In Technical Analysis",
+    "DH80": "In Progress",
+    "DH72-02": "In Business Requirements",
+    "DH66": "In Technical Analysis",
+    "DH99": "In Business Requirements",
+    "DH45-04": "In Technical Analysis",
+    "DH101": "To Do",
+    "DH100": "Backlog",
+    "DH87": "In Technical Analysis",
+    "DH84-02": "Ready for Development",
+    "DH102": "In Technical Analysis",
+    "DH59": "In Technical Analysis",
+    "DH93": "Backlog",
+    "DH60-02": "In Technical Analysis",
+    "DH88": "In Technical Analysis"
   },
   "jiraStatusesSyncedAt": "2026-04-13",
   "params": {
@@ -41,7 +61,8 @@
       "estimated": false,
       "progress": 75,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1045"
     },
     {
       "id": "DH95",
@@ -60,7 +81,8 @@
       "estimated": false,
       "progress": 75,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2107"
     },
     {
       "id": "DH71-01",
@@ -69,7 +91,8 @@
       "notes": "",
       "estimated": false,
       "progress": 75,
-      "deps": []
+      "deps": [],
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1192"
     },
     {
       "id": "DH46",
@@ -78,7 +101,8 @@
       "estimated": false,
       "progress": 75,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-971"
     },
     {
       "id": "DH54",
@@ -87,7 +111,8 @@
       "estimated": false,
       "progress": 50,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1008"
     },
     {
       "id": "DH45-03",
@@ -96,7 +121,8 @@
       "estimated": false,
       "progress": 25,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1195"
     },
     {
       "id": "DH80",
@@ -105,7 +131,8 @@
       "estimated": false,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1107"
     },
     {
       "id": "CREQ-132",
@@ -126,7 +153,7 @@
         "DH71-01"
       ],
       "notes": "",
-      "jiraUrl": ""
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1191"
     },
     {
       "id": "DH66",
@@ -135,7 +162,8 @@
       "estimated": false,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1051"
     },
     {
       "id": "DH99",
@@ -144,7 +172,8 @@
       "estimated": false,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2147"
     },
     {
       "id": "DH45-04",
@@ -153,7 +182,8 @@
       "estimated": false,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1366"
     },
     {
       "id": "DH101",
@@ -162,7 +192,8 @@
       "estimated": true,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2157"
     },
     {
       "id": "DH100",
@@ -171,7 +202,8 @@
       "estimated": true,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2151"
     },
     {
       "id": "DH87",
@@ -180,7 +212,8 @@
       "estimated": true,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1738"
     },
     {
       "id": "DH84-02",
@@ -191,7 +224,8 @@
       "deps": [
         "DH84"
       ],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2134"
     },
     {
       "id": "DH102",
@@ -200,7 +234,8 @@
       "estimated": true,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1860"
     },
     {
       "id": "DH59",
@@ -209,7 +244,8 @@
       "estimated": true,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1042"
     },
     {
       "id": "DH93",
@@ -218,7 +254,8 @@
       "estimated": true,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1981"
     },
     {
       "id": "DH60-02",
@@ -229,7 +266,8 @@
       "deps": [
         "DH71-01"
       ],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1190"
     },
     {
       "id": "DH88",
@@ -238,7 +276,8 @@
       "estimated": true,
       "progress": 0,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1748"
     }
   ],
   "absences": [
