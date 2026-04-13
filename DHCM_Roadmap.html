@@ -2370,6 +2370,16 @@ async function githubSaveActual() {
   setGhStatus('saving', '↑ A guardar…');
   document.getElementById('btnGhSave').classList.add('loading');
 
+  // Build jiraStatuses from cache to persist alongside roadmap data
+  const jiraStatusesSnapshot = {};
+  let jiraStatusesSyncedAt = '';
+  Object.entries(jiraStatusCache).forEach(([id, entry]) => {
+    if (!entry.loading && entry.status) {
+      jiraStatusesSnapshot[id] = entry.status;
+      if (entry.fetchedAt) jiraStatusesSyncedAt = entry.fetchedAt;
+    }
+  });
+
   const state = {
     version: 3,
     savedAt: new Date().toISOString(),
@@ -2377,6 +2387,10 @@ async function githubSaveActual() {
     projects: JSON.parse(JSON.stringify(projects)),
     absences: JSON.parse(JSON.stringify(absences)),
     scenarios: JSON.parse(JSON.stringify(scenarios)),
+    ...(Object.keys(jiraStatusesSnapshot).length ? {
+      jiraStatuses: jiraStatusesSnapshot,
+      jiraStatusesSyncedAt,
+    } : {}),
   };
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
 
