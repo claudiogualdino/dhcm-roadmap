@@ -343,6 +343,46 @@
   .admin-panel-label{font-size:9px;font-weight:700;color:var(--red);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.8px;margin-right:4px;white-space:nowrap}
   @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 
+
+  /* CHANGELOG */
+  .changelog-section{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-top:16px;display:none}
+  .changelog-section.show{display:block}
+  .changelog-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .changelog-header h2{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .changelog-count{font-size:9px;font-family:var(--font-mono);background:var(--bg-tertiary);color:var(--text-muted);padding:2px 8px;border-radius:8px;font-weight:600}
+  .changelog-day{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+  .changelog-day-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--bg-tertiary);cursor:pointer;user-select:none;transition:background var(--transition)}
+  .changelog-day-header:hover{background:rgba(42,58,92,0.6)}
+  .changelog-day-date{font-size:11px;font-weight:700;color:var(--text-primary);font-family:var(--font-mono)}
+  .changelog-day-meta{display:flex;align-items:center;gap:8px}
+  .changelog-day-count{font-size:9px;color:var(--text-muted);font-family:var(--font-mono)}
+  .changelog-day-note{font-size:9px;color:var(--cyan);font-style:italic;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .changelog-chevron{font-size:10px;color:var(--text-muted);transition:transform 0.2s}
+  .changelog-chevron.open{transform:rotate(180deg)}
+  .changelog-entries{display:none;padding:8px 0}
+  .changelog-entries.show{display:block}
+  .changelog-entry{display:flex;align-items:flex-start;gap:10px;padding:6px 14px;border-bottom:1px solid rgba(42,58,92,0.3);font-size:11px}
+  .changelog-entry:last-child{border-bottom:none}
+  .changelog-type{font-size:9px;font-weight:700;font-family:var(--font-mono);padding:2px 7px;border-radius:6px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+  .changelog-type.add{background:rgba(45,212,160,0.15);color:var(--green)}
+  .changelog-type.edit{background:rgba(59,130,246,0.15);color:var(--blue)}
+  .changelog-type.reorder{background:rgba(168,85,247,0.15);color:var(--purple)}
+  .changelog-type.import{background:rgba(245,158,11,0.15);color:var(--orange)}
+  .changelog-type.save{background:rgba(100,116,139,0.12);color:var(--text-muted)}
+  .changelog-entry-body{flex:1;min-width:0}
+  .changelog-entry-title{color:var(--text-primary);font-weight:600}
+  .changelog-entry-detail{color:var(--text-secondary);font-size:10px;margin-top:2px}
+  .changelog-entry-time{font-size:9px;color:var(--text-muted);font-family:var(--font-mono);white-space:nowrap;flex-shrink:0}
+  .changelog-empty{text-align:center;padding:24px;color:var(--text-muted);font-size:11px}
+  .changelog-note-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+  .changelog-note-modal.show{display:flex}
+  .changelog-note-box{background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:24px 28px;width:420px;max-width:95vw;box-shadow:0 20px 50px rgba(0,0,0,0.4)}
+  .changelog-note-box h3{font-size:14px;font-weight:800;margin-bottom:6px}
+  .changelog-note-box p{font-size:11px;color:var(--text-secondary);margin-bottom:14px}
+  .changelog-note-box textarea{width:100%;background:var(--bg-primary);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text-primary);font-family:var(--font-body);font-size:11px;resize:none;height:70px;outline:none;transition:border-color 0.2s}
+  .changelog-note-box textarea:focus{border-color:var(--blue)}
+  .changelog-note-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+
 </style>
 </head>
 <body>
@@ -391,7 +431,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import
     </button>
     <span class="gh-status hidden" id="ghStatus"></span>
-    <button class="btn gh-btn" onclick="githubSave()" id="btnGhSave" style="font-size:10px;padding:5px 10px">
+    <button class="btn gh-btn" onclick="openSaveNoteModal()" id="btnGhSave" style="font-size:10px;padding:5px 10px">
       <svg height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>💾 Guardar
     </button>
     <button class="btn" onclick="githubLoad()" id="btnGhLoad" style="font-size:10px;padding:5px 10px;border-color:rgba(35,134,54,0.4);color:#3fb950">
@@ -656,6 +696,33 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
           Guardar Config
         </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- CHANGELOG (admin only) -->
+  <div class="changelog-section" id="changelogSection">
+    <div class="changelog-header">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--cyan)"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Histórico de Alterações
+        <span class="changelog-count" id="changelogCount">0 entradas</span>
+      </h2>
+      <button class="btn" onclick="clearChangelog()" style="font-size:9px;padding:4px 8px;color:var(--red);border-color:rgba(239,68,68,0.3)">🗑 Limpar histórico</button>
+    </div>
+    <div id="changelogList"><div class="changelog-empty">Nenhuma alteração registada ainda.<br>As alterações aparecem aqui automaticamente.</div></div>
+  </div>
+
+  <!-- SAVE NOTE MODAL -->
+  <div class="changelog-note-modal" id="saveNoteModal">
+    <div class="changelog-note-box">
+      <h3>💾 Guardar no GitHub</h3>
+      <p>Adiciona uma nota opcional para descrever as alterações desta versão.</p>
+      <textarea id="saveNoteText" placeholder="ex: Sprint planning — reordenação de prioridades, DH105 adicionado…"></textarea>
+      <div class="changelog-note-actions">
+        <button class="btn" onclick="closeSaveNoteModal()">Cancelar</button>
+        <button class="btn" onclick="githubSaveWithNote()" style="background:var(--green);color:#0f1729;border-color:var(--green);font-weight:700">💾 Guardar</button>
       </div>
     </div>
   </div>
@@ -1278,7 +1345,10 @@ function editEffort(id, cell) {
 function commitEffort(id, val) {
   const proj=projects.find(p=>p.id===id);if(!proj)return;
   const num=parseInt(val);
-  if(!isNaN(num)&&num>0) proj.effort=num;
+  if(!isNaN(num)&&num>0&&num!==proj.effort){
+    trackChange('edit', proj.id, proj.name, `Esforço: ${proj.effort}h → ${num}h`);
+    proj.effort=num;
+  }
   render();
 }
 
@@ -1300,7 +1370,11 @@ function commitGanttProgress(id, val) {
   const proj = projects.find(p => p.id === id);
   if (!proj) return;
   const num = parseInt(val);
-  if (!isNaN(num)) proj.progress = Math.max(0, Math.min(100, num));
+  if (!isNaN(num)) {
+    const newVal = Math.max(0, Math.min(100, num));
+    if (newVal !== (proj.progress||0)) trackChange('edit', proj.id, proj.name, `Progresso: ${proj.progress||0}% → ${newVal}%`);
+    proj.progress = newVal;
+  }
   render();
 }
 
@@ -1316,7 +1390,11 @@ function editProgress(id, cell) {
 function commitProgress(id, val) {
   const proj=projects.find(p=>p.id===id);if(!proj)return;
   const num=parseInt(val);
-  if(!isNaN(num)) proj.progress=Math.max(0,Math.min(100,num));
+  if(!isNaN(num)){
+    const newVal=Math.max(0,Math.min(100,num));
+    if(newVal!==(proj.progress||0)) trackChange('edit',proj.id,proj.name,`Progresso: ${proj.progress||0}% → ${newVal}%`);
+    proj.progress=newVal;
+  }
   render();
 }
 
@@ -1332,7 +1410,9 @@ function editNotes(id, cell) {
 
 function commitNotes(id, val) {
   const proj=projects.find(p=>p.id===id);if(!proj)return;
-  proj.notes=val.trim();
+  const newNotes=val.trim();
+  if(newNotes!==(proj.notes||'')) trackChange('edit',proj.id,proj.name,`Notas atualizadas`);
+  proj.notes=newNotes;
   render();
 }
 
@@ -1369,7 +1449,7 @@ let dragIdx=null;
 function onDragStart(e){dragIdx=parseInt(e.currentTarget.dataset.idx);e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move'}
 function onDragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over')}
 function onDragLeave(e){e.currentTarget.classList.remove('drag-over')}
-function onDrop(e){e.preventDefault();e.currentTarget.classList.remove('drag-over');const ti=parseInt(e.currentTarget.dataset.idx);if(dragIdx===null||dragIdx===ti)return;const filtered=currentFilter==='all'?projects:currentFilter==='estimated'?projects.filter(x=>x.estimated):projects.filter(x=>!x.estimated);if(currentFilter==='all'){const[m]=projects.splice(dragIdx,1);projects.splice(ti,0,m)}else{const s=filtered[dragIdx],t=filtered[ti],si=projects.indexOf(s);projects.splice(si,1);const ni=projects.indexOf(t),ii=dragIdx<ti?ni+1:ni;projects.splice(ii,0,s)}dragIdx=null;render()}
+function onDrop(e){e.preventDefault();e.currentTarget.classList.remove('drag-over');const ti=parseInt(e.currentTarget.dataset.idx);if(dragIdx===null||dragIdx===ti)return;const filtered=currentFilter==='all'?projects:currentFilter==='estimated'?projects.filter(x=>x.estimated):projects.filter(x=>!x.estimated);if(currentFilter==='all'){const[m]=projects.splice(dragIdx,1);projects.splice(ti,0,m)}else{const s=filtered[dragIdx],t=filtered[ti],si=projects.indexOf(s);projects.splice(si,1);const ni=projects.indexOf(t),ii=dragIdx<ti?ni+1:ni;projects.splice(ii,0,s)}const moved=projects[ti]||filtered[ti];if(moved)trackChange('reorder',moved.id,moved.name,`Prioridade reordenada`);dragIdx=null;render()}
 
 // ════════════════════ DEPENDENCIES ════════════════════
 // ════════════════════ EXPORT MENU ════════════════════
@@ -1533,6 +1613,7 @@ function showImportPreview(data, fileName, colMap, headers) {
 
 function confirmImport() {
   if (!pendingImport) return;
+  trackChange('import', '', 'Importação de ficheiro', `${pendingImport.length} projetos importados`);
   // File order = priority order (first row = highest priority)
   projects = pendingImport;
   pendingImport = null;
@@ -1669,6 +1750,7 @@ function confirmAddProject() {
     projects.push(newProject);
   }
 
+  trackChange('add', id, name, `Adicionado · ${effort}h${estimated?' · estimado':''}`);
   closeAddProjModal();
   render();
 
@@ -1706,22 +1788,155 @@ function handleLogoClick() {
 }
 
 function activateAdmin() {
-  document.body.classList.remove('readonly');
-  document.getElementById('adminBar').classList.add('show');
-  document.getElementById('adminModeBadge').classList.add('show');
-  // Brief flash on logo to confirm
-  const zone = document.getElementById('fhLogoZone');
-  zone.style.filter = 'brightness(1.4)';
-  zone.style.transform = 'scale(1.08)';
-  setTimeout(() => { zone.style.filter = ''; zone.style.transform = ''; }, 400);
+  const panel = document.getElementById('adminPanel');
+  const badge = document.getElementById('adminModeBadge');
+  const zone  = document.getElementById('fhLogoZone');
+  if (panel) panel.classList.add('show');
+  if (badge) badge.classList.add('show');
+  showChangelogSection();
+  if (zone) {
+    zone.style.filter = 'brightness(1.4)';
+    zone.style.transform = 'scale(1.08)';
+    setTimeout(() => { zone.style.filter = ''; zone.style.transform = ''; }, 400);
+  }
 }
 
 function deactivateAdmin() {
-  document.getElementById('adminBar').classList.remove('show');
-  document.getElementById('adminModeBadge').classList.remove('show');
-  // Go back to appropriate mode
-  const cfg = ghConfig();
-  setReadonlyMode(!cfg.token);
+  const panel = document.getElementById('adminPanel');
+  const badge = document.getElementById('adminModeBadge');
+  if (panel) panel.classList.remove('show');
+  if (badge) badge.classList.remove('show');
+  hideChangelogSection();
+}
+
+
+// ════════════════════ CHANGELOG ════════════════════
+let changelog = []; // [{date, time, type, id, name, detail, note}]
+const GH_CHANGELOG_FILE = 'changelog.json';
+
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function nowTimeStr() { return new Date().toLocaleTimeString('pt-PT', {hour:'2-digit',minute:'2-digit'}); }
+
+function trackChange(type, id, name, detail) {
+  changelog.push({ date: todayStr(), time: nowTimeStr(), type, id: id||'', name: name||'', detail: detail||'' });
+  renderChangelog();
+}
+
+function renderChangelog() {
+  const list = document.getElementById('changelogList');
+  const countEl = document.getElementById('changelogCount');
+  if (!list) return;
+  if (changelog.length === 0) {
+    list.innerHTML = '<div class="changelog-empty">Nenhuma alteração registada ainda.<br>As alterações aparecem aqui automaticamente.</div>';
+    if (countEl) countEl.textContent = '0 entradas';
+    return;
+  }
+  if (countEl) countEl.textContent = changelog.length + ' entr' + (changelog.length === 1 ? 'ada' : 'adas');
+
+  // Group by date (most recent first)
+  const byDate = {};
+  changelog.forEach(e => { if (!byDate[e.date]) byDate[e.date] = []; byDate[e.date].push(e); });
+  const sortedDates = Object.keys(byDate).sort((a,b) => b.localeCompare(a));
+
+  const typeLabel = { add:'➕ ADD', edit:'✏️ EDIT', reorder:'↕ ORDEM', import:'📥 IMPORT', save:'💾 SAVE', remove:'🗑 REMOVE' };
+
+  list.innerHTML = sortedDates.map((date, di) => {
+    const entries = byDate[date];
+    const saveEntry = entries.find(e => e.type === 'save');
+    const note = saveEntry?.detail || '';
+    const isOpen = di === 0; // first day open by default
+    const formattedDate = new Date(date + 'T12:00:00').toLocaleDateString('pt-PT', {weekday:'short', day:'2-digit', month:'long', year:'numeric'});
+    return `<div class="changelog-day">
+      <div class="changelog-day-header" onclick="toggleChangelogDay(this)">
+        <span class="changelog-day-date">${formattedDate}</span>
+        <div class="changelog-day-meta">
+          ${note ? `<span class="changelog-day-note">"${note}"</span>` : ''}
+          <span class="changelog-day-count">${entries.length} alt.</span>
+          <span class="changelog-chevron ${isOpen?'open':''}">▼</span>
+        </div>
+      </div>
+      <div class="changelog-entries ${isOpen?'show':''}">
+        ${[...entries].reverse().map(e => `
+          <div class="changelog-entry">
+            <span class="changelog-type ${e.type}">${typeLabel[e.type]||e.type}</span>
+            <div class="changelog-entry-body">
+              <div class="changelog-entry-title">${e.id ? `<span style="font-family:var(--font-mono);color:var(--text-muted)">${e.id}</span> · ` : ''}${e.name}</div>
+              ${e.detail ? `<div class="changelog-entry-detail">${e.detail}</div>` : ''}
+            </div>
+            <span class="changelog-entry-time">${e.time}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleChangelogDay(header) {
+  const entries = header.nextElementSibling;
+  const chevron = header.querySelector('.changelog-chevron');
+  entries.classList.toggle('show');
+  chevron.classList.toggle('open');
+}
+
+function clearChangelog() {
+  if (!confirm('Limpar todo o histórico de alterações? Esta ação não pode ser desfeita.')) return;
+  changelog = [];
+  renderChangelog();
+}
+
+// Show/hide changelog with admin panel
+function showChangelogSection() {
+  const sec = document.getElementById('changelogSection');
+  if (sec) sec.classList.add('show');
+}
+function hideChangelogSection() {
+  const sec = document.getElementById('changelogSection');
+  if (sec) sec.classList.remove('show');
+}
+
+// Save note modal
+function openSaveNoteModal() {
+  document.getElementById('saveNoteText').value = '';
+  document.getElementById('saveNoteModal').classList.add('show');
+  setTimeout(() => document.getElementById('saveNoteText').focus(), 100);
+}
+function closeSaveNoteModal() {
+  document.getElementById('saveNoteModal').classList.remove('show');
+}
+
+// Push changelog to GitHub
+async function saveChangelogToGitHub(cfg) {
+  if (!cfg.token) return;
+  const data = btoa(unescape(encodeURIComponent(JSON.stringify(changelog, null, 2))));
+  try {
+    const checkRes = await fetch(`https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_CHANGELOG_FILE}`,
+      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } });
+    let sha; if (checkRes.ok) { const d = await checkRes.json(); sha = d.sha; }
+    await fetch(`https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_CHANGELOG_FILE}`, {
+      method: 'PUT',
+      headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: `changelog: update ${new Date().toISOString().slice(0,16).replace('T',' ')}`, content: data, ...(sha?{sha}:{}) })
+    });
+  } catch(e) { console.warn('Changelog save failed:', e); }
+}
+
+// Load changelog from GitHub (public raw)
+async function loadChangelogFromGitHub() {
+  try {
+    const u = localStorage.getItem('gh_username') || 'claudiogualdino';
+    const r = localStorage.getItem('gh_repo') || 'dhcm-roadmap';
+    const res = await fetch(`https://raw.githubusercontent.com/${u}/${r}/main/${GH_CHANGELOG_FILE}?t=${Date.now()}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Array.isArray(data)) { changelog = data; renderChangelog(); }
+  } catch(e) { /* silent */ }
+}
+
+async function githubSaveWithNote() {
+  const note = document.getElementById('saveNoteText').value.trim();
+  closeSaveNoteModal();
+  if (note) trackChange('save', '', 'Versão guardada', note);
+  else trackChange('save', '', 'Versão guardada', '');
+  await githubSaveActual();
 }
 
 // ════════════════════ GITHUB SYNC ════════════════════
@@ -1795,7 +2010,7 @@ function setGhStatus(type, msg) {
   el.textContent = msg;
 }
 
-async function githubSave() {
+async function githubSaveActual() {
   const cfg = ghConfig();
   if (!cfg.username || !cfg.token) { openGhModal(); return; }
 
@@ -1841,6 +2056,7 @@ async function githubSave() {
     );
 
     if (res.ok) {
+      await saveChangelogToGitHub(cfg);
       setGhStatus('ok', '✓ Guardado no GitHub');
       setTimeout(() => setGhStatus('hidden', ''), 4000);
     } else {
