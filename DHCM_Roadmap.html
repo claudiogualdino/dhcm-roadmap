@@ -2149,64 +2149,32 @@ async function githubSaveWithNote() {
 
 // ════════════════════ JIRA STATUS ════════════════════
 
-const JIRA_STATUS_MAP = {
-  // Future Healthcare DHCM workflow states
-  'backlog':                    'todo',
-  'to do':                      'todo',
-  'pending approval':           'todo',
-  'in business requirements':   'inprogress',
-  'in technical analysis':      'inprogress',
-  'ready for development':      'inprogress',
-  'in progress':                'inprogress',
-  'implemented':                'inreview',
-  'on hold':                    'blocked',
-  'qa testing':                 'inreview',
-  'qa refused':                 'blocked',
-  'qa approved':                'inreview',
-  'train testing':              'inreview',
-  'train refused':              'blocked',
-  'ready for go live':          'inreview',
-  'closed':                     'done',
-  'cancelled':                  'cancelled',
-  'canceled':                   'cancelled',
-  // Generic fallbacks
-  'open':                       'todo',
-  'done':                       'done',
-  'resolved':                   'done',
-  'blocked':                    'blocked',
-};
-
 function jiraStatusClass(statusName) {
   if (!statusName) return 'todo';
-  return JIRA_STATUS_MAP[statusName.toLowerCase()] || 'inprogress';
-}
-
-function jiraStatusLabel(statusName) {
-  if (!statusName) return '—';
-  // Abbreviate long names
-  const abbr = {
-    'backlog':'BACKLOG','to do':'TO DO','pending approval':'PENDING',
-    'in business requirements':'BIZ REQ','in technical analysis':'TECH AN',
-    'ready for development':'READY DEV','in progress':'IN PROG',
-    'implemented':'IMPL','on hold':'ON HOLD',
-    'qa testing':'QA TEST','qa refused':'QA ✗','qa approved':'QA ✓',
-    'train testing':'TRAIN','train refused':'TRAIN ✗',
-    'ready for go live':'GO LIVE','closed':'CLOSED','cancelled':'CANCEL',
-  };
-  return abbr[statusName.toLowerCase()] || statusName.toUpperCase().slice(0,8);
+  const s = statusName.toLowerCase();
+  if (['closed','done','resolved'].some(x => s.includes(x))) return 'done';
+  if (['cancel'].some(x => s.includes(x))) return 'cancelled';
+  if (['refused','on hold','blocked','hold'].some(x => s.includes(x))) return 'blocked';
+  if (['qa','review','implemented','approved','train','go live'].some(x => s.includes(x))) return 'inreview';
+  if (['progress','analysis','requirement','development','pending'].some(x => s.includes(x))) return 'inprogress';
+  return 'todo';
 }
 
 function renderStatusBadge(projectId) {
   const cache = jiraStatusCache[projectId];
   if (!cache) return '<span style="color:var(--text-muted);font-size:10px">—</span>';
   if (cache.loading) return '<span class="jira-status loading">···</span>';
-  return `<span class="jira-status ${cache.statusClass}" title="${cache.status}">${jiraStatusLabel(cache.status)}</span>`;
+  if (!cache.status) return '<span style="color:var(--text-muted);font-size:10px">—</span>';
+  return `<span class="jira-status ${jiraStatusClass(cache.status)}" title="${cache.status}">${cache.status}</span>`;
 }
 
 function renderGanttStatusChip(projectId) {
   const cache = jiraStatusCache[projectId];
   if (!cache || cache.loading || !cache.status) return '';
-  return `<span class="gantt-status ${cache.statusClass}" title="${cache.status}">${jiraStatusLabel(cache.status)}</span>`;
+  const s = cache.status;
+  // Shorten for Gantt display (max ~10 chars)
+  const short = s.length > 12 ? s.slice(0, 11) + '…' : s;
+  return `<span class="gantt-status ${jiraStatusClass(s)}" title="${s}">${short}</span>`;
 }
 
 function jiraConfig() {
@@ -2234,8 +2202,10 @@ async function fetchJiraStatus(project) {
     });
     if (!res.ok) return null;
     const data = await res.json();
-    return data?.fields?.status?.name || null;
-  } catch(e) { return null; }
+    const statusName = data?.fields?.status?.name || null;
+    if (statusName) console.log(`[Jira] ${issueKey} → "${statusName}"`);
+    return statusName;
+  } catch(e) { console.warn('[Jira] fetch error:', e); return null; }
 }
 
 async function syncJiraStatuses() {
