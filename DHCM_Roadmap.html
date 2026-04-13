@@ -627,6 +627,7 @@
     <table class="details-table">
       <thead><tr>
         <th style="width:80px">ID</th><th style="min-width:180px">Project</th>
+        <th class="center" style="width:80px">Status</th>
         <th class="center" style="width:65px">Effort</th>
         <th class="center" style="width:70px">Progress</th>
         <th class="center" style="width:100px">Start</th>
@@ -635,7 +636,6 @@
         <th class="center" style="width:70px">Duration</th>
         <th class="center" style="width:70px">Depends</th>
         <th style="min-width:120px">Notes</th>
-        <th class="center" style="width:80px">Status</th>
         <th class="center" style="width:60px">Jira</th>
         <th class="center admin-est-col" style="width:90px;display:none">Estimado</th>
       </tr></thead>
@@ -1413,6 +1413,7 @@ function renderDetails(data){
     return`<tr>
       ${idCell}
       ${nameCell}
+      <td class="center">${renderStatusBadge(p.id)}</td>
       ${effortCell}
       ${progressCell}
       <td class="center" style="font-size:11px">${fmtDate(p.startDate)}</td>
@@ -1421,7 +1422,6 @@ function renderDetails(data){
       <td class="center" style="color:var(--text-secondary);font-size:11px">${p.durationWeeks.toFixed(1)}w</td>
       ${depsCell}
       ${notesCell}
-      <td class="center">${renderStatusBadge(p.id)}</td>
       ${jiraCell}
       ${adminEstCol}
     </tr>`;
