@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-10T11:21:18.623Z",
+  "savedAt": "2026-04-13T01:49:22.485Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -13,7 +13,7 @@
       "name": "Scribe F1",
       "effort": 32,
       "estimated": false,
-      "progress": 0,
+      "progress": 100,
       "deps": [],
       "notes": ""
     },
