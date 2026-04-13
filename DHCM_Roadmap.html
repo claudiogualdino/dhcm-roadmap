@@ -61,24 +61,6 @@
   .kpi-badge.red{background:rgba(239,68,68,0.15);color:var(--red)}
   .kpi-badge.muted{background:rgba(100,116,139,0.12);color:var(--text-muted)}
 
-  /* SPRINT LOAD CHART */
-  .sprint-load-section{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px}
-  .sprint-load-section h3{font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px}
-  .sprint-load-chart{display:flex;align-items:flex-end;gap:4px;height:80px;padding:0 4px}
-  .sprint-load-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
-  .sprint-load-bar-track{width:100%;flex:1;background:var(--bg-tertiary);border-radius:4px 4px 0 0;position:relative;overflow:hidden;cursor:pointer;transition:filter var(--transition)}
-  .sprint-load-bar-track:hover{filter:brightness(1.15)}
-  .sprint-load-bar-fill{position:absolute;bottom:0;left:0;right:0;border-radius:4px 4px 0 0;transition:height 0.5s cubic-bezier(0.4,0,0.2,1)}
-  .sprint-load-bar-fill.sl-under{background:linear-gradient(180deg,#10b981,#059669)}
-  .sprint-load-bar-fill.sl-near{background:linear-gradient(180deg,#f59e0b,#d97706)}
-  .sprint-load-bar-fill.sl-over{background:linear-gradient(180deg,#ef4444,#dc2626)}
-  .sprint-load-cap-line{position:absolute;left:0;right:0;height:2px;background:rgba(255,255,255,0.2);border-radius:1px}
-  .sprint-load-label{font-size:7.5px;font-family:var(--font-mono);color:var(--text-muted);font-weight:600;white-space:nowrap}
-  .sprint-load-pct{font-size:7px;font-family:var(--font-mono);font-weight:700}
-  .sprint-load-legend{display:flex;gap:12px;margin-top:10px;justify-content:flex-end}
-  .sl-legend-item{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-muted)}
-  .sl-legend-dot{width:8px;height:8px;border-radius:2px}
-
   /* RISK FLAGS */
   .risk-flag{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;padding:1px 5px;border-radius:6px;flex-shrink:0;white-space:nowrap}
   .risk-flag.rf-blocked{background:rgba(239,68,68,0.18);color:var(--red);border:1px solid rgba(239,68,68,0.35)}
@@ -147,7 +129,7 @@
   .gantt-section{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;overflow-x:auto;position:relative}
   .gantt-table{width:100%;min-width:1000px}
   .gantt-header-row{display:flex}
-  .gantt-proj-col{min-width:240px;flex-shrink:0;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;padding:4px 0}
+  .gantt-proj-col{min-width:290px;flex-shrink:0;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;padding:4px 0}
   .gantt-timeline-col{flex:1;display:flex;min-width:800px}
   .sprint-hdr{flex:1;text-align:center;padding:5px 2px;border-radius:5px;margin:0 1px;font-size:10px;font-weight:700;color:#fff}
   .sprint-hdr .s-dates{display:block;font-size:7.5px;opacity:0.7;margin-top:1px;font-weight:500}
@@ -160,12 +142,12 @@
   .gantt-row.dragging{opacity:0.5}
   .gantt-row.drag-over{border-top:2px solid var(--blue)}
   .gantt-row.dep-conflict{background:rgba(239,68,68,0.12)}
-  .proj-info{min-width:240px;flex-shrink:0;display:flex;align-items:center;gap:5px;padding:2px 0;font-size:11px}
+  .proj-info{min-width:290px;flex-shrink:0;display:flex;align-items:center;gap:5px;padding:2px 0;font-size:11px}
   .drag-handle{color:var(--text-muted);font-size:9px;cursor:grab;opacity:0.3;transition:opacity var(--transition);user-select:none}
   .gantt-row:hover .drag-handle{opacity:1}
   .color-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
   .proj-id{font-weight:700;color:var(--text-secondary);font-size:10px;font-family:var(--font-mono);min-width:58px}
-  .proj-name{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:88px}
+  .proj-name{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
   .dep-icon{font-size:9px;cursor:pointer;opacity:0.5;transition:opacity var(--transition)}
   .dep-icon:hover{opacity:1}
   .dep-icon.has-deps{color:var(--purple);opacity:0.8}
@@ -190,7 +172,7 @@
   .bar-remaining{position:absolute;right:0;top:0;bottom:0;background:rgba(0,0,0,0.15);border-radius:0 4px 4px 0;pointer-events:none}
   .bar-label{position:relative;z-index:2}
   .grid-line{position:absolute;top:0;bottom:0;width:1px;background:rgba(42,58,92,0.25);pointer-events:none}
-  .dep-svg{position:absolute;top:0;left:240px;right:0;bottom:0;pointer-events:none;z-index:5}
+  .dep-svg{position:absolute;top:0;left:290px;right:0;bottom:0;pointer-events:none;z-index:5}
   .dep-arrow{stroke:var(--purple);stroke-width:1.5;fill:none;opacity:0.6}
   .dep-arrow-head{fill:var(--purple);opacity:0.6}
   .dep-arrow.conflict{stroke:var(--red)}
@@ -362,6 +344,31 @@
   body.readonly [onclick*="saveState"]{display:none !important}
   body.readonly [onclick*="loadState"]{display:none !important}
 
+
+  /* ADMIN MODE */
+  .admin-bar{display:none;align-items:center;gap:6px;flex-wrap:wrap}
+  .admin-bar.show{display:flex}
+  .admin-unlock-hint{font-size:8px;color:var(--text-muted);font-family:var(--font-mono);opacity:0;transition:opacity 0.3s;user-select:none;padding:4px 8px}
+  .fh-logo-admin{cursor:pointer;border-radius:6px;transition:box-shadow 0.2s}
+  .fh-logo-admin:hover .admin-unlock-hint{opacity:1}
+  .admin-mode-badge{display:none;align-items:center;gap:5px;font-size:9px;font-weight:700;font-family:var(--font-mono);padding:3px 10px;border-radius:8px;background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.35);cursor:pointer}
+  .admin-mode-badge.show{display:inline-flex}
+  .admin-mode-badge:hover{background:rgba(239,68,68,0.25)}
+
+
+  /* ADD PROJECT MODAL */
+  .addproj-modal{width:520px}
+  .addproj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
+  .addproj-grid .gh-field{margin-bottom:0}
+  .addproj-full{grid-column:1/-1}
+  .addproj-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .addproj-checkbox{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-secondary);cursor:pointer;padding:8px 12px;border:1px solid var(--border);border-radius:7px;background:var(--bg-primary);transition:border-color 0.2s}
+  .addproj-checkbox:hover{border-color:var(--blue)}
+  .addproj-checkbox input{accent-color:var(--blue)}
+  .addproj-pos{display:flex;gap:6px}
+  .addproj-pos-btn{flex:1;padding:6px;border:1px solid var(--border);border-radius:6px;background:var(--bg-primary);color:var(--text-secondary);font-size:10px;font-weight:600;cursor:pointer;transition:all 0.2s;text-align:center}
+  .addproj-pos-btn:hover,.addproj-pos-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
 </style>
 </head>
 <body>
@@ -369,7 +376,7 @@
 
   <!-- FH BRANDED HEADER -->
   <div style="display:flex;align-items:center;gap:16px;padding:12px 0 14px;margin-bottom:10px;border-bottom:3px solid #C41E3A">
-    <div style="display:flex;align-items:center;gap:12px">
+    <div style="display:flex;align-items:center;gap:12px" class="fh-logo-admin" id="fhLogoZone" onclick="handleLogoClick()">
       <svg width="36" height="36" viewBox="0 0 36 36"><path d="M18 33c-1.5-1.2-12-10.2-12-19.5C6 7.7 9.7 4 14.5 4c2.4 0 4.5 1.2 5.5 3 1-1.8 3.1-3 5.5-3C30.3 4 34 7.7 34 13.5 34 22.8 23.5 31.8 22 33l-4-0z" fill="#C41E3A"/><circle cx="18" cy="15" r="2" fill="white"/><circle cx="14" cy="13" r="1.5" fill="white" opacity="0.7"/><circle cx="22" cy="13" r="1.5" fill="white" opacity="0.7"/><circle cx="16" cy="18" r="1.2" fill="white" opacity="0.5"/><circle cx="20" cy="18" r="1.2" fill="white" opacity="0.5"/></svg>
       <div>
         <div style="font-size:16px;font-weight:800;line-height:1.1;color:var(--text-primary);letter-spacing:-0.3px"><span style="color:var(--text-primary)">Future</span> <span style="color:var(--text-secondary)">healthcare</span></div>
@@ -389,8 +396,14 @@
       <div class="subtitle" id="dateRange"></div>
     </div>
     <div class="header-right">
+      <span class="admin-mode-badge" id="adminModeBadge" onclick="deactivateAdmin()" title="Clica para sair do modo admin">🔒 Admin · clica para sair</span>
+      <div class="admin-bar" id="adminBar">
       <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFileSelect(event)">
       <input type="file" id="stateInput" accept=".json" style="display:none" onchange="handleLoadState(event)">
+      <button class="btn" onclick="openAddProjModal()" title="Adicionar novo projeto (admin)" style="background:rgba(45,212,160,0.15);color:var(--green);border-color:rgba(45,212,160,0.4);font-weight:700">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        + Projeto
+      </button>
       <button class="btn btn-primary" onclick="togglePanel('importPanel','btnImport')" id="btnImport" title="Import project list from CSV/XLSX">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Import
@@ -460,18 +473,6 @@
 
   <!-- KPI -->
   <div class="kpi-row" id="kpiRow"></div>
-
-  <!-- SPRINT LOAD CHART -->
-  <div class="sprint-load-section animate-in" id="sprintLoadSection" style="animation-delay:0.08s">
-    <h3>Sprint Load Chart</h3>
-    <div class="sprint-load-chart" id="sprintLoadChart"></div>
-    <div class="sprint-load-legend">
-      <div class="sl-legend-item"><div class="sl-legend-dot" style="background:#10b981"></div>Under capacity</div>
-      <div class="sl-legend-item"><div class="sl-legend-dot" style="background:#f59e0b"></div>Near capacity (≥80%)</div>
-      <div class="sl-legend-item"><div class="sl-legend-dot" style="background:#ef4444"></div>Overloaded (≥100%)</div>
-      <div class="sl-legend-item"><div class="sl-legend-dot" style="background:rgba(255,255,255,0.2)"></div>Capacity limit</div>
-    </div>
-  </div>
 
   <!-- CONTROLS -->
   <div class="controls-panel animate-in" style="animation-delay:0.05s">
@@ -611,7 +612,7 @@
     <h2>Project Timeline Details</h2>
     <table class="details-table">
       <thead><tr>
-        <th style="width:80px">ID</th><th>Project</th>
+        <th style="width:80px">ID</th><th style="min-width:180px">Project</th>
         <th class="center" style="width:65px">Effort</th>
         <th class="center" style="width:70px">Progress</th>
         <th class="center" style="width:100px">Start</th>
@@ -627,6 +628,67 @@
     </table>
   </div>
 
+
+
+  <!-- ADD PROJECT MODAL (admin only) -->
+  <div class="gh-modal-overlay" id="addProjModal">
+    <div class="gh-modal addproj-modal">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;color:var(--green)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Adicionar Projeto
+      </h2>
+      <div class="gh-subtitle">O projeto será inserido na posição escolhida da fila de prioridades.</div>
+
+      <div class="addproj-grid">
+        <div class="gh-field">
+          <label>ID do Projeto *</label>
+          <input type="text" id="apId" placeholder="ex: DH105" style="text-transform:uppercase">
+          <div class="gh-hint">Identificador único (DH##, CREQ-###)</div>
+        </div>
+        <div class="gh-field">
+          <label>Esforço (horas) *</label>
+          <input type="number" id="apEffort" placeholder="ex: 80" min="1" max="9999">
+        </div>
+        <div class="gh-field addproj-full">
+          <label>Nome do Projeto *</label>
+          <input type="text" id="apName" placeholder="ex: Patient Portal - Notifications">
+        </div>
+        <div class="gh-field addproj-full">
+          <label>Jira URL</label>
+          <input type="url" id="apJiraUrl" placeholder="https://futurehealthcare.atlassian.net/browse/GDP-xxxx">
+        </div>
+        <div class="gh-field addproj-full">
+          <label>Notas / Observações</label>
+          <input type="text" id="apNotes" placeholder="ex: Estimado pelo Claude, Aguarda validação...">
+        </div>
+      </div>
+
+      <div class="addproj-row" style="margin-top:4px">
+        <label class="addproj-checkbox">
+          <input type="checkbox" id="apEstimated">
+          <span>⚬ Esforço estimado</span>
+        </label>
+      </div>
+
+      <div class="gh-field" style="margin-bottom:16px">
+        <label>Inserir na posição</label>
+        <div class="addproj-pos">
+          <div class="addproj-pos-btn active" id="apPos0" onclick="setApPos(0)">⬆ Início (prioridade máxima)</div>
+          <div class="addproj-pos-btn" id="apPos1" onclick="setApPos(1)">⬇ Fim (última prioridade)</div>
+        </div>
+      </div>
+
+      <div id="apError" style="display:none;color:var(--red);font-size:10px;margin-bottom:10px;padding:8px 12px;background:rgba(239,68,68,0.1);border-radius:6px;border:1px solid rgba(239,68,68,0.3)"></div>
+
+      <div class="gh-modal-actions">
+        <button class="btn" onclick="closeAddProjModal()">Cancelar</button>
+        <button class="btn gh-btn" onclick="confirmAddProject()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar Projeto
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- GITHUB MODAL -->
   <div class="gh-modal-overlay" id="ghModal">
@@ -1059,7 +1121,7 @@ function compute(){
 // ════════════════════ RENDER ════════════════════
 function render(){
   const data=compute();
-  renderAbsences();renderKPIs(data);renderCapacity(data);renderSprintLoad(data);renderGantt(data);renderDetails(data);renderFooter(data);
+  renderAbsences();renderKPIs(data);renderCapacity(data);renderGantt(data);renderDetails(data);renderFooter(data);
   document.getElementById('dateRange').textContent=data.scheduled.length>0?`${fmtDate(data.scheduled[0].startDate)} → ${fmtDate(data.scheduled[data.scheduled.length-1].endDate)}`:'';
 }
 
@@ -1150,32 +1212,6 @@ function renderCapacity(data){
   }
 }
 
-function renderSprintLoad(data){
-  const chart = document.getElementById('sprintLoadChart');
-  if(!chart) return;
-  const maxH = Math.max(...data.sprintHours.map((h,i)=>Math.max(h, data.sprintEffCap[i]||1)), 1);
-  let html = '';
-  for(let i=0;i<data.numSprintsDisplay;i++){
-    const used = data.sprintHours[i]||0;
-    const effCap = data.sprintEffCap[i]||data.baseCapacity;
-    const pct = effCap>0?Math.min(Math.round((used/effCap)*100),120):0;
-    const cls = pct>=100?'sl-over':pct>=80?'sl-near':'sl-under';
-    const fillH = Math.round((used/maxH)*100);
-    const capLineH = Math.round((effCap/maxH)*100);
-    const pctColor = pct>=100?'var(--red)':pct>=80?'var(--orange)':'var(--green)';
-    const hasAbsence = effCap < data.baseCapacity;
-    html += `<div class="sprint-load-bar-wrap" title="Sprint ${i+1}: ${Math.round(used)}h / ${Math.round(effCap)}h (${pct}%)${hasAbsence?' · reduced by absences':''}">
-      <div class="sprint-load-pct" style="color:${pctColor}">${pct}%</div>
-      <div class="sprint-load-bar-track">
-        <div class="sprint-load-bar-fill ${cls}" style="height:${fillH}%"></div>
-        <div class="sprint-load-cap-line" style="bottom:${capLineH}%" title="Capacity: ${Math.round(effCap)}h"></div>
-      </div>
-      <div class="sprint-load-label" style="${hasAbsence?'color:var(--orange)':''}">S${i+1}</div>
-    </div>`;
-  }
-  chart.innerHTML = html;
-}
-
 function renderGantt(data){
   const{scheduled,numSprintsDisplay,totalWeeks,totalDays,sprintStarts,sprintEnds,sprintEffCap,weeksSprint,todayPct,depConflicts,baseCapacity}=data;
   let html='';
@@ -1213,7 +1249,7 @@ function renderGantt(data){
         <span class="drag-handle">⋮⋮</span>
         <div class="color-dot" style="background:${p.color}"></div>
         <span class="proj-id">${p.id}</span>
-        <span class="proj-name" title="${p.name}">${truncate(p.name,14)}</span>
+        <span class="proj-name" title="${p.name}">${truncate(p.name,22)}</span>
         ${isConflict?'<span class="risk-flag rf-blocked">⛔ DEP</span>':p.estimated?'<span class="risk-flag rf-estimated">~ EST</span>':p.notes&&p.notes.toLowerCase().includes('review')?'<span class="risk-flag rf-review">👁 REVIEW</span>':'<span class="risk-flag rf-ok">✓</span>'}
         <span class="dep-icon ${hasDeps?'has-deps':''}" onclick="event.stopPropagation();toggleDepEditor('${p.id}')" title="${hasDeps?'Depends on: '+p.deps.join(', '):'Add dependency'}">⛓</span>
         <span class="gantt-progress-pill ${progress===100?'done':progress>0?'in-progress':'not-started'}" id="gpill-${p.id}" onclick="event.stopPropagation();editGanttProgress('${p.id}')" title="Click to edit progress">${progress===100?'✓ Done':progress>0?progress+'%':'—'}</span>
@@ -1656,6 +1692,118 @@ function handleLoadState(e) {
 render();
 
 
+
+
+// ════════════════════ ADD PROJECT ════════════════════
+let _apPosition = 0; // 0=start, 1=end
+
+function openAddProjModal() {
+  document.getElementById('apId').value       = '';
+  document.getElementById('apName').value     = '';
+  document.getElementById('apEffort').value   = '';
+  document.getElementById('apJiraUrl').value  = '';
+  document.getElementById('apNotes').value    = '';
+  document.getElementById('apEstimated').checked = false;
+  document.getElementById('apError').style.display = 'none';
+  setApPos(0);
+  document.getElementById('addProjModal').classList.add('show');
+  setTimeout(() => document.getElementById('apId').focus(), 100);
+}
+
+function closeAddProjModal() {
+  document.getElementById('addProjModal').classList.remove('show');
+}
+
+function setApPos(pos) {
+  _apPosition = pos;
+  document.getElementById('apPos0').classList.toggle('active', pos === 0);
+  document.getElementById('apPos1').classList.toggle('active', pos === 1);
+}
+
+function confirmAddProject() {
+  const id       = document.getElementById('apId').value.trim().toUpperCase();
+  const name     = document.getElementById('apName').value.trim();
+  const effort   = parseInt(document.getElementById('apEffort').value);
+  const jiraUrl  = document.getElementById('apJiraUrl').value.trim();
+  const notes    = document.getElementById('apNotes').value.trim();
+  const estimated = document.getElementById('apEstimated').checked;
+
+  const errEl = document.getElementById('apError');
+  errEl.style.display = 'none';
+
+  // Validation
+  if (!id)              { errEl.textContent = 'O ID do projeto é obrigatório.';     errEl.style.display='block'; return; }
+  if (!name)            { errEl.textContent = 'O nome do projeto é obrigatório.';   errEl.style.display='block'; return; }
+  if (!effort || effort < 1) { errEl.textContent = 'O esforço deve ser ≥ 1 hora.'; errEl.style.display='block'; return; }
+  if (projects.find(p => p.id === id)) {
+    errEl.textContent = `Já existe um projeto com o ID "${id}". Escolhe um ID diferente.`;
+    errEl.style.display = 'block'; return;
+  }
+
+  const newProject = { id, name, effort, estimated, progress: 0, deps: [], notes, jiraUrl };
+
+  if (_apPosition === 0) {
+    projects.unshift(newProject);
+  } else {
+    projects.push(newProject);
+  }
+
+  closeAddProjModal();
+  render();
+
+  // Briefly highlight the new row in the Gantt
+  setTimeout(() => {
+    const row = document.querySelector(`.gantt-row[data-id="${id}"]`);
+    if (row) {
+      row.style.background = 'rgba(45,212,160,0.18)';
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => row.style.background = '', 2000);
+    }
+  }, 200);
+}
+
+// Allow Enter key to submit
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeAddProjModal();
+    closeGhModal();
+  }
+});
+
+// ════════════════════ ADMIN TRIPLE-CLICK ════════════════════
+let _logoClickCount = 0;
+let _logoClickTimer = null;
+
+function handleLogoClick() {
+  _logoClickCount++;
+  clearTimeout(_logoClickTimer);
+  _logoClickTimer = setTimeout(() => { _logoClickCount = 0; }, 600);
+  if (_logoClickCount >= 3) {
+    _logoClickCount = 0;
+    activateAdmin();
+  }
+}
+
+function activateAdmin() {
+  document.body.classList.remove('readonly');
+  document.getElementById('adminBar').classList.add('show');
+  document.getElementById('adminModeBadge').classList.add('show');
+  document.getElementById('readonlyBanner').classList.remove('show');
+  document.getElementById('editModeBadge').classList.remove('show');
+  // Brief flash on logo to confirm
+  const zone = document.getElementById('fhLogoZone');
+  zone.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.6)';
+  setTimeout(() => zone.style.boxShadow = '', 600);
+}
+
+function deactivateAdmin() {
+  document.getElementById('adminBar').classList.remove('show');
+  document.getElementById('adminModeBadge').classList.remove('show');
+  // Go back to appropriate mode
+  const cfg = ghConfig();
+  setReadonlyMode(!cfg.token);
+}
+
 // ════════════════════ GITHUB SYNC ════════════════════
 const GH_FILE = 'roadmap-state.json';
 
@@ -1887,10 +2035,14 @@ async function loadPublicState() {
 function setReadonlyMode(isReadonly) {
   if (isReadonly) {
     document.body.classList.add('readonly');
+    document.getElementById('adminBar').classList.remove('show');
+    document.getElementById('adminModeBadge').classList.remove('show');
     document.getElementById('readonlyBanner').classList.add('show');
     document.getElementById('editModeBadge').classList.remove('show');
   } else {
     document.body.classList.remove('readonly');
+    document.getElementById('adminBar').classList.add('show');
+    document.getElementById('adminModeBadge').classList.remove('show');
     document.getElementById('readonlyBanner').classList.remove('show');
     document.getElementById('editModeBadge').classList.add('show');
   }
