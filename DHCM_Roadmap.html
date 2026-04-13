@@ -475,7 +475,7 @@
       <svg height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>🔄 Atualizar
     </button>
     <button class="btn" onclick="openGhModal()" style="font-size:10px;padding:5px 10px">⚙ GitHub</button>
-    <button class="btn" onclick="syncJiraStatuses()" id="btnJiraSync" style="font-size:10px;padding:5px 10px;border-color:rgba(59,130,246,0.4);color:var(--blue)" title="Obter estados dos epics do Jira">
+    <button class="btn" onclick="openJiraSyncModal()" id="btnJiraSync" style="font-size:10px;padding:5px 10px;border-color:rgba(59,130,246,0.4);color:var(--blue)" title="Sincronizar estados Jira via Claude">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Sync Jira
     </button>
     <div style="position:relative">
@@ -705,6 +705,53 @@
     </div>
   </div>
 
+
+  <!-- JIRA SYNC INSTRUCTION MODAL -->
+  <div class="gh-modal-overlay" id="jiraSyncModal">
+    <div class="gh-modal" style="max-width:480px">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:var(--blue)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        Sincronizar Estados Jira
+      </h2>
+      <div class="gh-subtitle">Os estados dos epics são obtidos via Claude + MCP Atlassian e guardados automaticamente no GitHub.</div>
+
+      <div style="background:var(--bg-tertiary);border-radius:8px;padding:14px 16px;margin:14px 0;border-left:3px solid var(--blue)">
+        <div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:10px">Como funciona o fluxo:</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--text-secondary)">
+            <span style="background:var(--blue);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">1</span>
+            Clica <strong style="color:var(--text-primary)">"Abrir Claude"</strong> abaixo — abre uma nova conversa com a instrução pré-preenchida
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--text-secondary)">
+            <span style="background:var(--blue);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">2</span>
+            Claude usa o <strong style="color:var(--text-primary)">MCP Atlassian</strong> para ir buscar o estado actual de cada epic no Jira
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--text-secondary)">
+            <span style="background:var(--blue);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">3</span>
+            Claude atualiza o <strong style="color:var(--text-primary)">roadmap-state.json</strong> no GitHub com os estados obtidos
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--text-secondary)">
+            <span style="background:var(--green);color:#0f1729;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">4</span>
+            Volta ao dashboard e clica <strong style="color:var(--text-primary)">🔄 Atualizar</strong> — os estados aparecem automaticamente
+          </div>
+        </div>
+      </div>
+
+      <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:8px;padding:10px 14px;font-size:10px;color:var(--orange);margin-bottom:14px">
+        ⚠️ Certifica-te que tens o <strong>MCP Atlassian ligado</strong> no Claude antes de avançar.<br>
+        Settings → Integrations → Atlassian → Connect
+      </div>
+
+      <div class="gh-modal-actions">
+        <button class="btn" onclick="closeJiraSyncModal()">Fechar</button>
+        <button class="btn" onclick="openClaudeForSync()" style="background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Abrir Claude
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- GITHUB MODAL -->
   <div class="gh-modal-overlay" id="ghModal">
     <div class="gh-modal">
@@ -730,25 +777,6 @@
         <div class="gh-hint">
           Cria em: <a href="https://github.com/settings/tokens/new?scopes=repo&description=dhcm-roadmap" target="_blank">github.com/settings/tokens</a> → scope: <strong>repo</strong>
         </div>
-      </div>
-      <div style="height:1px;background:var(--border);margin:16px 0"></div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--blue)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
-        <span style="font-size:13px;font-weight:700">Jira Integration</span>
-      </div>
-      <div class="gh-subtitle" style="margin-bottom:14px">Para sincronizar o estado dos epics. O token é guardado apenas localmente.</div>
-      <div class="gh-field">
-        <label>Jira Domain</label>
-        <input type="text" id="jiraDomain" placeholder="futurehealthcare.atlassian.net">
-      </div>
-      <div class="gh-field">
-        <label>Jira Email</label>
-        <input type="email" id="jiraEmail" placeholder="claudio@futurehealthcare.pt">
-      </div>
-      <div class="gh-field">
-        <label>Jira API Token</label>
-        <input type="password" id="jiraToken" placeholder="ATATT3xFf...">
-        <div class="gh-hint">Cria em: <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank">id.atlassian.com</a> → Create API token</div>
       </div>
       <div class="gh-modal-actions">
         <button class="btn" onclick="closeGhModal()">Cancelar</button>
@@ -2185,92 +2213,34 @@ function jiraConfig() {
   };
 }
 
-async function fetchJiraStatus(project) {
-  const cfg = jiraConfig();
-  if (!cfg.domain || !cfg.email || !cfg.token) return null;
-  if (!project.jiraUrl) return null;
 
-  // Extract issue key from URL (e.g. GDP-1234)
-  const match = project.jiraUrl.match(/browse\/([A-Z][A-Z0-9]+-\d+)/i);
-  if (!match) return null;
-  const issueKey = match[1];
 
-  try {
-    const auth = btoa(`${cfg.email}:${cfg.token}`);
-    const res = await fetch(`https://${cfg.domain}/rest/api/3/issue/${issueKey}?fields=status`, {
-      headers: { 'Authorization': `Basic ${auth}`, 'Accept': 'application/json' }
+
+// ════════════════════ JIRA SYNC (via Claude) ════════════════════
+function loadJiraStatusesFromState(state) {
+  // Called when roadmap-state.json is loaded — reads jiraStatuses field
+  if (state.jiraStatuses && typeof state.jiraStatuses === 'object') {
+    Object.entries(state.jiraStatuses).forEach(([id, status]) => {
+      jiraStatusCache[id] = { loading: false, status, fetchedAt: state.jiraStatusesSyncedAt || '' };
     });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const statusName = data?.fields?.status?.name || null;
-    if (statusName) console.log(`[Jira] ${issueKey} → "${statusName}"`);
-    return statusName;
-  } catch(e) { console.warn('[Jira] fetch error:', e); return null; }
+    renderChangelog && renderChangelog();
+  }
 }
 
-async function syncJiraStatuses() {
-  const cfg = jiraConfig();
-  if (!cfg.domain || !cfg.email || !cfg.token) {
-    openGhModal();
-    alert('Configura primeiro as credenciais Jira no modal de configuração.');
-    return;
-  }
-
-  const btn = document.getElementById('btnJiraSync');
-  if (btn) { btn.textContent = '⏳ A sincronizar…'; btn.disabled = true; }
-
-  const projectsWithJira = projects.filter(p => p.jiraUrl);
-  let synced = 0;
-
-  // Mark all as loading
-  projectsWithJira.forEach(p => {
-    jiraStatusCache[p.id] = { loading: true, status: null, statusClass: 'todo' };
-  });
-  render();
-
-  // Fetch sequentially to avoid rate limiting
-  for (const p of projectsWithJira) {
-    const status = await fetchJiraStatus(p);
-    jiraStatusCache[p.id] = {
-      loading: false,
-      status: status || 'Unknown',
-      statusClass: jiraStatusClass(status),
-      fetchedAt: new Date().toISOString()
-    };
-    synced++;
-    render(); // update progressively
-  }
-
-  if (btn) { btn.textContent = `✓ ${synced} sync'd`; btn.disabled = false; setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Sync Jira'; }, 3000); }
-  trackChange('edit', '', 'Jira Sync', `${synced} projetos sincronizados`);
-  setGhStatus('ok', `✓ Jira: ${synced} estados atualizados`);
-  setTimeout(() => setGhStatus('hidden', ''), 4000);
+function openJiraSyncModal() {
+  document.getElementById('jiraSyncModal').classList.add('show');
 }
 
-// Extend openGhModal to prefill Jira fields
-const _origOpenGhModal = openGhModal;
-openGhModal = function() {
-  _origOpenGhModal();
-  const jc = jiraConfig();
-  const domEl = document.getElementById('jiraDomain');
-  const emEl  = document.getElementById('jiraEmail');
-  const tokEl = document.getElementById('jiraToken');
-  if (domEl) domEl.value = jc.domain || 'futurehealthcare.atlassian.net';
-  if (emEl)  emEl.value  = jc.email;
-  if (tokEl) tokEl.value = jc.token;
-};
+function closeJiraSyncModal() {
+  document.getElementById('jiraSyncModal').classList.remove('show');
+}
 
-// Extend saveGhConfig to also save Jira credentials
-const _origSaveGhConfig = saveGhConfig;
-saveGhConfig = function() {
-  _origSaveGhConfig();
-  const domain = (document.getElementById('jiraDomain')?.value || '').trim();
-  const email  = (document.getElementById('jiraEmail')?.value  || '').trim();
-  const token  = (document.getElementById('jiraToken')?.value  || '').trim();
-  if (domain) localStorage.setItem('jira_domain', domain);
-  if (email)  localStorage.setItem('jira_email',  email);
-  if (token)  localStorage.setItem('jira_token',  token);
-};
+function openClaudeForSync() {
+  const projectIds = projects.filter(p => p.jiraUrl).map(p => p.id).join(', ');
+  const msg = encodeURIComponent(`Sincroniza os estados Jira do roadmap DHCM. Os projetos com URL Jira são: ${projectIds}. Por favor vai buscar o estado de cada epic via MCP Atlassian e atualiza o ficheiro roadmap-state.json no GitHub com o campo jiraStatuses.`);
+  window.open(`https://claude.ai/new?q=${msg}`, '_blank');
+  closeJiraSyncModal();
+}
 
 // ════════════════════ GITHUB SYNC ════════════════════
 const GH_FILE = 'roadmap-state.json';
@@ -2441,6 +2411,7 @@ async function githubLoad() {
     });
     if (state.absences)  absences  = state.absences;
     if (state.scenarios) scenarios = state.scenarios;
+    loadJiraStatusesFromState(state);
     if (state.params) {
       document.getElementById('ctrlDevs').value  = state.params.devs        || 1.5;
       document.getElementById('ctrlHours').value = state.params.hoursPerDev || 90;
