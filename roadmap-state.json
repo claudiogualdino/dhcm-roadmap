@@ -1,17 +1,17 @@
 {
   "version": 3,
-  "savedAt": "2026-04-13T10:58:57.829Z",
+  "savedAt": "2026-04-13T15:28:51.668Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
     "weeksSprint": 3,
-    "startDate": "2025-12-24"
+    "startDate": "2026-01-14"
   },
   "projects": [
     {
       "id": "DH84",
       "name": "Scribe F1",
-      "effort": 32,
+      "effort": 60,
       "estimated": false,
       "progress": 100,
       "deps": [],
@@ -20,48 +20,19 @@
     {
       "id": "DH92",
       "name": "Video",
-      "effort": 16,
+      "effort": 32,
       "estimated": false,
-      "progress": 0,
+      "progress": 100,
       "deps": [],
       "notes": ""
     },
     {
       "id": "DH61",
       "name": "Pack - Points Reuse",
-      "effort": 48,
+      "effort": 80,
       "estimated": false,
-      "progress": 0,
+      "progress": 75,
       "deps": [],
-      "notes": ""
-    },
-    {
-      "id": "DH54",
-      "name": "Group Sessions",
-      "effort": 90,
-      "estimated": false,
-      "progress": 0,
-      "deps": [],
-      "notes": ""
-    },
-    {
-      "id": "DH46",
-      "name": "Healthy Companies",
-      "effort": 40,
-      "estimated": false,
-      "progress": 0,
-      "deps": [],
-      "notes": ""
-    },
-    {
-      "id": "DH84-02",
-      "name": "Scribe F2 e F3",
-      "effort": 69,
-      "estimated": false,
-      "progress": 0,
-      "deps": [
-        "DH84"
-      ],
       "notes": ""
     },
     {
@@ -69,7 +40,7 @@
       "name": "Alergias Alerta",
       "effort": 40,
       "estimated": false,
-      "progress": 0,
+      "progress": 75,
       "deps": [],
       "notes": ""
     },
@@ -78,7 +49,34 @@
       "name": "Conteúdos Pack Saúde",
       "effort": 40,
       "estimated": false,
-      "progress": 0,
+      "progress": 75,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH71-01",
+      "name": "VBHC - Gestão de Entidades",
+      "effort": 120,
+      "notes": "",
+      "estimated": false,
+      "progress": 75,
+      "deps": []
+    },
+    {
+      "id": "DH46",
+      "name": "Healthy Companies",
+      "effort": 60,
+      "estimated": false,
+      "progress": 75,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH54",
+      "name": "Group Sessions",
+      "effort": 148,
+      "estimated": false,
+      "progress": 50,
       "deps": [],
       "notes": ""
     },
@@ -86,6 +84,15 @@
       "id": "DH45-03",
       "name": "Nif Optional QC",
       "effort": 8,
+      "estimated": false,
+      "progress": 25,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH80",
+      "name": "Telefone e Nif Estrangeiros",
+      "effort": 32,
       "estimated": false,
       "progress": 0,
       "deps": [],
@@ -101,22 +108,14 @@
       "notes": ""
     },
     {
-      "id": "DH80",
-      "name": "Telefone e Nif Estrangeiros",
-      "effort": 32,
+      "id": "DH72-02",
+      "name": "VBHC - Ecrãs especificos",
+      "effort": 360,
       "estimated": false,
       "progress": 0,
       "deps": [],
-      "notes": ""
-    },
-    {
-      "id": "DH45-04",
-      "name": "Me1st Pre Registration",
-      "effort": 100,
-      "estimated": false,
-      "progress": 0,
-      "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": ""
     },
     {
       "id": "DH66",
@@ -131,6 +130,15 @@
       "id": "DH99",
       "name": "Client Portal - Reschedule",
       "effort": 56,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": ""
+    },
+    {
+      "id": "DH45-04",
+      "name": "Me1st Pre Registration",
+      "effort": 100,
       "estimated": false,
       "progress": 0,
       "deps": [],
@@ -164,6 +172,17 @@
       "notes": ""
     },
     {
+      "id": "DH84-02",
+      "name": "Scribe F2 e F3",
+      "effort": 69,
+      "estimated": false,
+      "progress": 0,
+      "deps": [
+        "DH84"
+      ],
+      "notes": ""
+    },
+    {
       "id": "DH102",
       "name": "Calendar Slots Available CM",
       "effort": 40,
@@ -191,22 +210,13 @@
       "notes": ""
     },
     {
-      "id": "DH71",
-      "name": "VBHC",
-      "effort": 360,
-      "notes": "should be reviewed",
-      "estimated": false,
-      "progress": 0,
-      "deps": []
-    },
-    {
       "id": "DH60-02",
       "name": "Soft Login 2",
       "effort": 100,
       "estimated": true,
       "progress": 0,
       "deps": [
-        "DH71"
+        "DH71-01"
       ],
       "notes": ""
     },
@@ -221,12 +231,6 @@
     }
   ],
   "absences": [
-    {
-      "name": "PO",
-      "from": "2026-04-22",
-      "to": "2026-05-22",
-      "hoursPerDay": 6
-    },
     {
       "name": "PO",
       "from": "2026-07-30",
@@ -249,6 +253,12 @@
       "name": "AR",
       "from": "2026-04-06",
       "to": "2026-04-06",
+      "hoursPerDay": 6
+    },
+    {
+      "name": "PO",
+      "from": "2026-04-22",
+      "to": "2026-05-22",
       "hoursPerDay": 6
     }
   ],
