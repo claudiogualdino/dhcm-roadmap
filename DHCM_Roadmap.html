@@ -2507,6 +2507,7 @@ async function autoLoadFromGitHub() {
       document.getElementById('ctrlWeeks').value = state.params.weeksSprint || 3;
       document.getElementById('ctrlStart').value = state.params.startDate   || '';
     }
+    loadJiraStatusesFromState(state);
     updateScenarioSlots();
     render();
     const savedDate = state.savedAt ? new Date(state.savedAt).toLocaleString('pt-PT') : '?';
