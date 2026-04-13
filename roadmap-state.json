@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-13T23:28:47.379Z",
+  "savedAt": "2026-04-13T23:44:31.049Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -21,7 +21,7 @@
     {
       "id": "DH92",
       "name": "Video",
-      "effort": 32,
+      "effort": 58,
       "estimated": false,
       "progress": 100,
       "deps": [],
@@ -31,7 +31,7 @@
     {
       "id": "DH61",
       "name": "Pack - Points Reuse",
-      "effort": 80,
+      "effort": 105,
       "estimated": false,
       "progress": 75,
       "deps": [],
@@ -51,7 +51,7 @@
     {
       "id": "DH96",
       "name": "Conteúdos Pack Saúde",
-      "effort": 40,
+      "effort": 65,
       "estimated": false,
       "progress": 75,
       "deps": [],
@@ -69,19 +69,9 @@
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1192"
     },
     {
-      "id": "DH46",
-      "name": "Healthy Companies",
-      "effort": 60,
-      "estimated": false,
-      "progress": 75,
-      "deps": [],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-971"
-    },
-    {
       "id": "DH54",
       "name": "Group Sessions",
-      "effort": 148,
+      "effort": 132,
       "estimated": false,
       "progress": 50,
       "deps": [],
@@ -290,32 +280,5 @@
   "scenarios": {
     "A": null,
     "B": null
-  },
-  "jiraStatuses": {
-    "DH84": "Closed",
-    "DH92": "Closed",
-    "DH61": "In Progress",
-    "DH95": "In Progress",
-    "DH96": "Implemented",
-    "DH72-01": "QA Testing",
-    "DH46": "Cancelled",
-    "DH54": "QA Testing",
-    "DH45-03": "In Technical Analysis",
-    "DH80": "In Progress",
-    "CREQ-132": "Ready for Development",
-    "DH72-02": "In Business Requirements",
-    "DH66": "In Technical Analysis",
-    "DH99": "In Business Requirements",
-    "DH45-04": "In Technical Analysis",
-    "DH101": "To Do",
-    "DH100": "Backlog",
-    "DH87": "In Technical Analysis",
-    "DH84-02": "Ready for Development",
-    "DH102": "In Technical Analysis",
-    "DH59": "In Technical Analysis",
-    "DH93": "Backlog",
-    "DH60-02": "In Technical Analysis",
-    "DH88": "In Technical Analysis"
-  },
-  "jiraStatusesSyncedAt": "2026-04-13"
+  }
 }
