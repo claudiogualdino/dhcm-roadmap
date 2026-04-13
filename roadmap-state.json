@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-13T23:44:31.049Z",
+  "savedAt": "2026-04-13T23:51:27.342Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -35,7 +35,7 @@
       "estimated": false,
       "progress": 75,
       "deps": [],
-      "notes": "",
+      "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1045"
     },
     {
@@ -45,7 +45,7 @@
       "estimated": false,
       "progress": 75,
       "deps": [],
-      "notes": "",
+      "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2105"
     },
     {
@@ -55,14 +55,14 @@
       "estimated": false,
       "progress": 75,
       "deps": [],
-      "notes": "",
+      "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2107"
     },
     {
       "id": "DH72-01",
       "name": "VBHC - Gestão de Entidades",
       "effort": 120,
-      "notes": "",
+      "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "estimated": false,
       "progress": 75,
       "deps": [],
