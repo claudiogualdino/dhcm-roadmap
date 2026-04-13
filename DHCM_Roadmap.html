@@ -27,7 +27,7 @@
   .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
   .header-left h1{font-size:24px;font-weight:800;letter-spacing:-0.5px}
   .header-left .subtitle{font-size:12px;color:var(--text-secondary);margin-top:3px;font-family:var(--font-mono)}
-  .header-right{display:flex;gap:6px;flex-wrap:wrap}
+  .header-right{display:flex;gap:8px;align-items:center;flex-shrink:0}
   .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:7px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-secondary);font-family:var(--font-body);font-size:11px;font-weight:600;cursor:pointer;transition:all var(--transition);white-space:nowrap}
   .btn:hover{background:var(--bg-tertiary);color:var(--text-primary)}
   .btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
@@ -318,43 +318,6 @@
   .gh-token-warning{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:10px 12px;font-size:10px;color:var(--orange);margin-bottom:16px;line-height:1.5}
 
 
-  /* READ-ONLY MODE */
-  .readonly-banner{display:none;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(6,182,212,0.08));border:1px solid rgba(59,130,246,0.3);border-radius:var(--radius);padding:10px 16px;margin-bottom:14px;gap:12px}
-  .readonly-banner.show{display:flex}
-  .readonly-banner-left{display:flex;align-items:center;gap:8px;font-size:11px}
-  .readonly-banner-icon{font-size:16px}
-  .readonly-banner-text{color:var(--text-primary);font-weight:600}
-  .readonly-banner-sub{color:var(--text-secondary);font-size:10px;margin-top:1px}
-  .readonly-banner-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-  .share-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:7px;background:var(--blue);color:#fff;border:none;font-size:10px;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:var(--font-body)}
-  .share-btn:hover{background:#2563eb;transform:translateY(-1px)}
-  .share-btn.copied{background:var(--green)}
-  .edit-mode-badge{display:none;align-items:center;gap:5px;font-size:9px;font-weight:700;font-family:var(--font-mono);padding:3px 8px;border-radius:8px;background:rgba(245,158,11,0.15);color:var(--orange);border:1px solid rgba(245,158,11,0.3)}
-  .edit-mode-badge.show{display:inline-flex}
-  body.readonly .controls-panel{display:none !important}
-  body.readonly .drag-handle{display:none !important}
-  body.readonly .dep-icon{display:none !important}
-  body.readonly .dep-editor{display:none !important}
-  body.readonly .gantt-progress-pill{pointer-events:none;cursor:default}
-  body.readonly .editable{pointer-events:none;cursor:default}
-  body.readonly #btnImport{display:none !important}
-  body.readonly #btnGhSave{display:none !important}
-  body.readonly #btnGhLoad{display:none !important}
-  body.readonly .btn-green{display:none !important}
-  body.readonly [onclick*="saveState"]{display:none !important}
-  body.readonly [onclick*="loadState"]{display:none !important}
-
-
-  /* ADMIN MODE */
-  .admin-bar{display:none;align-items:center;gap:6px;flex-wrap:wrap}
-  .admin-bar.show{display:flex}
-  .admin-unlock-hint{font-size:8px;color:var(--text-muted);font-family:var(--font-mono);opacity:0;transition:opacity 0.3s;user-select:none;padding:4px 8px}
-  .fh-logo-admin{cursor:pointer;border-radius:6px;transition:box-shadow 0.2s}
-  .fh-logo-admin:hover .admin-unlock-hint{opacity:1}
-  .admin-mode-badge{display:none;align-items:center;gap:5px;font-size:9px;font-weight:700;font-family:var(--font-mono);padding:3px 10px;border-radius:8px;background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.35);cursor:pointer}
-  .admin-mode-badge.show{display:inline-flex}
-  .admin-mode-badge:hover{background:rgba(239,68,68,0.25)}
-
 
   /* ADD PROJECT MODAL */
   .addproj-modal{width:520px}
@@ -397,79 +360,38 @@
     </div>
     <div class="header-right">
       <span class="admin-mode-badge" id="adminModeBadge" onclick="deactivateAdmin()" title="Clica para sair do modo admin">🔒 Admin · clica para sair</span>
-      <div class="admin-bar" id="adminBar">
       <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFileSelect(event)">
-      <input type="file" id="stateInput" accept=".json" style="display:none" onchange="handleLoadState(event)">
-      <button class="btn" onclick="openAddProjModal()" title="Adicionar novo projeto (admin)" style="background:rgba(45,212,160,0.15);color:var(--green);border-color:rgba(45,212,160,0.4);font-weight:700">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        + Projeto
+    </div>
+  </div><!-- /header -->
+
+  <!-- ADMIN PANEL (triple-click FH logo to reveal) -->
+  <div class="admin-panel" id="adminPanel">
+    <span class="admin-panel-label">🔒 Admin</span>
+    <button class="btn" onclick="openAddProjModal()" style="background:rgba(45,212,160,0.15);color:var(--green);border-color:rgba(45,212,160,0.4);font-weight:700;font-size:10px;padding:5px 10px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>+ Projeto
+    </button>
+    <button class="btn btn-primary" onclick="togglePanel('importPanel','btnImport')" id="btnImport" style="font-size:10px;padding:5px 10px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import
+    </button>
+    <span class="gh-status hidden" id="ghStatus"></span>
+    <button class="btn gh-btn" onclick="githubSave()" id="btnGhSave" style="font-size:10px;padding:5px 10px">
+      <svg height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>💾 Guardar
+    </button>
+    <button class="btn" onclick="githubLoad()" id="btnGhLoad" style="font-size:10px;padding:5px 10px;border-color:rgba(35,134,54,0.4);color:#3fb950">
+      <svg height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>🔄 Atualizar
+    </button>
+    <button class="btn" onclick="openGhModal()" style="font-size:10px;padding:5px 10px">⚙ GitHub</button>
+    <div style="position:relative">
+      <button class="btn" onclick="toggleExportMenu()" id="btnExport" style="font-size:10px;padding:5px 10px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export ▾
       </button>
-      <button class="btn btn-primary" onclick="togglePanel('importPanel','btnImport')" id="btnImport" title="Import project list from CSV/XLSX">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Import
-      </button>
-      <button class="btn btn-green" onclick="saveState()" title="Save full dashboard state to continue later">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        Save
-      </button>
-      <button class="btn" onclick="document.getElementById('stateInput').click()" title="Load a previously saved dashboard state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
-        Load
-      </button>
-      <span class="gh-status hidden" id="ghStatus"></span>
-      <button class="btn gh-btn" onclick="githubSave()" id="btnGhSave" title="Guardar roadmap no GitHub">
-        <svg height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-        ↑ GitHub
-      </button>
-      <button class="btn" onclick="githubLoad()" id="btnGhLoad" title="Carregar roadmap do GitHub" style="border-color:rgba(35,134,54,0.4);color:#3fb950">
-        <svg height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-        ↓ GitHub
-      </button>
-      <button class="btn" onclick="openGhModal()" title="Configurar GitHub Sync" style="padding:7px 8px">⚙ GitHub</button>
-      <button class="share-btn" onclick="copyShareLink()" title="Copiar link para partilhar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Partilhar
-      </button>
-      <div class="export-dropdown">
-        <button class="btn" onclick="toggleExportMenu()" id="btnExport" title="Export dashboard">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export ▾
-        </button>
-        <div class="export-menu" id="exportMenu">
-          <button onclick="exportCSV();closeExportMenu()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            Export as CSV
-          </button>
-          <button onclick="window.print();closeExportMenu()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-            Export as PDF
-          </button>
-        </div>
+      <div class="export-menu" id="exportMenu">
+        <div class="export-item" onclick="exportCSV()">📄 Export CSV</div>
+        <div class="export-item" onclick="window.print()">🖨 Print / PDF</div>
       </div>
     </div>
   </div>
 
-
-  <!-- READ-ONLY BANNER (shown when no token) -->
-  <div class="readonly-banner" id="readonlyBanner">
-    <div class="readonly-banner-left">
-      <span class="readonly-banner-icon">👁</span>
-      <div>
-        <div class="readonly-banner-text">Modo de Visualização</div>
-        <div class="readonly-banner-sub">Estás a ver a versão mais recente do roadmap · Apenas o autor pode editar</div>
-      </div>
-    </div>
-    <div class="readonly-banner-right">
-      <button class="share-btn" id="shareLinkBtn" onclick="copyShareLink()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Copiar Link
-      </button>
-    </div>
-  </div>
-  <!-- EDIT MODE BADGE (shown when token present) -->
-  <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
-    <span class="edit-mode-badge" id="editModeBadge">✏️ Modo Edição</span>
-  </div>
 
   <!-- KPI -->
   <div class="kpi-row" id="kpiRow"></div>
@@ -596,11 +518,6 @@
     <div class="scenario-diff" id="scenarioDiff"></div>
   </div>
 
-  <!-- CAPACITY -->
-  <div class="capacity-section animate-in" style="animation-delay:0.1s">
-    <h3>Sprint Capacity Utilization</h3>
-    <div class="capacity-grid" id="capacityGrid"></div>
-  </div>
 
   <!-- GANTT -->
   <div class="gantt-section animate-in" style="animation-delay:0.15s">
@@ -1121,7 +1038,7 @@ function compute(){
 // ════════════════════ RENDER ════════════════════
 function render(){
   const data=compute();
-  renderAbsences();renderKPIs(data);renderCapacity(data);renderGantt(data);renderDetails(data);renderFooter(data);
+  renderAbsences();renderKPIs(data);renderGantt(data);renderDetails(data);renderFooter(data);
   document.getElementById('dateRange').textContent=data.scheduled.length>0?`${fmtDate(data.scheduled[0].startDate)} → ${fmtDate(data.scheduled[data.scheduled.length-1].endDate)}`:'';
 }
 
@@ -1198,19 +1115,7 @@ function renderKPIs(data){
     </div>`).join('');
 }
 
-function renderCapacity(data){
-  const grid=document.getElementById('capacityGrid');grid.innerHTML='';
-  for(let i=0;i<data.numSprintsDisplay;i++){
-    const used=data.sprintHours[i]||0;
-    const effCap=data.sprintEffCap[i];
-    const pct=effCap>0?Math.round((used/effCap)*100):0;
-    const cls=pct>=100?'over':pct>=80?'near':'under';
-    const hasAbsence=effCap<data.baseCapacity;
-    const absMarker=hasAbsence?`<div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--orange);border-radius:0 0 4px 4px;opacity:0.8"></div>`:'';
-    const capLabel=hasAbsence?`<div class="capacity-bar-sublabel">${Math.round(effCap)}h eff</div>`:'';
-    grid.innerHTML+=`<div class="capacity-bar-wrapper"><div class="capacity-bar-track" title="Sprint ${i+1}: ${Math.round(used)}h / ${Math.round(effCap)}h effective (${pct}%)${hasAbsence?' — reduced by absences':''}"><div class="capacity-bar-fill ${cls}" style="width:${Math.min(pct,100)}%"><span class="capacity-pct">${pct>12?pct+'%':''}</span></div>${absMarker}</div><div class="capacity-bar-label">S${i+1}</div>${capLabel}</div>`;
-  }
-}
+function renderCapacity(data){}
 
 function renderGantt(data){
   const{scheduled,numSprintsDisplay,totalWeeks,totalDays,sprintStarts,sprintEnds,sprintEffCap,weeksSprint,todayPct,depConflicts,baseCapacity}=data;
@@ -1788,8 +1693,6 @@ function activateAdmin() {
   document.body.classList.remove('readonly');
   document.getElementById('adminBar').classList.add('show');
   document.getElementById('adminModeBadge').classList.add('show');
-  document.getElementById('readonlyBanner').classList.remove('show');
-  document.getElementById('editModeBadge').classList.remove('show');
   // Brief flash on logo to confirm
   const zone = document.getElementById('fhLogoZone');
   zone.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.6)';
@@ -1995,21 +1898,16 @@ async function githubLoad() {
 const GH_PUBLIC_RAW = 'https://raw.githubusercontent.com/claudiogualdino/dhcm-roadmap/main/roadmap-state.json';
 const SHARE_URL = 'https://claudiogualdino.github.io/dhcm-roadmap/DHCM_Roadmap.html';
 
-function copyShareLink() {
-  navigator.clipboard.writeText(SHARE_URL).then(() => {
-    const btns = document.querySelectorAll('#shareLinkBtn, .share-btn');
-    btns.forEach(b => { b.classList.add('copied'); b.textContent = '✓ Link copiado!'; });
-    setTimeout(() => {
-      btns.forEach(b => { b.classList.remove('copied'); b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Partilhar'; });
-    }, 2500);
-  });
-}
 
-async function loadPublicState() {
+
+
+// Always auto-load latest version from GitHub on page open
+const GH_RAW_URL = 'https://raw.githubusercontent.com/claudiogualdino/dhcm-roadmap/main/roadmap-state.json';
+
+async function autoLoadFromGitHub() {
   try {
-    setGhStatus('saving', '↓ A carregar roadmap…');
-    const res = await fetch(GH_PUBLIC_RAW + '?t=' + Date.now()); // cache-bust
-    if (!res.ok) { setGhStatus('hidden',''); return; }
+    const res = await fetch(GH_RAW_URL + '?t=' + Date.now());
+    if (!res.ok) return;
     const state = await res.json();
     if (!state.projects || !Array.isArray(state.projects)) return;
     projects = state.projects;
@@ -2025,43 +1923,16 @@ async function loadPublicState() {
     updateScenarioSlots();
     render();
     const savedDate = state.savedAt ? new Date(state.savedAt).toLocaleString('pt-PT') : '?';
-    setGhStatus('ok', `✓ Roadmap atualizado em ${savedDate}`);
-    setTimeout(() => setGhStatus('hidden',''), 5000);
-  } catch(e) {
-    setGhStatus('hidden','');
-  }
-}
-
-function setReadonlyMode(isReadonly) {
-  if (isReadonly) {
-    document.body.classList.add('readonly');
-    document.getElementById('adminBar').classList.remove('show');
-    document.getElementById('adminModeBadge').classList.remove('show');
-    document.getElementById('readonlyBanner').classList.add('show');
-    document.getElementById('editModeBadge').classList.remove('show');
-  } else {
-    document.body.classList.remove('readonly');
-    document.getElementById('adminBar').classList.add('show');
-    document.getElementById('adminModeBadge').classList.remove('show');
-    document.getElementById('readonlyBanner').classList.remove('show');
-    document.getElementById('editModeBadge').classList.add('show');
-  }
+    setGhStatus('ok', `✓ Atualizado · ${savedDate}`);
+    setTimeout(() => setGhStatus('hidden', ''), 4000);
+  } catch(e) { /* silent fail — use default data */ }
 }
 
 window.addEventListener('load', () => {
-  // Pre-fill defaults if first time
   if (!localStorage.getItem('gh_username')) localStorage.setItem('gh_username', 'claudiogualdino');
   if (!localStorage.getItem('gh_repo'))     localStorage.setItem('gh_repo',     'dhcm-roadmap');
-  const cfg = ghConfig();
-  if (cfg.token) {
-    // EDIT MODE — has token, load via authenticated API
-    setReadonlyMode(false);
-    setTimeout(() => githubLoad(), 800);
-  } else {
-    // READ-ONLY MODE — no token, load via public raw URL
-    setReadonlyMode(true);
-    setTimeout(() => loadPublicState(), 400);
-  }
+  // Always load latest from GitHub (public raw URL, no token needed)
+  setTimeout(() => autoLoadFromGitHub(), 500);
 });
 
 
