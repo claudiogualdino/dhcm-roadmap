@@ -383,6 +383,24 @@
   .changelog-note-box textarea:focus{border-color:var(--blue)}
   .changelog-note-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
 
+
+  /* ADMIN INLINE EDITS */
+  .admin-editable{cursor:pointer;border-radius:4px;transition:background 0.15s;position:relative}
+  .admin-editable:hover{background:rgba(59,130,246,0.12)}
+  .admin-editable::after{content:'✎';position:absolute;top:2px;right:3px;font-size:8px;color:var(--blue);opacity:0;transition:opacity 0.15s;pointer-events:none}
+  .admin-editable:hover::after{opacity:0.7}
+  .inline-input{background:var(--bg-primary);border:1px solid var(--blue);border-radius:5px;color:var(--text-primary);font-family:var(--font-body);font-size:11px;padding:3px 6px;outline:none;width:100%}
+  .est-toggle{display:inline-flex;align-items:center;gap:5px;cursor:pointer;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;border:1px solid transparent;transition:all 0.15s}
+  .est-toggle.estimated{background:rgba(251,191,36,0.15);color:var(--gold);border-color:rgba(251,191,36,0.3)}
+  .est-toggle.confirmed{background:rgba(45,212,160,0.12);color:var(--green);border-color:rgba(45,212,160,0.25)}
+  .est-toggle:hover{filter:brightness(1.2)}
+  .deps-editor-inline{display:flex;flex-wrap:wrap;gap:4px;align-items:center;min-width:120px}
+  .dep-tag-inline{display:inline-flex;align-items:center;gap:2px;background:rgba(168,85,247,0.15);color:var(--purple);border:1px solid rgba(168,85,247,0.3);border-radius:5px;padding:1px 6px;font-size:9px;font-family:var(--font-mono)}
+  .dep-tag-inline .rm{cursor:pointer;opacity:0.6;margin-left:2px;font-size:10px;line-height:1}
+  .dep-tag-inline .rm:hover{opacity:1;color:var(--red)}
+  .dep-add-btn{font-size:9px;color:var(--blue);cursor:pointer;padding:1px 5px;border:1px dashed rgba(59,130,246,0.4);border-radius:4px;white-space:nowrap}
+  .dep-add-btn:hover{background:rgba(59,130,246,0.1)}
+
 </style>
 </head>
 <body>
@@ -596,6 +614,7 @@
         <th class="center" style="width:70px">Depends</th>
         <th style="min-width:120px">Notes</th>
         <th class="center" style="width:60px">Jira</th>
+        <th class="center admin-est-col" style="width:90px;display:none">Estimado</th>
       </tr></thead>
       <tbody id="detailsBody"></tbody>
       <tfoot id="detailsFoot"></tfoot>
@@ -738,6 +757,9 @@
 <div class="tooltip" id="tooltip"></div>
 
 <script>
+let _isAdminMode = false;
+function isAdmin() { return _isAdminMode; }
+
 // ════════════════════ DATA ════════════════════
 let projects = [
   {
@@ -1001,7 +1023,7 @@ function addAbsence(){
   document.getElementById('absFrom').value='';
   document.getElementById('absTo').value='';
   document.getElementById('ctrlWeeks').value='3';
-render();
+  render();
 }
 
 function removeAbsence(idx){absences.splice(idx,1);render()}
@@ -1291,6 +1313,8 @@ function drawDepArrows(data){
 function renderDetails(data){
   const{scheduled,totalHours,totalWeeksCalc,avgProgress,baseCapacity,weeksSprint}=data;
   const numSprints=Math.ceil(totalWeeksCalc/weeksSprint)||1;
+  const admin = isAdmin();
+
   document.getElementById('detailsBody').innerHTML=scheduled.map(p=>{
     const estIcon=p.estimated?'<span style="color:var(--gold)" title="Estimated">⚬</span>':'<span style="color:var(--green)" title="Confirmed">●</span>';
     const effortColor=p.estimated?'color:var(--gold)':'';
@@ -1304,22 +1328,156 @@ function renderDetails(data){
     const notesDisplay=notes?truncate(notes,30):'+ add note';
     const notesCls=notes?'notes-cell':'notes-cell empty';
 
+    // ID cell — editable in admin
+    const idCell = admin
+      ? `<td><div class="id-cell admin-editable" onclick="editField('${p.id}','id',this)" title="Editar ID"><div class="color-dot" style="background:${p.color}"></div>${p.id}</div></td>`
+      : `<td><div class="id-cell"><div class="color-dot" style="background:${p.color}"></div>${p.id}</div></td>`;
+
+    // Name cell — editable in admin
+    const nameCell = admin
+      ? `<td class="admin-editable" onclick="editField('${p.id}','name',this)" title="Editar nome" style="font-size:11px">${p.name}</td>`
+      : `<td style="font-size:11px">${p.name}</td>`;
+
+    // Effort cell — always editable
+    const effortCell = `<td class="center mono editable" style="${effortColor}" onclick="editEffort('${p.id}',this)" title="Click to edit effort">${estIcon} ${p.effort}h</td>`;
+
+    // Progress — always editable
+    const progressCell = `<td class="center editable" onclick="editProgress('${p.id}',this)" title="Click to edit progress"><div class="mini-progress"><div class="mini-progress-bar"><div class="mini-progress-fill" style="width:${prog}%;background:${progColor}"></div></div><span class="mini-progress-text" style="color:${progColor}">${prog}%</span></div></td>`;
+
+    // Deps cell — editable in admin
+    const depsCell = admin
+      ? `<td onclick="event.stopPropagation()" style="min-width:100px"><div class="deps-editor-inline" id="deps-inline-${p.id}">
+          ${(p.deps||[]).map(d=>`<span class="dep-tag-inline">${d}<span class="rm" onclick="removeDepInline('${p.id}','${d}')">×</span></span>`).join('')}
+          <span class="dep-add-btn" onclick="addDepInline('${p.id}')">+ dep</span>
+        </div></td>`
+      : `<td class="center mono" style="color:${depColor};font-size:10px">${depList}</td>`;
+
+    // Estimated toggle — clickable in admin
+    const estimatedDisplay = admin
+      ? `<td class="center"><span class="est-toggle ${p.estimated?'estimated':'confirmed'}" onclick="toggleEstimatedInline('${p.id}')" title="Clica para alternar">${p.estimated?'⚬ Estimado':'● Confirmado'}</span></td>`
+      : '';
+
+    // Notes — always editable
+    const notesCell = `<td class="${notesCls}" onclick="editNotes('${p.id}',this)" title="Click to edit notes">${notesDisplay}</td>`;
+
+    // Jira URL — editable in admin
+    const jiraCell = admin
+      ? `<td class="center admin-editable" onclick="editField('${p.id}','jiraUrl',this)" title="Editar Jira URL">${p.jiraUrl?`<a href="${p.jiraUrl}" target="_blank" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:3px;color:var(--blue);font-size:10px;font-weight:700;text-decoration:none;padding:2px 6px;border-radius:5px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.1)">🔗 Epic</a>`:'<span style="color:var(--text-muted);font-size:10px">+ url</span>'}</td>`
+      : `<td class="center">${p.jiraUrl?`<a href="${p.jiraUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:3px;color:var(--blue);font-size:10px;font-weight:700;text-decoration:none;padding:2px 6px;border-radius:5px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.1)">🔗 Epic</a>`:'<span style="color:var(--text-muted);font-size:10px">—</span>'}</td>`;
+
+    const adminEstCol = admin ? estimatedDisplay : '';
+
     return`<tr>
-      <td><div class="id-cell"><div class="color-dot" style="background:${p.color}"></div>${p.id}</div></td>
-      <td style="font-size:11px">${p.name}</td>
-      <td class="center mono editable" style="${effortColor}" onclick="editEffort('${p.id}',this)" title="Click to edit effort">${estIcon} ${p.effort}h</td>
-      <td class="center editable" onclick="editProgress('${p.id}',this)" title="Click to edit progress"><div class="mini-progress"><div class="mini-progress-bar"><div class="mini-progress-fill" style="width:${prog}%;background:${progColor}"></div></div><span class="mini-progress-text" style="color:${progColor}">${prog}%</span></div></td>
+      ${idCell}
+      ${nameCell}
+      ${effortCell}
+      ${progressCell}
       <td class="center" style="font-size:11px">${fmtDate(p.startDate)}</td>
       <td class="center" style="font-size:11px">${fmtDate(p.endDate)}</td>
       <td class="${sprintCls}">${sprintText}</td>
       <td class="center" style="color:var(--text-secondary);font-size:11px">${p.durationWeeks.toFixed(1)}w</td>
-      <td class="center mono" style="color:${depColor};font-size:10px">${depList}</td>
-      <td class="${notesCls}" onclick="editNotes('${p.id}',this)" title="Click to edit notes">${notesDisplay}</td>
-      <td class="center">${p.jiraUrl?`<a href="${p.jiraUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:3px;color:var(--blue);font-size:10px;font-weight:700;text-decoration:none;padding:2px 6px;border-radius:5px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);transition:all 0.2s" onmouseover="this.style.background='rgba(59,130,246,0.2)'" onmouseout="this.style.background='rgba(59,130,246,0.1)'">🔗 Epic</a>`:'<span style="color:var(--text-muted);font-size:10px">—</span>'}</td>
+      ${depsCell}
+      ${notesCell}
+      ${jiraCell}
+      ${adminEstCol}
     </tr>`;
   }).join('');
   if(!scheduled.length){document.getElementById('detailsFoot').innerHTML='';return}
-  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="2"></td></tr>`;
+  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="${admin?3:2}"></td></tr>`;
+}
+
+// ═══ ADMIN INLINE FIELD EDITING ═══
+function editField(id, field, cell) {
+  if (!isAdmin()) return;
+  const proj = projects.find(p => p.id === id);
+  if (!proj) return;
+  const oldVal = proj[field] || '';
+  const safeVal = oldVal.replace(/"/g, '&quot;');
+  const inputType = field === 'jiraUrl' ? 'url' : 'text';
+  const ph = field === 'jiraUrl' ? 'https://futurehealthcare.atlassian.net/browse/GDP-xxx' : '';
+
+  const inp = document.createElement('input');
+  inp.className = 'inline-input';
+  inp.type = inputType;
+  inp.value = oldVal;
+  inp.placeholder = ph;
+  inp.onclick = e => e.stopPropagation();
+  inp.onblur = () => commitField(id, field, inp.value, oldVal);
+  inp.onkeydown = e => {
+    if (e.key === 'Enter') inp.blur();
+    if (e.key === 'Escape') { inp.value = oldVal; inp.blur(); }
+  };
+  cell.innerHTML = '';
+  cell.appendChild(inp);
+  inp.focus(); inp.select();
+}
+
+function commitField(id, field, newVal, oldVal) {
+  newVal = newVal.trim();
+  if (newVal === oldVal || newVal === '') { render(); return; }
+  const proj = projects.find(p => p.id === id);
+  if (!proj) return;
+
+  if (field === 'id') {
+    // Check uniqueness
+    if (projects.find(p => p.id === newVal && p !== proj)) {
+      alert(`ID "${newVal}" já existe. Escolhe outro.`);
+      render(); return;
+    }
+    // Update deps in all other projects
+    projects.forEach(p => {
+      if (p.deps) p.deps = p.deps.map(d => d === id ? newVal : d);
+    });
+    trackChange('edit', newVal, proj.name, `ID: ${id} → ${newVal}`);
+    proj.id = newVal;
+  } else if (field === 'name') {
+    trackChange('edit', proj.id, newVal, `Nome: "${oldVal}" → "${newVal}"`);
+    proj.name = newVal;
+  } else if (field === 'jiraUrl') {
+    trackChange('edit', proj.id, proj.name, `Jira URL atualizado`);
+    proj.jiraUrl = newVal;
+  }
+  render();
+}
+
+function toggleEstimatedInline(id) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj || !isAdmin()) return;
+  proj.estimated = !proj.estimated;
+  trackChange('edit', proj.id, proj.name, `Estimado: ${!proj.estimated} → ${proj.estimated}`);
+  render();
+}
+
+function addDepInline(id) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj || !isAdmin()) return;
+  const available = projects.filter(x => x.id !== id && !(proj.deps||[]).includes(x.id));
+  if (!available.length) return;
+
+  const sel = document.createElement('select');
+  sel.className = 'inline-input';
+  sel.style.cssText = 'width:auto;min-width:80px;font-size:9px;padding:2px 4px';
+  sel.innerHTML = '<option value="">Escolhe...</option>' +
+    available.map(x => `<option value="${x.id}">${x.id}</option>`).join('');
+  sel.onchange = () => {
+    if (!sel.value) return;
+    if (!proj.deps) proj.deps = [];
+    proj.deps.push(sel.value);
+    trackChange('edit', proj.id, proj.name, `Dependência adicionada: ${sel.value}`);
+    render();
+  };
+  sel.onblur = () => render();
+
+  const container = document.getElementById('deps-inline-' + id);
+  if (container) { container.appendChild(sel); sel.focus(); }
+}
+
+function removeDepInline(id, dep) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj || !isAdmin()) return;
+  proj.deps = (proj.deps||[]).filter(d => d !== dep);
+  trackChange('edit', proj.id, proj.name, `Dependência removida: ${dep}`);
+  render();
 }
 
 function toggleEstimated(id){
@@ -1791,9 +1949,12 @@ function activateAdmin() {
   const panel = document.getElementById('adminPanel');
   const badge = document.getElementById('adminModeBadge');
   const zone  = document.getElementById('fhLogoZone');
+  _isAdminMode = true;
   if (panel) panel.classList.add('show');
   if (badge) badge.classList.add('show');
   showChangelogSection();
+  render(); // re-render to enable admin edits
+  document.querySelectorAll('.admin-est-col').forEach(el=>el.style.display='');
   if (zone) {
     zone.style.filter = 'brightness(1.4)';
     zone.style.transform = 'scale(1.08)';
@@ -1804,9 +1965,12 @@ function activateAdmin() {
 function deactivateAdmin() {
   const panel = document.getElementById('adminPanel');
   const badge = document.getElementById('adminModeBadge');
+  _isAdminMode = false;
   if (panel) panel.classList.remove('show');
   if (badge) badge.classList.remove('show');
   hideChangelogSection();
+  render(); // re-render to remove admin edits
+  document.querySelectorAll('.admin-est-col').forEach(el=>el.style.display='none');
 }
 
 
