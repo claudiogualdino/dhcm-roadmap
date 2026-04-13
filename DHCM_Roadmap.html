@@ -420,6 +420,11 @@
   .gantt-status.cancelled{background:rgba(239,68,68,0.15);color:#f87171}
   .gantt-status.blocked{background:rgba(245,158,11,0.2);color:#fbbf24}
 
+
+  /* DELETE PROJECT */
+  .btn-delete-proj{background:none;border:none;cursor:pointer;padding:3px 6px;border-radius:5px;color:var(--text-muted);font-size:13px;transition:all 0.15s;line-height:1;display:flex;align-items:center;justify-content:center}
+  .btn-delete-proj:hover{color:var(--red);background:rgba(239,68,68,0.12);transform:scale(1.15)}
+
 </style>
 </head>
 <body>
@@ -638,6 +643,7 @@
         <th style="min-width:120px">Notes</th>
         <th class="center" style="width:60px">Jira</th>
         <th class="center admin-est-col" style="width:90px;display:none">Estimado</th>
+        <th class="center admin-del-col" style="width:36px;display:none"></th>
       </tr></thead>
       <tbody id="detailsBody"></tbody>
       <tfoot id="detailsFoot"></tfoot>
@@ -1452,10 +1458,11 @@ function renderDetails(data){
       ${notesCell}
       ${jiraCell}
       ${adminEstCol}
+      ${admin ? `<td class="center"><button class="btn-delete-proj" onclick="deleteProject('${p.id}')" title="Remover projeto do roadmap">🗑</button></td>` : ''}
     </tr>`;
   }).join('');
   if(!scheduled.length){document.getElementById('detailsFoot').innerHTML='';return}
-  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="${admin?4:3}"></td></tr>`;
+  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="${admin?5:3}"></td></tr>`;
 }
 
 // ═══ ADMIN INLINE FIELD EDITING ═══
@@ -1549,6 +1556,17 @@ function removeDepInline(id, dep) {
   if (!proj || !isAdmin()) return;
   proj.deps = (proj.deps||[]).filter(d => d !== dep);
   trackChange('edit', proj.id, proj.name, `Dependência removida: ${dep}`);
+  render();
+}
+
+function deleteProject(id) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj || !isAdmin()) return;
+  if (!confirm(`Remover "${proj.id} — ${proj.name}" do roadmap?\n\nEsta ação não pode ser desfeita.\nPara persistir, guarda no GitHub após remover.`)) return;
+  projects = projects.filter(p => p.id !== id);
+  // Remove from deps of other projects
+  projects.forEach(p => { if (p.deps) p.deps = p.deps.filter(d => d !== id); });
+  trackChange('remove', id, proj.name, `Removido do roadmap (${proj.effort}h)`);
   render();
 }
 
@@ -2027,6 +2045,7 @@ function activateAdmin() {
   showChangelogSection();
   render(); // re-render to enable admin edits
   document.querySelectorAll('.admin-est-col').forEach(el=>el.style.display='');
+  document.querySelectorAll('.admin-del-col').forEach(el=>el.style.display='');
   if (zone) {
     zone.style.filter = 'brightness(1.4)';
     zone.style.transform = 'scale(1.08)';
@@ -2043,6 +2062,7 @@ function deactivateAdmin() {
   hideChangelogSection();
   render(); // re-render to remove admin edits
   document.querySelectorAll('.admin-est-col').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.admin-del-col').forEach(el=>el.style.display='none');
 }
 
 
