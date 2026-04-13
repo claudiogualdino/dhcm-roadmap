@@ -1,55 +1,23 @@
 [
   {
     "date": "2026-04-13",
-    "time": "17:22",
+    "time": "00:28",
     "type": "edit",
-    "id": "DH72-02",
-    "name": "VBHC - Ecrãs especificos",
-    "detail": "Dependência adicionada: DH71-01"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "17:41",
-    "type": "edit",
-    "id": "DH95",
-    "name": "Alergias Alerta",
+    "id": "CREQ-132",
+    "name": "Configured Last Answer",
     "detail": "Jira URL atualizado"
   },
   {
     "date": "2026-04-13",
-    "time": "17:41",
+    "time": "00:28",
     "type": "edit",
-    "id": "",
-    "name": "Jira Sync",
-    "detail": "1 projetos sincronizados"
+    "id": "DH72-01",
+    "name": "VBHC - Gestão de Entidades",
+    "detail": "ID: DH71-01 → DH72-01"
   },
   {
     "date": "2026-04-13",
-    "time": "17:43",
-    "type": "edit",
-    "id": "DH84",
-    "name": "Scribe F1",
-    "detail": "Jira URL atualizado"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "17:43",
-    "type": "edit",
-    "id": "",
-    "name": "Jira Sync",
-    "detail": "2 projetos sincronizados"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "17:46",
-    "type": "edit",
-    "id": "DH92",
-    "name": "Video",
-    "detail": "Jira URL atualizado"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "17:48",
+    "time": "00:28",
     "type": "save",
     "id": "",
     "name": "Versão guardada",
