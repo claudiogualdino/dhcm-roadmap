@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-13T15:28:51.668Z",
+  "savedAt": "2026-04-13T16:48:16.984Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -15,7 +15,8 @@
       "estimated": false,
       "progress": 100,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1246"
     },
     {
       "id": "DH92",
@@ -24,7 +25,8 @@
       "estimated": false,
       "progress": 100,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1675"
     },
     {
       "id": "DH61",
@@ -42,7 +44,8 @@
       "estimated": false,
       "progress": 75,
       "deps": [],
-      "notes": ""
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2105"
     },
     {
       "id": "DH96",
@@ -113,7 +116,9 @@
       "effort": 360,
       "estimated": false,
       "progress": 0,
-      "deps": [],
+      "deps": [
+        "DH71-01"
+      ],
       "notes": "",
       "jiraUrl": ""
     },
