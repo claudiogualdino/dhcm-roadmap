@@ -332,6 +332,17 @@
   .addproj-pos-btn{flex:1;padding:6px;border:1px solid var(--border);border-radius:6px;background:var(--bg-primary);color:var(--text-secondary);font-size:10px;font-weight:600;cursor:pointer;transition:all 0.2s;text-align:center}
   .addproj-pos-btn:hover,.addproj-pos-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 
+
+  /* ADMIN MODE */
+  .fh-logo-admin{cursor:pointer;border-radius:6px;transition:box-shadow 0.2s;user-select:none}
+  .admin-mode-badge{display:none;align-items:center;gap:5px;font-size:9px;font-weight:700;font-family:var(--font-mono);padding:4px 10px;border-radius:8px;background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.35);cursor:pointer;white-space:nowrap}
+  .admin-mode-badge.show{display:inline-flex}
+  .admin-mode-badge:hover{background:rgba(239,68,68,0.25)}
+  .admin-panel{display:none;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 16px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;margin-bottom:12px;animation:fadeIn 0.2s ease}
+  .admin-panel.show{display:flex}
+  .admin-panel-label{font-size:9px;font-weight:700;color:var(--red);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.8px;margin-right:4px;white-space:nowrap}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
 </style>
 </head>
 <body>
