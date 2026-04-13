@@ -1,298 +1,58 @@
 [
   {
     "date": "2026-04-13",
-    "time": "16:04",
+    "time": "17:22",
     "type": "edit",
-    "id": "DH84",
-    "name": "Scribe F1",
-    "detail": "Estimado: false → true"
+    "id": "DH72-02",
+    "name": "VBHC - Ecrãs especificos",
+    "detail": "Dependência adicionada: DH71-01"
   },
   {
     "date": "2026-04-13",
-    "time": "16:04",
-    "type": "edit",
-    "id": "DH84",
-    "name": "Scribe F1",
-    "detail": "Estimado: true → false"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:10",
-    "type": "edit",
-    "id": "DH71",
-    "name": "VBHC",
-    "detail": "Estimado: false → true"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:12",
-    "type": "reorder",
-    "id": "DH84-02",
-    "name": "Scribe F2 e F3",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:12",
-    "type": "reorder",
-    "id": "DH84-02",
-    "name": "Scribe F2 e F3",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:12",
-    "type": "reorder",
-    "id": "DH84-02",
-    "name": "Scribe F2 e F3",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:14",
-    "type": "edit",
-    "id": "DH61",
-    "name": "Pack - Points Reuse",
-    "detail": "Progresso: 0% → 90%"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:14",
-    "type": "edit",
-    "id": "DH61",
-    "name": "Pack - Points Reuse",
-    "detail": "Esforço: 48h → 80h"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:14",
-    "type": "edit",
-    "id": "DH92",
-    "name": "Video",
-    "detail": "Esforço: 16h → 32h"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:14",
-    "type": "edit",
-    "id": "DH84",
-    "name": "Scribe F1",
-    "detail": "Esforço: 32h → 60h"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:14",
-    "type": "edit",
-    "id": "DH92",
-    "name": "Video",
-    "detail": "Progresso: 0% → 100%"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:15",
-    "type": "edit",
-    "id": "DH96",
-    "name": "Conteúdos Pack Saúde",
-    "detail": "Progresso: 0% → 75%"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:15",
-    "type": "edit",
-    "id": "DH61",
-    "name": "Pack - Points Reuse",
-    "detail": "Progresso: 90% → 75%"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:15",
-    "type": "edit",
-    "id": "DH54",
-    "name": "Group Sessions",
-    "detail": "Progresso: 0% → 50%"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:16",
-    "type": "edit",
-    "id": "DH54",
-    "name": "Group Sessions",
-    "detail": "Esforço: 90h → 148h"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:16",
-    "type": "edit",
-    "id": "DH46",
-    "name": "Healthy Companies",
-    "detail": "Progresso: 0% → 75%"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:16",
+    "time": "17:41",
     "type": "edit",
     "id": "DH95",
     "name": "Alergias Alerta",
-    "detail": "Progresso: 0% → 75%"
+    "detail": "Jira URL atualizado"
   },
   {
     "date": "2026-04-13",
-    "time": "16:16",
+    "time": "17:41",
     "type": "edit",
-    "id": "DH45-03",
-    "name": "Nif Optional QC",
-    "detail": "Progresso: 0% → 25%"
+    "id": "",
+    "name": "Jira Sync",
+    "detail": "1 projetos sincronizados"
   },
   {
     "date": "2026-04-13",
-    "time": "16:16",
-    "type": "reorder",
-    "id": "CREQ-132",
-    "name": "Configured Last Answer",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:16",
-    "type": "reorder",
-    "id": "CREQ-132",
-    "name": "Configured Last Answer",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:16",
-    "type": "reorder",
-    "id": "DH45-04",
-    "name": "Me1st Pre Registration",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:17",
-    "type": "reorder",
-    "id": "DH71",
-    "name": "VBHC",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:18",
+    "time": "17:43",
     "type": "edit",
-    "id": "DH71-01",
-    "name": "VBHC",
-    "detail": "ID: DH71 → DH71-01"
+    "id": "DH84",
+    "name": "Scribe F1",
+    "detail": "Jira URL atualizado"
   },
   {
     "date": "2026-04-13",
-    "time": "16:18",
+    "time": "17:43",
     "type": "edit",
-    "id": "DH71-01",
-    "name": "VBHC - Gestão de Entidades",
-    "detail": "Nome: \"VBHC\" → \"VBHC - Gestão de Entidades\""
+    "id": "",
+    "name": "Jira Sync",
+    "detail": "2 projetos sincronizados"
   },
   {
     "date": "2026-04-13",
-    "time": "16:18",
+    "time": "17:46",
     "type": "edit",
-    "id": "DH71-01",
-    "name": "VBHC - Gestão de Entidades",
-    "detail": "Esforço: 360h → 120h"
+    "id": "DH92",
+    "name": "Video",
+    "detail": "Jira URL atualizado"
   },
   {
     "date": "2026-04-13",
-    "time": "16:18",
-    "type": "edit",
-    "id": "DH71-01",
-    "name": "VBHC - Gestão de Entidades",
-    "detail": "Estimado: true → false"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:20",
-    "type": "add",
-    "id": "DH72-02",
-    "name": "VBHC - Ecrãs especificos",
-    "detail": "Adicionado · 360h"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:20",
-    "type": "reorder",
-    "id": "DH72-02",
-    "name": "VBHC - Ecrãs especificos",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:20",
-    "type": "reorder",
-    "id": "DH46",
-    "name": "Healthy Companies",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:20",
-    "type": "edit",
-    "id": "DH71-01",
-    "name": "VBHC - Gestão de Entidades",
-    "detail": "Notas atualizadas"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:21",
-    "type": "edit",
-    "id": "DH71-01",
-    "name": "VBHC - Gestão de Entidades",
-    "detail": "Progresso: 0% → 75%"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:21",
-    "type": "reorder",
-    "id": "DH95",
-    "name": "Alergias Alerta",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:21",
-    "type": "reorder",
-    "id": "DH96",
-    "name": "Conteúdos Pack Saúde",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:22",
-    "type": "reorder",
-    "id": "DH54",
-    "name": "Group Sessions",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:22",
-    "type": "edit",
-    "id": "DH46",
-    "name": "Healthy Companies",
-    "detail": "Esforço: 40h → 60h"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:22",
-    "type": "reorder",
-    "id": "DH72-02",
-    "name": "VBHC - Ecrãs especificos",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-04-13",
-    "time": "16:28",
+    "time": "17:48",
     "type": "save",
     "id": "",
     "name": "Versão guardada",
-    "detail": "Revisão Dashboard"
+    "detail": ""
   }
 ]
