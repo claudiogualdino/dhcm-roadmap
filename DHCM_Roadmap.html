@@ -129,7 +129,7 @@
   .gantt-section{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;overflow-x:auto;position:relative}
   .gantt-table{width:100%;min-width:1000px}
   .gantt-header-row{display:flex}
-  .gantt-proj-col{min-width:320px;flex-shrink:0;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;padding:4px 0}
+  .gantt-proj-col{min-width:360px;flex-shrink:0;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;padding:4px 0}
   .gantt-timeline-col{flex:1;display:flex;min-width:800px}
   .sprint-hdr{flex:1;text-align:center;padding:5px 2px;border-radius:5px;margin:0 1px;font-size:10px;font-weight:700;color:#fff}
   .sprint-hdr .s-dates{display:block;font-size:7.5px;opacity:0.7;margin-top:1px;font-weight:500}
@@ -142,7 +142,7 @@
   .gantt-row.dragging{opacity:0.5}
   .gantt-row.drag-over{border-top:2px solid var(--blue)}
   .gantt-row.dep-conflict{background:rgba(239,68,68,0.12)}
-  .proj-info{min-width:320px;flex-shrink:0;display:flex;align-items:center;gap:5px;padding:2px 0;font-size:11px}
+  .proj-info{min-width:360px;flex-shrink:0;display:flex;align-items:center;gap:5px;padding:2px 0;font-size:11px}
   .drag-handle{color:var(--text-muted);font-size:9px;cursor:grab;opacity:0.3;transition:opacity var(--transition);user-select:none}
   .gantt-row:hover .drag-handle{opacity:1}
   .color-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
@@ -172,7 +172,7 @@
   .bar-remaining{position:absolute;right:0;top:0;bottom:0;background:rgba(0,0,0,0.15);border-radius:0 4px 4px 0;pointer-events:none}
   .bar-label{position:relative;z-index:2}
   .grid-line{position:absolute;top:0;bottom:0;width:1px;background:rgba(42,58,92,0.25);pointer-events:none}
-  .dep-svg{position:absolute;top:0;left:320px;right:0;bottom:0;pointer-events:none;z-index:5}
+  .dep-svg{position:absolute;top:0;left:360px;right:0;bottom:0;pointer-events:none;z-index:5}
   .dep-arrow{stroke:var(--purple);stroke-width:1.5;fill:none;opacity:0.6}
   .dep-arrow-head{fill:var(--purple);opacity:0.6}
   .dep-arrow.conflict{stroke:var(--red)}
@@ -401,6 +401,25 @@
   .dep-add-btn{font-size:9px;color:var(--blue);cursor:pointer;padding:1px 5px;border:1px dashed rgba(59,130,246,0.4);border-radius:4px;white-space:nowrap}
   .dep-add-btn:hover{background:rgba(59,130,246,0.1)}
 
+
+  /* JIRA STATUS */
+  .jira-status{display:inline-flex;align-items:center;font-size:8px;font-weight:700;font-family:var(--font-mono);padding:2px 6px;border-radius:5px;white-space:nowrap;letter-spacing:0.3px}
+  .jira-status.todo{background:rgba(100,116,139,0.15);color:var(--text-muted);border:1px solid rgba(100,116,139,0.3)}
+  .jira-status.inprogress{background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid rgba(59,130,246,0.35)}
+  .jira-status.inreview{background:rgba(168,85,247,0.15);color:var(--purple);border:1px solid rgba(168,85,247,0.35)}
+  .jira-status.done{background:rgba(45,212,160,0.15);color:var(--green);border:1px solid rgba(45,212,160,0.35)}
+  .jira-status.cancelled{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.25)}
+  .jira-status.blocked{background:rgba(245,158,11,0.15);color:var(--orange);border:1px solid rgba(245,158,11,0.35)}
+  .jira-status.loading{background:rgba(100,116,139,0.1);color:var(--text-muted);border:1px dashed rgba(100,116,139,0.3);animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .gantt-status{display:inline-flex;align-items:center;font-size:7.5px;font-weight:700;font-family:var(--font-mono);padding:1px 5px;border-radius:4px;white-space:nowrap;margin-right:3px;flex-shrink:0}
+  .gantt-status.todo{background:rgba(100,116,139,0.2);color:#94a3b8}
+  .gantt-status.inprogress{background:rgba(59,130,246,0.2);color:#60a5fa}
+  .gantt-status.inreview{background:rgba(168,85,247,0.2);color:#c084fc}
+  .gantt-status.done{background:rgba(45,212,160,0.2);color:#34d399}
+  .gantt-status.cancelled{background:rgba(239,68,68,0.15);color:#f87171}
+  .gantt-status.blocked{background:rgba(245,158,11,0.2);color:#fbbf24}
+
 </style>
 </head>
 <body>
@@ -456,6 +475,9 @@
       <svg height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>🔄 Atualizar
     </button>
     <button class="btn" onclick="openGhModal()" style="font-size:10px;padding:5px 10px">⚙ GitHub</button>
+    <button class="btn" onclick="syncJiraStatuses()" id="btnJiraSync" style="font-size:10px;padding:5px 10px;border-color:rgba(59,130,246,0.4);color:var(--blue)" title="Obter estados dos epics do Jira">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Sync Jira
+    </button>
     <div style="position:relative">
       <button class="btn" onclick="toggleExportMenu()" id="btnExport" style="font-size:10px;padding:5px 10px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export ▾
@@ -613,6 +635,7 @@
         <th class="center" style="width:70px">Duration</th>
         <th class="center" style="width:70px">Depends</th>
         <th style="min-width:120px">Notes</th>
+        <th class="center" style="width:80px">Status</th>
         <th class="center" style="width:60px">Jira</th>
         <th class="center admin-est-col" style="width:90px;display:none">Estimado</th>
       </tr></thead>
@@ -708,9 +731,28 @@
           Cria em: <a href="https://github.com/settings/tokens/new?scopes=repo&description=dhcm-roadmap" target="_blank">github.com/settings/tokens</a> → scope: <strong>repo</strong>
         </div>
       </div>
+      <div style="height:1px;background:var(--border);margin:16px 0"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--blue)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        <span style="font-size:13px;font-weight:700">Jira Integration</span>
+      </div>
+      <div class="gh-subtitle" style="margin-bottom:14px">Para sincronizar o estado dos epics. O token é guardado apenas localmente.</div>
+      <div class="gh-field">
+        <label>Jira Domain</label>
+        <input type="text" id="jiraDomain" placeholder="futurehealthcare.atlassian.net">
+      </div>
+      <div class="gh-field">
+        <label>Jira Email</label>
+        <input type="email" id="jiraEmail" placeholder="claudio@futurehealthcare.pt">
+      </div>
+      <div class="gh-field">
+        <label>Jira API Token</label>
+        <input type="password" id="jiraToken" placeholder="ATATT3xFf...">
+        <div class="gh-hint">Cria em: <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank">id.atlassian.com</a> → Create API token</div>
+      </div>
       <div class="gh-modal-actions">
         <button class="btn" onclick="closeGhModal()">Cancelar</button>
-        <button class="btn" onclick="testGhConnection()" id="btnGhTest">Testar Ligação</button>
+        <button class="btn" onclick="testGhConnection()" id="btnGhTest">Testar GitHub</button>
         <button class="btn gh-btn" onclick="saveGhConfig()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
           Guardar Config
@@ -759,6 +801,8 @@
 <script>
 let _isAdminMode = false;
 function isAdmin() { return _isAdminMode; }
+let changelog = [];
+let jiraStatusCache = {};
 
 // ════════════════════ DATA ════════════════════
 let projects = [
@@ -1258,11 +1302,10 @@ function renderGantt(data){
       <div class="proj-info">
         <span class="drag-handle">⋮⋮</span>
         <div class="color-dot" style="background:${p.color}"></div>
+        ${renderGanttStatusChip(p.id)}
         <span class="proj-id">${p.id}</span>
         <span class="proj-name" title="${p.name}">${truncate(p.name,30)}</span>
-        ${isConflict?'<span class="risk-flag rf-blocked">⛔ DEP</span>':p.estimated?'<span class="risk-flag rf-estimated">~ EST</span>':p.notes&&p.notes.toLowerCase().includes('review')?'<span class="risk-flag rf-review">👁 REVIEW</span>':'<span class="risk-flag rf-ok">✓</span>'}
-        <span class="dep-icon ${hasDeps?'has-deps':''}" onclick="event.stopPropagation();toggleDepEditor('${p.id}')" title="${hasDeps?'Depends on: '+p.deps.join(', '):'Add dependency'}">⛓</span>
-        <span class="gantt-progress-pill ${progress===100?'done':progress>0?'in-progress':'not-started'}" id="gpill-${p.id}" onclick="event.stopPropagation();editGanttProgress('${p.id}')" title="Click to edit progress">${progress===100?'✓ Done':progress>0?progress+'%':'—'}</span>
+        <span class="gantt-progress-pill ${progress>0?'in-progress':'not-started'}" id="gpill-${p.id}" onclick="event.stopPropagation();editGanttProgress('${p.id}')" title="Click to edit progress">${progress}%</span>
       </div>
       <div class="bar-area">
         ${gridLines}${todayLine}
@@ -1378,12 +1421,13 @@ function renderDetails(data){
       <td class="center" style="color:var(--text-secondary);font-size:11px">${p.durationWeeks.toFixed(1)}w</td>
       ${depsCell}
       ${notesCell}
+      <td class="center">${renderStatusBadge(p.id)}</td>
       ${jiraCell}
       ${adminEstCol}
     </tr>`;
   }).join('');
   if(!scheduled.length){document.getElementById('detailsFoot').innerHTML='';return}
-  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="${admin?3:2}"></td></tr>`;
+  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="${admin?4:3}"></td></tr>`;
 }
 
 // ═══ ADMIN INLINE FIELD EDITING ═══
@@ -1975,7 +2019,6 @@ function deactivateAdmin() {
 
 
 // ════════════════════ CHANGELOG ════════════════════
-let changelog = []; // [{date, time, type, id, name, detail, note}]
 const GH_CHANGELOG_FILE = 'changelog.json';
 
 function todayStr() { return new Date().toISOString().slice(0,10); }
@@ -2102,6 +2145,162 @@ async function githubSaveWithNote() {
   else trackChange('save', '', 'Versão guardada', '');
   await githubSaveActual();
 }
+
+
+// ════════════════════ JIRA STATUS ════════════════════
+
+const JIRA_STATUS_MAP = {
+  // Future Healthcare DHCM workflow states
+  'backlog':                    'todo',
+  'to do':                      'todo',
+  'pending approval':           'todo',
+  'in business requirements':   'inprogress',
+  'in technical analysis':      'inprogress',
+  'ready for development':      'inprogress',
+  'in progress':                'inprogress',
+  'implemented':                'inreview',
+  'on hold':                    'blocked',
+  'qa testing':                 'inreview',
+  'qa refused':                 'blocked',
+  'qa approved':                'inreview',
+  'train testing':              'inreview',
+  'train refused':              'blocked',
+  'ready for go live':          'inreview',
+  'closed':                     'done',
+  'cancelled':                  'cancelled',
+  'canceled':                   'cancelled',
+  // Generic fallbacks
+  'open':                       'todo',
+  'done':                       'done',
+  'resolved':                   'done',
+  'blocked':                    'blocked',
+};
+
+function jiraStatusClass(statusName) {
+  if (!statusName) return 'todo';
+  return JIRA_STATUS_MAP[statusName.toLowerCase()] || 'inprogress';
+}
+
+function jiraStatusLabel(statusName) {
+  if (!statusName) return '—';
+  // Abbreviate long names
+  const abbr = {
+    'backlog':'BACKLOG','to do':'TO DO','pending approval':'PENDING',
+    'in business requirements':'BIZ REQ','in technical analysis':'TECH AN',
+    'ready for development':'READY DEV','in progress':'IN PROG',
+    'implemented':'IMPL','on hold':'ON HOLD',
+    'qa testing':'QA TEST','qa refused':'QA ✗','qa approved':'QA ✓',
+    'train testing':'TRAIN','train refused':'TRAIN ✗',
+    'ready for go live':'GO LIVE','closed':'CLOSED','cancelled':'CANCEL',
+  };
+  return abbr[statusName.toLowerCase()] || statusName.toUpperCase().slice(0,8);
+}
+
+function renderStatusBadge(projectId) {
+  const cache = jiraStatusCache[projectId];
+  if (!cache) return '<span style="color:var(--text-muted);font-size:10px">—</span>';
+  if (cache.loading) return '<span class="jira-status loading">···</span>';
+  return `<span class="jira-status ${cache.statusClass}" title="${cache.status}">${jiraStatusLabel(cache.status)}</span>`;
+}
+
+function renderGanttStatusChip(projectId) {
+  const cache = jiraStatusCache[projectId];
+  if (!cache || cache.loading || !cache.status) return '';
+  return `<span class="gantt-status ${cache.statusClass}" title="${cache.status}">${jiraStatusLabel(cache.status)}</span>`;
+}
+
+function jiraConfig() {
+  return {
+    domain: localStorage.getItem('jira_domain') || '',
+    email:  localStorage.getItem('jira_email')  || '',
+    token:  localStorage.getItem('jira_token')  || '',
+  };
+}
+
+async function fetchJiraStatus(project) {
+  const cfg = jiraConfig();
+  if (!cfg.domain || !cfg.email || !cfg.token) return null;
+  if (!project.jiraUrl) return null;
+
+  // Extract issue key from URL (e.g. GDP-1234)
+  const match = project.jiraUrl.match(/browse\/([A-Z][A-Z0-9]+-\d+)/i);
+  if (!match) return null;
+  const issueKey = match[1];
+
+  try {
+    const auth = btoa(`${cfg.email}:${cfg.token}`);
+    const res = await fetch(`https://${cfg.domain}/rest/api/3/issue/${issueKey}?fields=status`, {
+      headers: { 'Authorization': `Basic ${auth}`, 'Accept': 'application/json' }
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.fields?.status?.name || null;
+  } catch(e) { return null; }
+}
+
+async function syncJiraStatuses() {
+  const cfg = jiraConfig();
+  if (!cfg.domain || !cfg.email || !cfg.token) {
+    openGhModal();
+    alert('Configura primeiro as credenciais Jira no modal de configuração.');
+    return;
+  }
+
+  const btn = document.getElementById('btnJiraSync');
+  if (btn) { btn.textContent = '⏳ A sincronizar…'; btn.disabled = true; }
+
+  const projectsWithJira = projects.filter(p => p.jiraUrl);
+  let synced = 0;
+
+  // Mark all as loading
+  projectsWithJira.forEach(p => {
+    jiraStatusCache[p.id] = { loading: true, status: null, statusClass: 'todo' };
+  });
+  render();
+
+  // Fetch sequentially to avoid rate limiting
+  for (const p of projectsWithJira) {
+    const status = await fetchJiraStatus(p);
+    jiraStatusCache[p.id] = {
+      loading: false,
+      status: status || 'Unknown',
+      statusClass: jiraStatusClass(status),
+      fetchedAt: new Date().toISOString()
+    };
+    synced++;
+    render(); // update progressively
+  }
+
+  if (btn) { btn.textContent = `✓ ${synced} sync'd`; btn.disabled = false; setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Sync Jira'; }, 3000); }
+  trackChange('edit', '', 'Jira Sync', `${synced} projetos sincronizados`);
+  setGhStatus('ok', `✓ Jira: ${synced} estados atualizados`);
+  setTimeout(() => setGhStatus('hidden', ''), 4000);
+}
+
+// Extend openGhModal to prefill Jira fields
+const _origOpenGhModal = openGhModal;
+openGhModal = function() {
+  _origOpenGhModal();
+  const jc = jiraConfig();
+  const domEl = document.getElementById('jiraDomain');
+  const emEl  = document.getElementById('jiraEmail');
+  const tokEl = document.getElementById('jiraToken');
+  if (domEl) domEl.value = jc.domain || 'futurehealthcare.atlassian.net';
+  if (emEl)  emEl.value  = jc.email;
+  if (tokEl) tokEl.value = jc.token;
+};
+
+// Extend saveGhConfig to also save Jira credentials
+const _origSaveGhConfig = saveGhConfig;
+saveGhConfig = function() {
+  _origSaveGhConfig();
+  const domain = (document.getElementById('jiraDomain')?.value || '').trim();
+  const email  = (document.getElementById('jiraEmail')?.value  || '').trim();
+  const token  = (document.getElementById('jiraToken')?.value  || '').trim();
+  if (domain) localStorage.setItem('jira_domain', domain);
+  if (email)  localStorage.setItem('jira_email',  email);
+  if (token)  localStorage.setItem('jira_token',  token);
+};
 
 // ════════════════════ GITHUB SYNC ════════════════════
 const GH_FILE = 'roadmap-state.json';
