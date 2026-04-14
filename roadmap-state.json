@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-14T00:53:05.316Z",
+  "savedAt": "2026-04-14T08:15:40.139Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -73,7 +73,7 @@
       "name": "Group Sessions",
       "effort": 132,
       "estimated": false,
-      "progress": 50,
+      "progress": 70,
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1008"
