@@ -2380,6 +2380,42 @@ async function githubSaveActual() {
     }
   });
 
+  // --- fetch current remote file first (need SHA anyway) ---
+  let sha = undefined;
+  let remoteJiraStatuses = null;
+  let remoteJiraSyncedAt = '';
+  try {
+    const checkRes = await fetch(
+      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
+      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    if (checkRes.ok) {
+      const d = await checkRes.json();
+      sha = d.sha;
+      // Decode remote content to read its jiraStatuses
+      try {
+        const remoteRaw = decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))));
+        const remoteState = JSON.parse(remoteRaw);
+        if (remoteState.jiraStatuses && typeof remoteState.jiraStatuses === 'object') {
+          remoteJiraStatuses = remoteState.jiraStatuses;
+          remoteJiraSyncedAt = remoteState.jiraStatusesSyncedAt || '';
+        }
+      } catch(e) { /* ignore decode errors */ }
+    }
+  } catch(e) { /* ignore — will create new file */ }
+
+  // Use whichever jiraStatuses is more recent: remote (Claude sync) or local cache
+  let finalJiraStatuses = jiraStatusesSnapshot;
+  let finalJiraSyncedAt = jiraStatusesSyncedAt;
+  if (remoteJiraStatuses && remoteJiraSyncedAt >= jiraStatusesSyncedAt) {
+    finalJiraStatuses = remoteJiraStatuses;
+    finalJiraSyncedAt = remoteJiraSyncedAt;
+    // Also update local cache to stay in sync
+    Object.entries(remoteJiraStatuses).forEach(([id, status]) => {
+      jiraStatusCache[id] = { loading: false, status, fetchedAt: remoteJiraSyncedAt };
+    });
+  }
+
   const state = {
     version: 3,
     savedAt: new Date().toISOString(),
@@ -2387,22 +2423,14 @@ async function githubSaveActual() {
     projects: JSON.parse(JSON.stringify(projects)),
     absences: JSON.parse(JSON.stringify(absences)),
     scenarios: JSON.parse(JSON.stringify(scenarios)),
-    ...(Object.keys(jiraStatusesSnapshot).length ? {
-      jiraStatuses: jiraStatusesSnapshot,
-      jiraStatusesSyncedAt,
+    ...(Object.keys(finalJiraStatuses).length ? {
+      jiraStatuses: finalJiraStatuses,
+      jiraStatusesSyncedAt: finalJiraSyncedAt,
     } : {}),
   };
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
 
   try {
-    // Check if file exists to get SHA (needed for update)
-    const checkRes = await fetch(
-      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
-      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
-    );
-    let sha = undefined;
-    if (checkRes.ok) { const d = await checkRes.json(); sha = d.sha; }
-
     const body = {
       message: `roadmap: update ${new Date().toISOString().slice(0,16).replace('T',' ')}`,
       content,
