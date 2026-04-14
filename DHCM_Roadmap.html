@@ -2558,6 +2558,8 @@ async function githubLoad() {
       p.progress  = p.progress  || 0;
       p.deps      = p.deps      || [];
       p.estimated = p.estimated || false;
+      p.briefing  = p.briefing  || '';
+      p.briefingGeneratedAt = p.briefingGeneratedAt || '';
     });
     if (state.absences)  absences  = state.absences;
     if (state.scenarios) scenarios = state.scenarios;
@@ -2598,9 +2600,10 @@ async function autoLoadFromGitHub() {
     const state = await res.json();
     if (!state.projects || !Array.isArray(state.projects)) return;
     projects = state.projects;
-    projects.forEach(p => { p.progress=p.progress||0; p.deps=p.deps||[]; p.estimated=p.estimated||false; });
+    projects.forEach(p => { p.progress=p.progress||0; p.deps=p.deps||[]; p.estimated=p.estimated||false; p.briefing=p.briefing||''; p.briefingGeneratedAt=p.briefingGeneratedAt||''; });
     if (state.absences)  absences  = state.absences;
     if (state.scenarios) scenarios = state.scenarios;
+    loadJiraStatusesFromState(state);
     if (state.params) {
       document.getElementById('ctrlDevs').value  = state.params.devs        || 1.5;
       document.getElementById('ctrlHours').value = state.params.hoursPerDev || 90;
