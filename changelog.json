@@ -1,7 +1,39 @@
 [
   {
     "date": "2026-04-14",
-    "time": "01:21",
+    "time": "01:32",
+    "type": "edit",
+    "id": "DH61",
+    "name": "Pack - Points Reuse",
+    "detail": "Progresso: 75% → 80%"
+  },
+  {
+    "date": "2026-04-14",
+    "time": "01:32",
+    "type": "edit",
+    "id": "DH95",
+    "name": "Alergias Alerta",
+    "detail": "Progresso: 75% → 80%"
+  },
+  {
+    "date": "2026-04-14",
+    "time": "01:32",
+    "type": "edit",
+    "id": "DH96",
+    "name": "Conteúdos Pack Saúde",
+    "detail": "Progresso: 75% → 80%"
+  },
+  {
+    "date": "2026-04-14",
+    "time": "01:32",
+    "type": "edit",
+    "id": "DH72-01",
+    "name": "VBHC - Gestão de Entidades",
+    "detail": "Progresso: 75% → 80%"
+  },
+  {
+    "date": "2026-04-14",
+    "time": "01:33",
     "type": "save",
     "id": "",
     "name": "Versão guardada",
