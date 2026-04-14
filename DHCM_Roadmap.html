@@ -446,6 +446,19 @@
   .btn-briefing-inline{background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:5px;color:var(--text-muted);font-size:12px;transition:all 0.15s;line-height:1}
   .btn-briefing-inline:hover{color:var(--blue);background:rgba(59,130,246,0.12);transform:scale(1.15)}
 
+
+  /* NOTES MODAL */
+  .notes-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+  .notes-modal-overlay.show{display:flex}
+  .notes-modal{background:var(--bg-secondary);border:1px solid var(--border);border-radius:14px;padding:28px 32px;width:520px;max-width:95vw;max-height:80vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.5)}
+  .notes-modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px}
+  .notes-modal-title{font-size:15px;font-weight:800}
+  .notes-modal-id{font-size:10px;font-family:var(--font-mono);color:var(--text-muted);margin-top:2px}
+  .notes-modal-close{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;padding:0;line-height:1;flex-shrink:0}
+  .notes-modal-close:hover{color:var(--text-primary)}
+  .notes-modal-body{font-size:12px;color:var(--text-secondary);line-height:1.7;white-space:pre-wrap;min-height:60px}
+  .notes-modal-footer{display:flex;justify-content:flex-end;align-items:center;margin-top:20px;padding-top:14px;border-top:1px solid var(--border)}
+
 </style>
 </head>
 <body>
@@ -734,6 +747,24 @@
   </div>
 
 
+
+
+  <!-- NOTES MODAL -->
+  <div class="notes-modal-overlay" id="notesModal">
+    <div class="notes-modal">
+      <div class="notes-modal-header">
+        <div>
+          <div class="notes-modal-title" id="notesModalTitle"></div>
+          <div class="notes-modal-id" id="notesModalId"></div>
+        </div>
+        <button class="notes-modal-close" onclick="closeNotesModal()">✕</button>
+      </div>
+      <div class="notes-modal-body" id="notesModalBody"></div>
+      <div class="notes-modal-footer">
+        <button class="btn" onclick="closeNotesModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- BRIEFING MODAL -->
   <div class="briefing-modal-overlay" id="briefingModal">
@@ -1445,7 +1476,7 @@ function renderDetails(data){
     const depList=(p.deps||[]).join(', ')||'—';
     const depColor=(p.deps||[]).length>0?'var(--purple)':'var(--text-muted)';
     const notes=p.notes||'';
-    const notesDisplay=notes?truncate(notes,30):'+ add note';
+    const notesDisplay=notes?truncate(notes,28):'+ add note';
     const notesCls=notes?'notes-cell':'notes-cell empty';
 
     // ID cell — editable in admin
@@ -1478,7 +1509,7 @@ function renderDetails(data){
       : '';
 
     // Notes — always editable
-    const notesCell = `<td class="${notesCls}" onclick="editNotes('${p.id}',this)" title="Click to edit notes">${notesDisplay}</td>`;
+    const notesCell = `<td class="${notesCls}" onclick="openNotesModal('${p.id}')" title="${notes?'Clica para ver/editar nota':'Clica para adicionar nota'}" style="cursor:pointer">${notesDisplay}</td>`;
 
     // Jira URL — editable in admin
     const jiraCell = admin
@@ -2239,6 +2270,62 @@ async function githubSaveWithNote() {
 }
 
 
+
+
+// ════════════════════ NOTES MODAL ════════════════════
+let _currentNotesId = null;
+
+function openNotesModal(id) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj) return;
+  _currentNotesId = id;
+  document.getElementById('notesModalTitle').textContent = proj.name;
+  document.getElementById('notesModalId').textContent = proj.id;
+  document.getElementById('notesModalBody').textContent = proj.notes || '(sem notas)';
+
+  // In admin mode, make body editable
+  const body = document.getElementById('notesModalBody');
+  if (isAdmin()) {
+    body.contentEditable = 'true';
+    body.style.outline = '1px dashed rgba(59,130,246,0.4)';
+    body.style.borderRadius = '4px';
+    body.style.padding = '6px';
+    body.title = 'Clica para editar';
+    // Save on blur
+    body.onblur = () => {
+      const newNotes = body.textContent.trim();
+      const p = projects.find(p => p.id === _currentNotesId);
+      if (p && newNotes !== (p.notes||'')) {
+        trackChange('edit', p.id, p.name, 'Notas atualizadas');
+        p.notes = newNotes;
+        render();
+      }
+    };
+  } else {
+    body.contentEditable = 'false';
+    body.style.outline = '';
+    body.style.padding = '';
+    body.onblur = null;
+  }
+
+  document.getElementById('notesModal').classList.add('show');
+}
+
+function closeNotesModal() {
+  // Save any pending edits
+  const body = document.getElementById('notesModalBody');
+  if (body && body.contentEditable === 'true' && _currentNotesId) {
+    const newNotes = body.textContent.trim();
+    const p = projects.find(p => p.id === _currentNotesId);
+    if (p && newNotes !== (p.notes||'')) {
+      trackChange('edit', p.id, p.name, 'Notas atualizadas');
+      p.notes = newNotes;
+      render();
+    }
+  }
+  document.getElementById('notesModal').classList.remove('show');
+  _currentNotesId = null;
+}
 
 // ════════════════════ BRIEFINGS ════════════════════
 let _currentBriefingId = null;
