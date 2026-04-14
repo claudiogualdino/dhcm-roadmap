@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-14T00:21:50.488Z",
+  "savedAt": "2026-04-14T00:33:24.938Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -33,7 +33,7 @@
       "name": "Pack - Points Reuse",
       "effort": 105,
       "estimated": false,
-      "progress": 75,
+      "progress": 80,
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1045"
@@ -43,7 +43,7 @@
       "name": "Alergias Alerta",
       "effort": 40,
       "estimated": false,
-      "progress": 75,
+      "progress": 80,
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2105"
@@ -53,7 +53,7 @@
       "name": "Conteúdos Pack Saúde",
       "effort": 65,
       "estimated": false,
-      "progress": 75,
+      "progress": 80,
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2107"
@@ -64,7 +64,7 @@
       "effort": 120,
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "estimated": false,
-      "progress": 75,
+      "progress": 80,
       "deps": [],
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1192"
     },
