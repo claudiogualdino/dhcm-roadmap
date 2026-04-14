@@ -1379,9 +1379,9 @@ function renderGantt(data){
       <div class="proj-info">
         <span class="drag-handle">⋮⋮</span>
         <div class="color-dot" style="background:${p.color}"></div>
-        ${renderGanttStatusChip(p.id)}
         <span class="proj-id">${p.id}</span>
         <span class="proj-name" title="${p.name}">${truncate(p.name,30)}</span>
+        ${renderGanttStatusChip(p.id)}
         <span class="gantt-progress-pill ${progress>0?'in-progress':'not-started'}" id="gpill-${p.id}" onclick="event.stopPropagation();editGanttProgress('${p.id}')" title="Click to edit progress">${progress}%</span>
       </div>
       <div class="bar-area">
