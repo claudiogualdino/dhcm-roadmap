@@ -17,8 +17,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1246",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Enable clinicians to transcribe speech to text during consultations and auto-populate clinical note fields.\n**Expected Output:** Speech-to-text capability integrated into the clinical note workflow, reducing manual data entry.\n**Context:** Targets Clinical Management; epic is Closed.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH92",
@@ -29,8 +29,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1675",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Allow clients to select their preferred video platform when booking a telemedicine consultation.\n**Expected Output:** Updated booking flow with video platform selection, improving client experience.\n**Context:** Builds on TytoCare integration; epic is Closed.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH61",
@@ -41,8 +41,8 @@
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1045",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Allow clients to redeem points from a previous health pack as a discount when purchasing a new one.\n**Expected Output:** Discount mechanism in the pack purchase flow that calculates and applies available points.\n**Context:** Depends on existing points tracking system; currently In Progress.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH95",
@@ -53,8 +53,8 @@
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2105",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Add a visible allergy alert indicator in Clinical Management to warn clinicians of patient allergies before or during a consultation.\n**Expected Output:** Allergy alert button/flag displayed on the patient record in Clinical Management.\n**Context:** Patient safety feature; currently In Progress.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH96",
@@ -65,8 +65,8 @@
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2107",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Enrich health packs with educational health literacy content accessible to clients.\n**Expected Output:** Content management area within Health Pack Management for associating articles and health resources.\n**Context:** Builds on the existing Health Pack module; currently In Progress.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH72-01",
@@ -77,8 +77,8 @@
       "progress": 80,
       "deps": [],
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1192",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Implement the first phase of Value-Based Healthcare (VBHC) by enabling management of clinical entities and outcome measures.\n**Expected Output:** Entity management screens and data structures supporting VBHC workflows.\n**Context:** First of two VBHC phases; currently In Progress.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH54",
@@ -89,8 +89,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1008",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Introduce group consultation session capability, allowing multiple clients to attend a single clinical session.\n**Expected Output:** Group session scheduling, management, and participation flows across the platform.\n**Context:** New consultation type extending the existing appointment model; currently In Progress.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH45-03",
@@ -101,8 +101,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1195",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Make the NIF (tax ID) field optional in the questionnaire table to support clients without a Portuguese NIF.\n**Expected Output:** Updated tuw_questionnaire table with nullable NIF column and all dependent services updated accordingly.\n**Context:** Requires WSDL update and coordination with dependent services; estimated 8h.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH80",
@@ -113,8 +113,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1107",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Support foreign clients by enabling non-Portuguese tax IDs and international phone formats across the platform.\n**Expected Output:** Updated client registration and management forms accepting foreign NIF and phone formats.\n**Context:** Regulatory and usability requirement for international client support.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "CREQ-132",
@@ -125,8 +125,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/CREQ-132",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Allow Clinical Management to be configured to show or hide previous questionnaire answers depending on the questionnaire type.\n**Expected Output:** A frontend configuration option per questionnaire controlling display of prior responses.\n**Context:** Addresses flexibility in questionnaire workflows; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH72-02",
@@ -139,8 +139,8 @@
       ],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1191",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Implement the second phase of VBHC with specific clinical screens for outcome capture and reporting.\n**Expected Output:** VBHC-specific screens for data entry and visualisation integrated into the clinical workflow.\n**Context:** Follows DH72-01; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH66",
@@ -151,8 +151,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1051",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Integrate Clinical Management with the Bluebee Prescription Platform to enable medication and exam prescriptions within the platform.\n**Expected Output:** Prescription workflows for medications/exams and retrieval of historical prescription data, all within Clinical Management.\n**Context:** Depends on Prescription Platform API; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH99",
@@ -163,8 +163,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2147",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Enable clients to reschedule or cancel appointments directly from the FHvc Client Portal without contacting the clinic.\n**Expected Output:** Reschedule and cancellation flows in the Client Portal with confirmation and notification handling.\n**Context:** Improves client self-service capabilities; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH45-04",
@@ -175,8 +175,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1366",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Allow new users to pre-register for the me1st wellness app directly from the FH platform.\n**Expected Output:** Pre-registration flow from the FH platform that provisions a linked me1st account for the client.\n**Context:** Bridges FH and me1st platforms; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH101",
@@ -187,8 +187,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2157",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Integrate Infermedica's symptom assessment engine into FHvc and Clinical Management to support triage and pre-consultation workflows.\n**Expected Output:** Symptom checker for clients and triage summary for clinicians, with insurer SSO support.\n**Context:** Estimated 200h; In Technical Analysis with mockups and PRD available.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH100",
@@ -199,8 +199,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2151",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Integrate external digital health applications (fitness, nutrition, wearables) into the FHvc Client Portal to enrich the client health profile.\n**Expected Output:** Connected apps section in the Client Portal allowing clients to link and view data from third-party health apps.\n**Context:** Estimated 320h; In Technical Analysis with PRD available.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH87",
@@ -211,8 +211,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1738",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Collect Net Promoter Score (NPS) feedback from clients after consultations via the FHvc Client Portal.\n**Expected Output:** NPS survey triggered post-consultation with results accessible for reporting.\n**Context:** Estimated 120h; currently In Technical Analysis.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH84-02",
@@ -225,8 +225,8 @@
       ],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2134",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Extend the Scribe feature to automatically capture vital signal values (blood pressure, heart rate, etc.) from consultations.\n**Expected Output:** Vital signs detected from speech/input auto-populated into the appropriate clinical note fields.\n**Context:** Builds on DH84 (Closed); Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH102",
@@ -237,8 +237,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1860",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Show available calendar slots in Clinical Management to improve appointment scheduling visibility and reduce booking friction.\n**Expected Output:** Visual indicator or count of available slots per day/clinician in the calendar view.\n**Context:** Estimated 40h; currently In Technical Analysis.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH59",
@@ -249,8 +249,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1042",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Display appointment descriptions (voucher details, points, act descriptions) on client invoices for better billing transparency.\n**Expected Output:** Invoice documents updated to include appointment descriptions.\n**Context:** Currently In Technical Analysis.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH93",
@@ -261,8 +261,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1981",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Integrate SAP appointment data to display estimated wait times to clients and staff in Clinical Management.\n**Expected Output:** Estimated wait time displayed on the appointment view, sourced from SAP.\n**Context:** Estimated 180h; currently In Technical Analysis.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH60-02",
@@ -275,8 +275,8 @@
       ],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1190",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Improve the FHvc portal registration flow by handling edge cases such as existing accounts and activation status.\n**Expected Output:** Smarter registration process detecting existing accounts and guiding users through the appropriate recovery flow.\n**Context:** Second phase of DH60; currently In Technical Analysis.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
       "id": "DH88",
@@ -287,8 +287,8 @@
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1748",
-      "briefing": "",
-      "briefingGeneratedAt": ""
+      "briefing": "**Objective:** Allow clients to manage health insurance cards in the FHvc Client Portal, including adding, deleting, and setting a preferred card.\n**Expected Output:** Card management section in the Client Portal with full CRUD capabilities for insurance cards.\n**Context:** Estimated 110h; currently In Technical Analysis.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     }
   ],
   "absences": [
@@ -326,5 +326,31 @@
   "scenarios": {
     "A": null,
     "B": null
-  }
+  },
+  "jiraStatuses": {
+    "DH84": "Closed",
+    "DH92": "Closed",
+    "DH61": "In Progress",
+    "DH95": "In Progress",
+    "DH96": "In Progress",
+    "DH72-01": "In Progress",
+    "DH54": "In Progress",
+    "DH45-03": "In Progress",
+    "DH80": "In Progress",
+    "CREQ-132": "Ready for Development",
+    "DH72-02": "Ready for Development",
+    "DH66": "Ready for Development",
+    "DH99": "Ready for Development",
+    "DH45-04": "Ready for Development",
+    "DH101": "In Technical Analysis",
+    "DH100": "In Technical Analysis",
+    "DH87": "In Technical Analysis",
+    "DH84-02": "Ready for Development",
+    "DH102": "In Technical Analysis",
+    "DH59": "In Technical Analysis",
+    "DH93": "In Technical Analysis",
+    "DH60-02": "In Technical Analysis",
+    "DH88": "In Technical Analysis"
+  },
+  "jiraStatusesSyncedAt": "2026-04-14T11:08:48.367669Z"
 }
