@@ -425,6 +425,27 @@
   .btn-delete-proj{background:none;border:none;cursor:pointer;padding:3px 6px;border-radius:5px;color:var(--text-muted);font-size:13px;transition:all 0.15s;line-height:1;display:flex;align-items:center;justify-content:center}
   .btn-delete-proj:hover{color:var(--red);background:rgba(239,68,68,0.12);transform:scale(1.15)}
 
+
+  /* BRIEFING */
+  .briefing-cell{cursor:pointer;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;color:var(--text-secondary);padding:4px 8px !important}
+  .briefing-cell:hover{color:var(--text-primary);background:rgba(59,130,246,0.08);border-radius:4px}
+  .briefing-cell.empty{color:var(--text-muted);font-style:italic}
+  .briefing-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+  .briefing-modal-overlay.show{display:flex}
+  .briefing-modal{background:var(--bg-secondary);border:1px solid var(--border);border-radius:14px;padding:28px 32px;width:580px;max-width:95vw;max-height:80vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.5)}
+  .briefing-modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px}
+  .briefing-modal-title{font-size:15px;font-weight:800;line-height:1.3}
+  .briefing-modal-id{font-size:10px;font-family:var(--font-mono);color:var(--text-muted);margin-top:2px}
+  .briefing-modal-close{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;padding:0;line-height:1;flex-shrink:0}
+  .briefing-modal-close:hover{color:var(--text-primary)}
+  .briefing-modal-body{font-size:12px;color:var(--text-secondary);line-height:1.7;white-space:pre-wrap}
+  .briefing-modal-footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:14px;border-top:1px solid var(--border)}
+  .briefing-modal-meta{font-size:9px;color:var(--text-muted);font-family:var(--font-mono)}
+  .btn-briefing-sync{display:inline-flex;align-items:center;gap:5px;font-size:10px;cursor:pointer;padding:5px 10px;border-radius:6px;background:rgba(59,130,246,0.12);color:var(--blue);border:1px solid rgba(59,130,246,0.3);transition:all 0.2s}
+  .btn-briefing-sync:hover{background:rgba(59,130,246,0.22)}
+  .btn-briefing-inline{background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:5px;color:var(--text-muted);font-size:12px;transition:all 0.15s;line-height:1}
+  .btn-briefing-inline:hover{color:var(--blue);background:rgba(59,130,246,0.12);transform:scale(1.15)}
+
 </style>
 </head>
 <body>
@@ -641,6 +662,7 @@
         <th class="center" style="width:70px">Duration</th>
         <th class="center" style="width:70px">Depends</th>
         <th style="min-width:120px">Notes</th>
+        <th style="min-width:160px">Briefing</th>
         <th class="center" style="width:60px">Jira</th>
         <th class="center admin-est-col" style="width:90px;display:none">Estimado</th>
         <th class="center admin-del-col" style="width:36px;display:none"></th>
@@ -712,6 +734,27 @@
   </div>
 
 
+
+  <!-- BRIEFING MODAL -->
+  <div class="briefing-modal-overlay" id="briefingModal">
+    <div class="briefing-modal">
+      <div class="briefing-modal-header">
+        <div>
+          <div class="briefing-modal-title" id="briefingModalTitle"></div>
+          <div class="briefing-modal-id" id="briefingModalId"></div>
+        </div>
+        <button class="briefing-modal-close" onclick="closeBriefingModal()">✕</button>
+      </div>
+      <div class="briefing-modal-body" id="briefingModalBody"></div>
+      <div class="briefing-modal-footer">
+        <span class="briefing-modal-meta" id="briefingModalMeta"></span>
+        <button class="btn-briefing-sync" id="briefingModalSyncBtn" onclick="openClaudeForSingleBriefingFromModal()">
+          📋 Atualizar briefing via Claude
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- JIRA SYNC INSTRUCTION MODAL -->
   <div class="gh-modal-overlay" id="jiraSyncModal">
     <div class="gh-modal" style="max-width:480px">
@@ -730,7 +773,7 @@
           </div>
           <div style="display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--text-secondary)">
             <span style="background:var(--blue);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">2</span>
-            Claude usa o <strong style="color:var(--text-primary)">MCP Atlassian</strong> para ir buscar o estado actual de cada epic no Jira
+            Claude usa o <strong style="color:var(--text-primary)">MCP Atlassian</strong> para ir buscar o estado actual de cada epic + gerar <strong style="color:var(--text-primary)">briefings</strong> para os que ainda não têm
           </div>
           <div style="display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--text-secondary)">
             <span style="background:var(--blue);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">3</span>
@@ -1336,9 +1379,9 @@ function renderGantt(data){
       <div class="proj-info">
         <span class="drag-handle">⋮⋮</span>
         <div class="color-dot" style="background:${p.color}"></div>
+        ${renderGanttStatusChip(p.id)}
         <span class="proj-id">${p.id}</span>
         <span class="proj-name" title="${p.name}">${truncate(p.name,30)}</span>
-        ${renderGanttStatusChip(p.id)}
         <span class="gantt-progress-pill ${progress>0?'in-progress':'not-started'}" id="gpill-${p.id}" onclick="event.stopPropagation();editGanttProgress('${p.id}')" title="Click to edit progress">${progress}%</span>
       </div>
       <div class="bar-area">
@@ -1456,13 +1499,14 @@ function renderDetails(data){
       <td class="center" style="color:var(--text-secondary);font-size:11px">${p.durationWeeks.toFixed(1)}w</td>
       ${depsCell}
       ${notesCell}
+      <td class="briefing-cell ${p.briefing?'':'empty'}" onclick="openBriefingModal('${p.id}')" title="${p.briefing?'Clica para ver o briefing completo':'Sem briefing — faz Sync Jira para gerar'}">${p.briefing?truncate(p.briefing,60):'📋 sem briefing'}</td>
       ${jiraCell}
       ${adminEstCol}
-      ${admin ? `<td class="center"><button class="btn-delete-proj" onclick="deleteProject('${p.id}')" title="Remover projeto do roadmap">🗑</button></td>` : ''}
+      ${admin ? `<td class="center" style="white-space:nowrap"><button class="btn-briefing-inline" onclick="event.stopPropagation();openClaudeForSingleBriefing('${p.id}')" title="Gerar/atualizar briefing via Claude">📋</button><button class="btn-delete-proj" onclick="deleteProject('${p.id}')" title="Remover projeto do roadmap">🗑</button></td>` : ''}
     </tr>`;
   }).join('');
   if(!scheduled.length){document.getElementById('detailsFoot').innerHTML='';return}
-  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="${admin?5:3}"></td></tr>`;
+  document.getElementById('detailsFoot').innerHTML=`<tr><td colspan="2" style="border-radius:7px 0 0 7px">TOTAL</td><td class="center mono" style="color:var(--green)">${totalHours}h</td><td class="center"><div class="mini-progress"><div class="mini-progress-bar" style="width:50px"><div class="mini-progress-fill" style="width:${avgProgress}%;background:var(--green)"></div></div><span class="mini-progress-text" style="color:var(--green)">${avgProgress}%</span></div></td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[0].startDate)}</td><td class="center" style="color:var(--green);font-size:11px">${fmtDate(scheduled[scheduled.length-1].endDate)}</td><td class="center" style="color:var(--cyan);font-weight:700">${numSprints} Spr</td><td class="center" style="color:var(--orange);font-weight:700">${Math.round(totalWeeksCalc)}w</td><td class="center">—</td><td style="border-radius:0 7px 7px 0" colspan="${admin?5:4}"></td></tr>`;
 }
 
 // ═══ ADMIN INLINE FIELD EDITING ═══
@@ -2195,6 +2239,57 @@ async function githubSaveWithNote() {
 }
 
 
+
+// ════════════════════ BRIEFINGS ════════════════════
+let _currentBriefingId = null;
+
+function openBriefingModal(id) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj) return;
+  _currentBriefingId = id;
+  document.getElementById('briefingModalTitle').textContent = proj.name;
+  document.getElementById('briefingModalId').textContent = proj.id + (proj.jiraUrl ? ' · ' + proj.jiraUrl : '');
+  document.getElementById('briefingModalBody').textContent = proj.briefing || 'Sem briefing gerado ainda.\n\nClica em "Atualizar briefing via Claude" para gerar.';
+  const meta = proj.briefingGeneratedAt ? 'Gerado em ' + new Date(proj.briefingGeneratedAt).toLocaleString('pt-PT') : '';
+  document.getElementById('briefingModalMeta').textContent = meta;
+  document.getElementById('briefingModal').classList.add('show');
+}
+
+function closeBriefingModal() {
+  document.getElementById('briefingModal').classList.remove('show');
+  _currentBriefingId = null;
+}
+
+function openClaudeForSingleBriefingFromModal() {
+  if (_currentBriefingId) openClaudeForSingleBriefing(_currentBriefingId);
+  closeBriefingModal();
+}
+
+function openClaudeForSingleBriefing(id) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj) return;
+  const cfg = ghConfig();
+  const ghRepo = `https://github.com/${cfg.username || 'claudiogualdino'}/${cfg.repo || 'dhcm-roadmap'}`;
+
+  const msg = `Gera um briefing para o epic ${proj.id} do roadmap DHCM.
+
+Epic: ${proj.id} — ${proj.name}
+Jira URL: ${proj.jiraUrl || '(sem URL)'}
+Repositório GitHub: ${ghRepo}
+
+Passos:
+1. Usa o MCP Atlassian para ler o epic ${proj.id}: obtém o Summary, Description e Acceptance Criteria
+2. Com base nessa informação, escreve um briefing em Inglês com:
+   - Objetivo do epic (1-2 frases)
+   - Output/entregável esperado (1-2 frases)
+   - Contexto relevante (1-2 frases, se aplicável)
+3. Lê o roadmap-state.json do GitHub
+4. No array projects, encontra o projeto com id "${proj.id}" e adiciona/atualiza o campo "briefing" com o texto gerado e "briefingGeneratedAt" com a data de hoje em ISO format
+5. Guarda o roadmap-state.json atualizado no GitHub`;
+
+  window.open(`https://claude.ai/new?q=${encodeURIComponent(msg)}`, '_blank');
+}
+
 // ════════════════════ JIRA STATUS ════════════════════
 
 function jiraStatusClass(statusName) {
@@ -2282,11 +2377,16 @@ ${jiraList}
 ${noJiraList ? `Epics sem URL Jira (ignorar): ${noJiraList}` : ''}
 
 Passos:
-1. Para cada epic acima, usa o MCP Atlassian para obter o estado actual (campo status.name)
-2. Constrói um objeto jiraStatuses: { "DH84": "In Progress", "DH101": "To Do", ... }
-3. Lê o roadmap-state.json actual do GitHub
-4. Adiciona/atualiza o campo jiraStatuses e jiraStatusesSyncedAt com a data de hoje
-5. Guarda o ficheiro atualizado no GitHub`;
+1. Para cada epic acima, usa o MCP Atlassian para obter:
+   - O estado actual (campo status.name) → para jiraStatuses
+   - Summary + Description + Acceptance Criteria → para gerar o briefing (apenas se o epic ainda não tiver briefing no roadmap-state.json)
+2. Para os epics sem briefing, gera um briefing em Inglês com: objetivo (1-2 frases), output/entregável esperado (1-2 frases), contexto relevante (1-2 frases se aplicável)
+3. Constrói um objeto jiraStatuses: { "DH84": "In Progress", "DH101": "To Do", ... }
+4. Lê o roadmap-state.json actual do GitHub
+5. No campo jiraStatuses, atualiza os estados de todos os epics
+6. No array projects, para cada epic sem briefing, adiciona o campo "briefing" e "briefingGeneratedAt" (ISO date)
+7. Atualiza também o campo jiraStatusesSyncedAt com a data de hoje
+8. Guarda o ficheiro atualizado no GitHub`;
 
   window.open(`https://claude.ai/new?q=${encodeURIComponent(msg)}`, '_blank');
   closeJiraSyncModal();
@@ -2370,52 +2470,6 @@ async function githubSaveActual() {
   setGhStatus('saving', '↑ A guardar…');
   document.getElementById('btnGhSave').classList.add('loading');
 
-  // Build jiraStatuses from cache to persist alongside roadmap data
-  const jiraStatusesSnapshot = {};
-  let jiraStatusesSyncedAt = '';
-  Object.entries(jiraStatusCache).forEach(([id, entry]) => {
-    if (!entry.loading && entry.status) {
-      jiraStatusesSnapshot[id] = entry.status;
-      if (entry.fetchedAt) jiraStatusesSyncedAt = entry.fetchedAt;
-    }
-  });
-
-  // --- fetch current remote file first (need SHA anyway) ---
-  let sha = undefined;
-  let remoteJiraStatuses = null;
-  let remoteJiraSyncedAt = '';
-  try {
-    const checkRes = await fetch(
-      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
-      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
-    );
-    if (checkRes.ok) {
-      const d = await checkRes.json();
-      sha = d.sha;
-      // Decode remote content to read its jiraStatuses
-      try {
-        const remoteRaw = decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))));
-        const remoteState = JSON.parse(remoteRaw);
-        if (remoteState.jiraStatuses && typeof remoteState.jiraStatuses === 'object') {
-          remoteJiraStatuses = remoteState.jiraStatuses;
-          remoteJiraSyncedAt = remoteState.jiraStatusesSyncedAt || '';
-        }
-      } catch(e) { /* ignore decode errors */ }
-    }
-  } catch(e) { /* ignore — will create new file */ }
-
-  // Use whichever jiraStatuses is more recent: remote (Claude sync) or local cache
-  let finalJiraStatuses = jiraStatusesSnapshot;
-  let finalJiraSyncedAt = jiraStatusesSyncedAt;
-  if (remoteJiraStatuses && remoteJiraSyncedAt >= jiraStatusesSyncedAt) {
-    finalJiraStatuses = remoteJiraStatuses;
-    finalJiraSyncedAt = remoteJiraSyncedAt;
-    // Also update local cache to stay in sync
-    Object.entries(remoteJiraStatuses).forEach(([id, status]) => {
-      jiraStatusCache[id] = { loading: false, status, fetchedAt: remoteJiraSyncedAt };
-    });
-  }
-
   const state = {
     version: 3,
     savedAt: new Date().toISOString(),
@@ -2423,14 +2477,18 @@ async function githubSaveActual() {
     projects: JSON.parse(JSON.stringify(projects)),
     absences: JSON.parse(JSON.stringify(absences)),
     scenarios: JSON.parse(JSON.stringify(scenarios)),
-    ...(Object.keys(finalJiraStatuses).length ? {
-      jiraStatuses: finalJiraStatuses,
-      jiraStatusesSyncedAt: finalJiraSyncedAt,
-    } : {}),
   };
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
 
   try {
+    // Check if file exists to get SHA (needed for update)
+    const checkRes = await fetch(
+      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${GH_FILE}`,
+      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    let sha = undefined;
+    if (checkRes.ok) { const d = await checkRes.json(); sha = d.sha; }
+
     const body = {
       message: `roadmap: update ${new Date().toISOString().slice(0,16).replace('T',' ')}`,
       content,
@@ -2549,7 +2607,6 @@ async function autoLoadFromGitHub() {
       document.getElementById('ctrlWeeks').value = state.params.weeksSprint || 3;
       document.getElementById('ctrlStart').value = state.params.startDate   || '';
     }
-    loadJiraStatusesFromState(state);
     updateScenarioSlots();
     render();
     const savedDate = state.savedAt ? new Date(state.savedAt).toLocaleString('pt-PT') : '?';
