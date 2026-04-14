@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-14T08:15:40.139Z",
+  "savedAt": "2026-04-14T10:27:53.738Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -16,7 +16,9 @@
       "progress": 100,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1246"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1246",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH92",
@@ -26,7 +28,9 @@
       "progress": 100,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1675"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1675",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH61",
@@ -36,7 +40,9 @@
       "progress": 80,
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1045"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1045",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH95",
@@ -46,7 +52,9 @@
       "progress": 80,
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2105"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2105",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH96",
@@ -56,7 +64,9 @@
       "progress": 80,
       "deps": [],
       "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2107"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2107",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH72-01",
@@ -66,7 +76,9 @@
       "estimated": false,
       "progress": 80,
       "deps": [],
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1192"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1192",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH54",
@@ -76,7 +88,9 @@
       "progress": 70,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1008"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1008",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH45-03",
@@ -86,7 +100,9 @@
       "progress": 25,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1195"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1195",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH80",
@@ -96,7 +112,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1107"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1107",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "CREQ-132",
@@ -106,7 +124,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/CREQ-132"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/CREQ-132",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH72-02",
@@ -118,7 +138,9 @@
         "DH72-01"
       ],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1191"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1191",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH66",
@@ -128,7 +150,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1051"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1051",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH99",
@@ -138,7 +162,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2147"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2147",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH45-04",
@@ -148,7 +174,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1366"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1366",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH101",
@@ -158,7 +186,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2157"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2157",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH100",
@@ -168,7 +198,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2151"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2151",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH87",
@@ -178,7 +210,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1738"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1738",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH84-02",
@@ -190,7 +224,9 @@
         "DH84"
       ],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2134"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2134",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH102",
@@ -200,7 +236,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1860"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1860",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH59",
@@ -210,7 +248,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1042"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1042",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH93",
@@ -220,7 +260,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1981"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1981",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH60-02",
@@ -232,7 +274,9 @@
         "DH72-01"
       ],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1190"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1190",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH88",
@@ -242,7 +286,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1748"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1748",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     }
   ],
   "absences": [
@@ -280,31 +326,5 @@
   "scenarios": {
     "A": null,
     "B": null
-  },
-  "jiraStatuses": {
-    "DH84": "Closed",
-    "DH92": "Closed",
-    "DH61": "In Progress",
-    "DH95": "In Progress",
-    "DH96": "In Progress",
-    "DH72-01": "In Progress",
-    "DH54": "In Progress",
-    "DH45-03": "In Progress",
-    "DH80": "In Progress",
-    "CREQ-132": "Ready for Development",
-    "DH72-02": "Ready for Development",
-    "DH66": "Ready for Development",
-    "DH99": "Ready for Development",
-    "DH45-04": "Ready for Development",
-    "DH101": "In Technical Analysis",
-    "DH100": "In Technical Analysis",
-    "DH87": "In Technical Analysis",
-    "DH84-02": "Ready for Development",
-    "DH102": "In Technical Analysis",
-    "DH59": "In Technical Analysis",
-    "DH93": "In Technical Analysis",
-    "DH60-02": "In Technical Analysis",
-    "DH88": "In Technical Analysis"
-  },
-  "jiraStatusesSyncedAt": "2026-04-14"
+  }
 }
