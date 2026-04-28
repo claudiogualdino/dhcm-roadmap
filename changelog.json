@@ -1,15 +1,87 @@
 [
   {
-    "date": "2026-04-14",
-    "time": "11:27",
-    "type": "save",
-    "id": "",
-    "name": "Versão guardada",
-    "detail": ""
+    "date": "2026-04-28",
+    "time": "12:17",
+    "type": "edit",
+    "id": "DH61",
+    "name": "Pack - Points Reuse",
+    "detail": "Progresso: 80% → 95%"
   },
   {
-    "date": "2026-04-14",
-    "time": "11:27",
+    "date": "2026-04-28",
+    "time": "12:18",
+    "type": "edit",
+    "id": "DH95",
+    "name": "Alergias Alerta",
+    "detail": "Progresso: 80% → 95%"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:18",
+    "type": "edit",
+    "id": "DH96",
+    "name": "Conteúdos Pack Saúde",
+    "detail": "Progresso: 80% → 95%"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:18",
+    "type": "edit",
+    "id": "DH72-01",
+    "name": "VBHC - Gestão de Entidades",
+    "detail": "Progresso: 80% → 95%"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:18",
+    "type": "edit",
+    "id": "DH54",
+    "name": "Group Sessions",
+    "detail": "Progresso: 70% → 90%"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:19",
+    "type": "edit",
+    "id": "DH61",
+    "name": "Pack - Points Reuse",
+    "detail": "Notas atualizadas"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:19",
+    "type": "edit",
+    "id": "DH95",
+    "name": "Alergias Alerta",
+    "detail": "Notas atualizadas"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:19",
+    "type": "edit",
+    "id": "DH96",
+    "name": "Conteúdos Pack Saúde",
+    "detail": "Notas atualizadas"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:19",
+    "type": "edit",
+    "id": "DH72-01",
+    "name": "VBHC - Gestão de Entidades",
+    "detail": "Notas atualizadas"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:19",
+    "type": "edit",
+    "id": "DH54",
+    "name": "Group Sessions",
+    "detail": "Notas atualizadas"
+  },
+  {
+    "date": "2026-04-28",
+    "time": "12:20",
     "type": "save",
     "id": "",
     "name": "Versão guardada",
