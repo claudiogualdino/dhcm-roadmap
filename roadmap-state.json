@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-14T10:27:53.738Z",
+  "savedAt": "2026-04-28T11:20:53.002Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -37,9 +37,9 @@
       "name": "Pack - Points Reuse",
       "effort": 105,
       "estimated": false,
-      "progress": 80,
+      "progress": 95,
       "deps": [],
-      "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
+      "notes": "Aguarda Release para Produção- aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1045",
       "briefing": "**Objective:** Allow clients to redeem points from a previous health pack as a discount when purchasing a new one.\n**Expected Output:** Discount mechanism in the pack purchase flow that calculates and applies available points.\n**Context:** Depends on existing points tracking system; currently In Progress.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
@@ -49,9 +49,9 @@
       "name": "Alergias Alerta",
       "effort": 40,
       "estimated": false,
-      "progress": 80,
+      "progress": 95,
       "deps": [],
-      "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
+      "notes": "Aguarda Release para Produção- aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2105",
       "briefing": "**Objective:** Add a visible allergy alert indicator in Clinical Management to warn clinicians of patient allergies before or during a consultation.\n**Expected Output:** Allergy alert button/flag displayed on the patient record in Clinical Management.\n**Context:** Patient safety feature; currently In Progress.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
@@ -61,9 +61,9 @@
       "name": "Conteúdos Pack Saúde",
       "effort": 65,
       "estimated": false,
-      "progress": 80,
+      "progress": 95,
       "deps": [],
-      "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
+      "notes": "Aguarda Release para Produção- aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2107",
       "briefing": "**Objective:** Enrich health packs with educational health literacy content accessible to clients.\n**Expected Output:** Content management area within Health Pack Management for associating articles and health resources.\n**Context:** Builds on the existing Health Pack module; currently In Progress.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
@@ -72,9 +72,9 @@
       "id": "DH72-01",
       "name": "VBHC - Gestão de Entidades",
       "effort": 120,
-      "notes": "Aguarda Release para QA Global - aguarda terminar testes Sessões de Grupo",
+      "notes": "Aguarda Release para Produção- aguarda terminar testes Sessões de Grupo",
       "estimated": false,
-      "progress": 80,
+      "progress": 95,
       "deps": [],
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1192",
       "briefing": "**Objective:** Implement the first phase of Value-Based Healthcare (VBHC) by enabling management of clinical entities and outcome measures.\n**Expected Output:** Entity management screens and data structures supporting VBHC workflows.\n**Context:** First of two VBHC phases; currently In Progress.",
@@ -85,9 +85,9 @@
       "name": "Group Sessions",
       "effort": 132,
       "estimated": false,
-      "progress": 70,
+      "progress": 90,
       "deps": [],
-      "notes": "",
+      "notes": "Aguarda Release para Produção- aguarda terminar testes Sessões de Grupo",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1008",
       "briefing": "**Objective:** Introduce group consultation session capability, allowing multiple clients to attend a single clinical session.\n**Expected Output:** Group session scheduling, management, and participation flows across the platform.\n**Context:** New consultation type extending the existing appointment model; currently In Progress.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
@@ -326,31 +326,5 @@
   "scenarios": {
     "A": null,
     "B": null
-  },
-  "jiraStatuses": {
-    "DH84": "Closed",
-    "DH92": "Closed",
-    "DH61": "In Progress",
-    "DH95": "In Progress",
-    "DH96": "In Progress",
-    "DH72-01": "In Progress",
-    "DH54": "In Progress",
-    "DH45-03": "In Progress",
-    "DH80": "In Progress",
-    "CREQ-132": "Ready for Development",
-    "DH72-02": "Ready for Development",
-    "DH66": "Ready for Development",
-    "DH99": "Ready for Development",
-    "DH45-04": "Ready for Development",
-    "DH101": "In Technical Analysis",
-    "DH100": "In Technical Analysis",
-    "DH87": "In Technical Analysis",
-    "DH84-02": "Ready for Development",
-    "DH102": "In Technical Analysis",
-    "DH59": "In Technical Analysis",
-    "DH93": "In Technical Analysis",
-    "DH60-02": "In Technical Analysis",
-    "DH88": "In Technical Analysis"
-  },
-  "jiraStatusesSyncedAt": "2026-04-14T11:08:48.367669Z"
+  }
 }
