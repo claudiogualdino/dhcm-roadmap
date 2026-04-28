@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-04-28T11:20:53.002Z",
+  "savedAt": "2026-04-28T11:29:31.106Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -83,7 +83,7 @@
     {
       "id": "DH54",
       "name": "Group Sessions",
-      "effort": 132,
+      "effort": 200,
       "estimated": false,
       "progress": 90,
       "deps": [],
