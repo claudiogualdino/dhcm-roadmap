@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-07-01T10:21:40.239Z",
+  "savedAt": "2026-07-01T11:05:34.216Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -93,6 +93,72 @@
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
+      "id": "RELEASE_DHCM_042026_1",
+      "name": "Major Release - deploy",
+      "effort": 60,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/projects/DHCM/versions/16028/tab/release-report-all-issues"
+    },
+    {
+      "id": "DH72-02",
+      "name": "VBHC - Ecrãs especificos",
+      "effort": 240,
+      "estimated": false,
+      "progress": 0,
+      "deps": [
+        "DH72-01"
+      ],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1191",
+      "briefing": "**Objective:** Implement the second phase of VBHC with specific clinical screens for outcome capture and reporting.\n**Expected Output:** VBHC-specific screens for data entry and visualisation integrated into the clinical workflow.\n**Context:** Follows DH72-01; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
+    },
+    {
+      "id": "CREQ-132",
+      "name": "Configured Last Answer",
+      "effort": 16,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/CREQ-132",
+      "briefing": "**Objective:** Allow Clinical Management to be configured to show or hide previous questionnaire answers depending on the questionnaire type.\n**Expected Output:** A frontend configuration option per questionnaire controlling display of prior responses.\n**Context:** Addresses flexibility in questionnaire workflows; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
+    },
+    {
+      "id": "DH110",
+      "name": "Book appointment - improvement",
+      "effort": 32,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2407"
+    },
+    {
+      "id": "DH111",
+      "name": "Review phone number associated to login account",
+      "effort": 24,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2411"
+    },
+    {
+      "id": "DH105",
+      "name": "CM - Documents view all",
+      "effort": 32,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2340"
+    },
+    {
       "id": "DH45-03",
       "name": "Nif Optional QC",
       "effort": 8,
@@ -117,32 +183,6 @@
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
-      "id": "CREQ-132",
-      "name": "Configured Last Answer",
-      "effort": 6,
-      "estimated": false,
-      "progress": 0,
-      "deps": [],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/CREQ-132",
-      "briefing": "**Objective:** Allow Clinical Management to be configured to show or hide previous questionnaire answers depending on the questionnaire type.\n**Expected Output:** A frontend configuration option per questionnaire controlling display of prior responses.\n**Context:** Addresses flexibility in questionnaire workflows; Ready for Development.",
-      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
-    },
-    {
-      "id": "DH72-02",
-      "name": "VBHC - Ecrãs especificos",
-      "effort": 360,
-      "estimated": false,
-      "progress": 0,
-      "deps": [
-        "DH72-01"
-      ],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1191",
-      "briefing": "**Objective:** Implement the second phase of VBHC with specific clinical screens for outcome capture and reporting.\n**Expected Output:** VBHC-specific screens for data entry and visualisation integrated into the clinical workflow.\n**Context:** Follows DH72-01; Ready for Development.",
-      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
-    },
-    {
       "id": "DH66",
       "name": "Prescription App - Bluebee",
       "effort": 160,
@@ -164,6 +204,18 @@
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2147",
       "briefing": "**Objective:** Enable clients to reschedule or cancel appointments directly from the FHvc Client Portal without contacting the clinic.\n**Expected Output:** Reschedule and cancellation flows in the Client Portal with confirmation and notification handling.\n**Context:** Improves client self-service capabilities; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
+    },
+    {
+      "id": "DH59",
+      "name": "Billing process review",
+      "effort": 180,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1042",
+      "briefing": "**Objective:** Display appointment descriptions (voucher details, points, act descriptions) on client invoices for better billing transparency.\n**Expected Output:** Invoice documents updated to include appointment descriptions.\n**Context:** Currently In Technical Analysis.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
@@ -238,18 +290,6 @@
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1860",
       "briefing": "**Objective:** Show available calendar slots in Clinical Management to improve appointment scheduling visibility and reduce booking friction.\n**Expected Output:** Visual indicator or count of available slots per day/clinician in the calendar view.\n**Context:** Estimated 40h; currently In Technical Analysis.",
-      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
-    },
-    {
-      "id": "DH59",
-      "name": "Billing process review",
-      "effort": 180,
-      "estimated": true,
-      "progress": 0,
-      "deps": [],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1042",
-      "briefing": "**Objective:** Display appointment descriptions (voucher details, points, act descriptions) on client invoices for better billing transparency.\n**Expected Output:** Invoice documents updated to include appointment descriptions.\n**Context:** Currently In Technical Analysis.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
