@@ -1,103 +1,71 @@
 [
   {
-    "date": "2026-04-28",
-    "time": "12:17",
+    "date": "2026-07-01",
+    "time": "11:20",
+    "type": "edit",
+    "id": "DH59",
+    "name": "Billing review",
+    "detail": "Nome: \"Voucher/Pontos/Descritivo Atos\" → \"Billing review\""
+  },
+  {
+    "date": "2026-07-01",
+    "time": "11:20",
+    "type": "edit",
+    "id": "DH59",
+    "name": "Billing processreview",
+    "detail": "Nome: \"Billing review\" → \"Billing processreview\""
+  },
+  {
+    "date": "2026-07-01",
+    "time": "11:20",
+    "type": "edit",
+    "id": "DH59",
+    "name": "Billing process review",
+    "detail": "Nome: \"Billing processreview\" → \"Billing process review\""
+  },
+  {
+    "date": "2026-07-01",
+    "time": "11:21",
     "type": "edit",
     "id": "DH61",
     "name": "Pack - Points Reuse",
-    "detail": "Progresso: 80% → 95%"
+    "detail": "Progresso: 95% → 100%"
   },
   {
-    "date": "2026-04-28",
-    "time": "12:18",
+    "date": "2026-07-01",
+    "time": "11:21",
     "type": "edit",
     "id": "DH95",
     "name": "Alergias Alerta",
-    "detail": "Progresso: 80% → 95%"
+    "detail": "Progresso: 95% → 100%"
   },
   {
-    "date": "2026-04-28",
-    "time": "12:18",
+    "date": "2026-07-01",
+    "time": "11:21",
     "type": "edit",
     "id": "DH96",
     "name": "Conteúdos Pack Saúde",
-    "detail": "Progresso: 80% → 95%"
+    "detail": "Progresso: 95% → 100%"
   },
   {
-    "date": "2026-04-28",
-    "time": "12:18",
+    "date": "2026-07-01",
+    "time": "11:21",
     "type": "edit",
     "id": "DH72-01",
     "name": "VBHC - Gestão de Entidades",
-    "detail": "Progresso: 80% → 95%"
+    "detail": "Progresso: 95% → 100%"
   },
   {
-    "date": "2026-04-28",
-    "time": "12:18",
+    "date": "2026-07-01",
+    "time": "11:21",
     "type": "edit",
     "id": "DH54",
     "name": "Group Sessions",
-    "detail": "Progresso: 70% → 90%"
+    "detail": "Progresso: 90% → 100%"
   },
   {
-    "date": "2026-04-28",
-    "time": "12:19",
-    "type": "edit",
-    "id": "DH61",
-    "name": "Pack - Points Reuse",
-    "detail": "Notas atualizadas"
-  },
-  {
-    "date": "2026-04-28",
-    "time": "12:19",
-    "type": "edit",
-    "id": "DH95",
-    "name": "Alergias Alerta",
-    "detail": "Notas atualizadas"
-  },
-  {
-    "date": "2026-04-28",
-    "time": "12:19",
-    "type": "edit",
-    "id": "DH96",
-    "name": "Conteúdos Pack Saúde",
-    "detail": "Notas atualizadas"
-  },
-  {
-    "date": "2026-04-28",
-    "time": "12:19",
-    "type": "edit",
-    "id": "DH72-01",
-    "name": "VBHC - Gestão de Entidades",
-    "detail": "Notas atualizadas"
-  },
-  {
-    "date": "2026-04-28",
-    "time": "12:19",
-    "type": "edit",
-    "id": "DH54",
-    "name": "Group Sessions",
-    "detail": "Notas atualizadas"
-  },
-  {
-    "date": "2026-04-28",
-    "time": "12:20",
-    "type": "save",
-    "id": "",
-    "name": "Versão guardada",
-    "detail": ""
-  },
-  {
-    "date": "2026-04-28",
-    "time": "12:23",
-    "type": "edit",
-    "id": "DH54",
-    "name": "Group Sessions",
-    "detail": "Esforço: 132h → 200h"
-  },
-  {
-    "date": "2026-04-28",
-    "time": "12:29",
+    "date": "2026-07-01",
+    "time": "11:21",
     "type": "save",
     "id": "",
     "name": "Versão guardada",
