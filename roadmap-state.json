@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-07-01T11:05:34.216Z",
+  "savedAt": "2026-07-11T22:31:53.886Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -100,7 +100,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/projects/DHCM/versions/16028/tab/release-report-all-issues"
+      "jiraUrl": "https://future-healthcare.atlassian.net/projects/DHCM/versions/16028/tab/release-report-all-issues",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH72-02",
@@ -136,7 +138,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2407"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2407",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH111",
@@ -146,7 +150,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2411"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2411",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH105",
@@ -156,7 +162,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2340"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2340",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH45-03",
