@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-07-29T11:13:15.599Z",
+  "savedAt": "2026-07-29T11:28:46.645Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -153,6 +153,16 @@
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2340",
       "briefing": "",
       "briefingGeneratedAt": ""
+    },
+    {
+      "id": "DH72-03",
+      "name": "VBH F3 improvements",
+      "effort": 80,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2461"
     },
     {
       "id": "DH45-03",
