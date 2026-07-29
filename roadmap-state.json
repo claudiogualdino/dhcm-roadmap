@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-07-29T11:28:46.645Z",
+  "savedAt": "2026-07-29T11:33:42.157Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -121,8 +121,8 @@
     {
       "id": "CREQ-132",
       "name": "Configured Last Answer",
-      "effort": 16,
-      "estimated": true,
+      "effort": 20,
+      "estimated": false,
       "progress": 20,
       "deps": [],
       "notes": "",
@@ -134,7 +134,7 @@
       "id": "DH110",
       "name": "Book appointment - improvement",
       "effort": 32,
-      "estimated": true,
+      "estimated": false,
       "progress": 25,
       "deps": [],
       "notes": "",
@@ -145,8 +145,8 @@
     {
       "id": "DH105",
       "name": "CM - Documents view all",
-      "effort": 32,
-      "estimated": true,
+      "effort": 64,
+      "estimated": false,
       "progress": 0,
       "deps": [],
       "notes": "",
@@ -179,8 +179,8 @@
     {
       "id": "DH111",
       "name": "Review phone number associated to login account",
-      "effort": 24,
-      "estimated": true,
+      "effort": 32,
+      "estimated": false,
       "progress": 0,
       "deps": [],
       "notes": "",
@@ -222,6 +222,18 @@
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2147",
       "briefing": "**Objective:** Enable clients to reschedule or cancel appointments directly from the FHvc Client Portal without contacting the clinic.\n**Expected Output:** Reschedule and cancellation flows in the Client Portal with confirmation and notification handling.\n**Context:** Improves client self-service capabilities; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
+    },
+    {
+      "id": "DH102",
+      "name": "Calendar Slots Available CM",
+      "effort": 40,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1860",
+      "briefing": "**Objective:** Show available calendar slots in Clinical Management to improve appointment scheduling visibility and reduce booking friction.\n**Expected Output:** Visual indicator or count of available slots per day/clinician in the calendar view.\n**Context:** Estimated 40h; currently In Technical Analysis.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
@@ -296,18 +308,6 @@
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2134",
       "briefing": "**Objective:** Extend the Scribe feature to automatically capture vital signal values (blood pressure, heart rate, etc.) from consultations.\n**Expected Output:** Vital signs detected from speech/input auto-populated into the appropriate clinical note fields.\n**Context:** Builds on DH84 (Closed); Ready for Development.",
-      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
-    },
-    {
-      "id": "DH102",
-      "name": "Calendar Slots Available CM",
-      "effort": 40,
-      "estimated": true,
-      "progress": 0,
-      "deps": [],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1860",
-      "briefing": "**Objective:** Show available calendar slots in Clinical Management to improve appointment scheduling visibility and reduce booking friction.\n**Expected Output:** Visual indicator or count of available slots per day/clinician in the calendar view.\n**Context:** Estimated 40h; currently In Technical Analysis.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
