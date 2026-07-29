@@ -46,5 +46,29 @@
     "id": "",
     "name": "Versão guardada",
     "detail": ""
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:14",
+    "type": "add",
+    "id": "DH72-03",
+    "name": "VBH F3 improvements",
+    "detail": "Adicionado · 80h"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:14",
+    "type": "reorder",
+    "id": "DH72-03",
+    "name": "VBH F3 improvements",
+    "detail": "Prioridade reordenada"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:28",
+    "type": "save",
+    "id": "",
+    "name": "Versão guardada",
+    "detail": ""
   }
 ]
