@@ -70,5 +70,101 @@
     "id": "",
     "name": "Versão guardada",
     "detail": ""
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:30",
+    "type": "edit",
+    "id": "DH105",
+    "name": "CM - Documents view all",
+    "detail": "Esforço: 32h → 64h"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:30",
+    "type": "edit",
+    "id": "DH105",
+    "name": "CM - Documents view all",
+    "detail": "Estimado: true → false"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:30",
+    "type": "edit",
+    "id": "DH110",
+    "name": "Book appointment - improvement",
+    "detail": "Estimado: true → false"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:31",
+    "type": "edit",
+    "id": "CREQ-132",
+    "name": "Configured Last Answer",
+    "detail": "Esforço: 16h → 20h"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:31",
+    "type": "edit",
+    "id": "CREQ-132",
+    "name": "Configured Last Answer",
+    "detail": "Estimado: true → false"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:32",
+    "type": "edit",
+    "id": "DH111",
+    "name": "Review phone number associated to login account",
+    "detail": "Esforço: 24h → 32h"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:32",
+    "type": "edit",
+    "id": "DH111",
+    "name": "Review phone number associated to login account",
+    "detail": "Estimado: true → false"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:32",
+    "type": "reorder",
+    "id": "DH101",
+    "name": "Infermedica Integration",
+    "detail": "Prioridade reordenada"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:33",
+    "type": "reorder",
+    "id": "DH59",
+    "name": "Billing process review",
+    "detail": "Prioridade reordenada"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:33",
+    "type": "reorder",
+    "id": "DH45-04",
+    "name": "Me1st Pre Registration",
+    "detail": "Prioridade reordenada"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:33",
+    "type": "reorder",
+    "id": "DH102",
+    "name": "Calendar Slots Available CM",
+    "detail": "Prioridade reordenada"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:33",
+    "type": "save",
+    "id": "",
+    "name": "Versão guardada",
+    "detail": ""
   }
 ]
