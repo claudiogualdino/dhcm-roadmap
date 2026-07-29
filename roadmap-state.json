@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-07-11T22:31:53.886Z",
+  "savedAt": "2026-07-29T11:13:15.599Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -97,7 +97,7 @@
       "name": "Major Release - deploy",
       "effort": 60,
       "estimated": false,
-      "progress": 0,
+      "progress": 100,
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/projects/DHCM/versions/16028/tab/release-report-all-issues",
@@ -109,7 +109,7 @@
       "name": "VBHC - Ecrãs especificos",
       "effort": 240,
       "estimated": false,
-      "progress": 0,
+      "progress": 100,
       "deps": [
         "DH72-01"
       ],
@@ -123,7 +123,7 @@
       "name": "Configured Last Answer",
       "effort": 16,
       "estimated": true,
-      "progress": 0,
+      "progress": 20,
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/CREQ-132",
@@ -135,22 +135,10 @@
       "name": "Book appointment - improvement",
       "effort": 32,
       "estimated": true,
-      "progress": 0,
+      "progress": 25,
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2407",
-      "briefing": "",
-      "briefingGeneratedAt": ""
-    },
-    {
-      "id": "DH111",
-      "name": "Review phone number associated to login account",
-      "effort": 24,
-      "estimated": true,
-      "progress": 0,
-      "deps": [],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2411",
       "briefing": "",
       "briefingGeneratedAt": ""
     },
@@ -177,6 +165,18 @@
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1195",
       "briefing": "**Objective:** Make the NIF (tax ID) field optional in the questionnaire table to support clients without a Portuguese NIF.\n**Expected Output:** Updated tuw_questionnaire table with nullable NIF column and all dependent services updated accordingly.\n**Context:** Requires WSDL update and coordination with dependent services; estimated 8h.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
+    },
+    {
+      "id": "DH111",
+      "name": "Review phone number associated to login account",
+      "effort": 24,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2411",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH80",
