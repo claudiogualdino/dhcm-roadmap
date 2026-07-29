@@ -1,7 +1,47 @@
 [
   {
-    "date": "2026-07-11",
-    "time": "23:31",
+    "date": "2026-07-29",
+    "time": "11:52",
+    "type": "edit",
+    "id": "RELEASE_DHCM_042026_1",
+    "name": "Major Release - deploy",
+    "detail": "Progresso: 0% → 100%"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "11:52",
+    "type": "edit",
+    "id": "DH72-02",
+    "name": "VBHC - Ecrãs especificos",
+    "detail": "Progresso: 0% → 100%"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "11:52",
+    "type": "edit",
+    "id": "CREQ-132",
+    "name": "Configured Last Answer",
+    "detail": "Progresso: 0% → 20%"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "11:52",
+    "type": "edit",
+    "id": "DH110",
+    "name": "Book appointment - improvement",
+    "detail": "Progresso: 0% → 25%"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "11:53",
+    "type": "reorder",
+    "id": "DH111",
+    "name": "Review phone number associated to login account",
+    "detail": "Prioridade reordenada"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:13",
     "type": "save",
     "id": "",
     "name": "Versão guardada",
