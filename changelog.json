@@ -166,5 +166,53 @@
     "id": "",
     "name": "Versão guardada",
     "detail": ""
+  },
+  {
+    "date": "2026-07-29",
+    "time": "12:57",
+    "type": "reorder",
+    "id": "DH72-03",
+    "name": "VBH F3 improvements",
+    "detail": "Prioridade reordenada"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "14:33",
+    "type": "edit",
+    "id": "DH72-03",
+    "name": "VBH F3 improvements",
+    "detail": "Esforço: 80h → 100h"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "14:34",
+    "type": "edit",
+    "id": "DH110",
+    "name": "Book appointment - improvement",
+    "detail": "Esforço: 32h → 40h"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "14:34",
+    "type": "edit",
+    "id": "CREQ-132",
+    "name": "Configured Last Answer",
+    "detail": "Esforço: 20h → 40h"
+  },
+  {
+    "date": "2026-07-29",
+    "time": "14:34",
+    "type": "edit",
+    "id": "DH72-03",
+    "name": "VBH F3 improvements",
+    "detail": "Progresso: 0% → 60%"
+  },
+  {
+    "date": "2026-07-31",
+    "time": "11:52",
+    "type": "save",
+    "id": "",
+    "name": "Versão guardada",
+    "detail": ""
   }
 ]
