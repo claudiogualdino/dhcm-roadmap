@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-07-29T11:33:42.157Z",
+  "savedAt": "2026-07-31T10:52:42.220Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -121,7 +121,7 @@
     {
       "id": "CREQ-132",
       "name": "Configured Last Answer",
-      "effort": 20,
+      "effort": 40,
       "estimated": false,
       "progress": 20,
       "deps": [],
@@ -133,7 +133,7 @@
     {
       "id": "DH110",
       "name": "Book appointment - improvement",
-      "effort": 32,
+      "effort": 40,
       "estimated": false,
       "progress": 25,
       "deps": [],
@@ -141,6 +141,16 @@
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2407",
       "briefing": "",
       "briefingGeneratedAt": ""
+    },
+    {
+      "id": "DH72-03",
+      "name": "VBH F3 improvements",
+      "effort": 100,
+      "estimated": false,
+      "progress": 60,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2461"
     },
     {
       "id": "DH105",
@@ -153,16 +163,6 @@
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2340",
       "briefing": "",
       "briefingGeneratedAt": ""
-    },
-    {
-      "id": "DH72-03",
-      "name": "VBH F3 improvements",
-      "effort": 80,
-      "estimated": false,
-      "progress": 0,
-      "deps": [],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2461"
     },
     {
       "id": "DH45-03",
