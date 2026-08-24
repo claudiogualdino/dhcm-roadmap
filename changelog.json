@@ -1,215 +1,23 @@
 [
   {
-    "date": "2026-07-29",
-    "time": "11:52",
-    "type": "edit",
-    "id": "RELEASE_DHCM_042026_1",
-    "name": "Major Release - deploy",
-    "detail": "Progresso: 0% → 100%"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "11:52",
-    "type": "edit",
-    "id": "DH72-02",
-    "name": "VBHC - Ecrãs especificos",
-    "detail": "Progresso: 0% → 100%"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "11:52",
-    "type": "edit",
-    "id": "CREQ-132",
-    "name": "Configured Last Answer",
-    "detail": "Progresso: 0% → 20%"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "11:52",
-    "type": "edit",
-    "id": "DH110",
-    "name": "Book appointment - improvement",
-    "detail": "Progresso: 0% → 25%"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "11:53",
-    "type": "reorder",
-    "id": "DH111",
-    "name": "Review phone number associated to login account",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:13",
-    "type": "save",
-    "id": "",
-    "name": "Versão guardada",
-    "detail": ""
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:14",
-    "type": "add",
-    "id": "DH72-03",
-    "name": "VBH F3 improvements",
-    "detail": "Adicionado · 80h"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:14",
-    "type": "reorder",
-    "id": "DH72-03",
-    "name": "VBH F3 improvements",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:28",
-    "type": "save",
-    "id": "",
-    "name": "Versão guardada",
-    "detail": ""
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:30",
-    "type": "edit",
-    "id": "DH105",
-    "name": "CM - Documents view all",
-    "detail": "Esforço: 32h → 64h"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:30",
-    "type": "edit",
-    "id": "DH105",
-    "name": "CM - Documents view all",
-    "detail": "Estimado: true → false"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:30",
-    "type": "edit",
-    "id": "DH110",
-    "name": "Book appointment - improvement",
-    "detail": "Estimado: true → false"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:31",
-    "type": "edit",
-    "id": "CREQ-132",
-    "name": "Configured Last Answer",
-    "detail": "Esforço: 16h → 20h"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:31",
-    "type": "edit",
-    "id": "CREQ-132",
-    "name": "Configured Last Answer",
-    "detail": "Estimado: true → false"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:32",
-    "type": "edit",
-    "id": "DH111",
-    "name": "Review phone number associated to login account",
-    "detail": "Esforço: 24h → 32h"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:32",
-    "type": "edit",
-    "id": "DH111",
-    "name": "Review phone number associated to login account",
-    "detail": "Estimado: true → false"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:32",
-    "type": "reorder",
-    "id": "DH101",
-    "name": "Infermedica Integration",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:33",
-    "type": "reorder",
-    "id": "DH59",
-    "name": "Billing process review",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:33",
+    "date": "2026-08-24",
+    "time": "23:42",
     "type": "reorder",
     "id": "DH45-04",
     "name": "Me1st Pre Registration",
     "detail": "Prioridade reordenada"
   },
   {
-    "date": "2026-07-29",
-    "time": "12:33",
+    "date": "2026-08-24",
+    "time": "23:42",
     "type": "reorder",
-    "id": "DH102",
-    "name": "Calendar Slots Available CM",
+    "id": "DH45-04",
+    "name": "Me1st Pre Registration",
     "detail": "Prioridade reordenada"
   },
   {
-    "date": "2026-07-29",
-    "time": "12:33",
-    "type": "save",
-    "id": "",
-    "name": "Versão guardada",
-    "detail": ""
-  },
-  {
-    "date": "2026-07-29",
-    "time": "12:57",
-    "type": "reorder",
-    "id": "DH72-03",
-    "name": "VBH F3 improvements",
-    "detail": "Prioridade reordenada"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "14:33",
-    "type": "edit",
-    "id": "DH72-03",
-    "name": "VBH F3 improvements",
-    "detail": "Esforço: 80h → 100h"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "14:34",
-    "type": "edit",
-    "id": "DH110",
-    "name": "Book appointment - improvement",
-    "detail": "Esforço: 32h → 40h"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "14:34",
-    "type": "edit",
-    "id": "CREQ-132",
-    "name": "Configured Last Answer",
-    "detail": "Esforço: 20h → 40h"
-  },
-  {
-    "date": "2026-07-29",
-    "time": "14:34",
-    "type": "edit",
-    "id": "DH72-03",
-    "name": "VBH F3 improvements",
-    "detail": "Progresso: 0% → 60%"
-  },
-  {
-    "date": "2026-07-31",
-    "time": "11:52",
+    "date": "2026-08-24",
+    "time": "23:42",
     "type": "save",
     "id": "",
     "name": "Versão guardada",
