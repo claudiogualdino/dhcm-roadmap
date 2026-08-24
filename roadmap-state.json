@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-07-31T10:52:42.220Z",
+  "savedAt": "2026-08-24T22:42:51.922Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -150,7 +150,9 @@
       "progress": 60,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2461"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2461",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH105",
@@ -213,6 +215,18 @@
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
+      "id": "DH45-04",
+      "name": "Me1st Pre Registration",
+      "effort": 100,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1366",
+      "briefing": "**Objective:** Allow new users to pre-register for the me1st wellness app directly from the FH platform.\n**Expected Output:** Pre-registration flow from the FH platform that provisions a linked me1st account for the client.\n**Context:** Bridges FH and me1st platforms; Ready for Development.",
+      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
+    },
+    {
       "id": "DH99",
       "name": "Client Portal - Reschedule",
       "effort": 56,
@@ -246,18 +260,6 @@
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1042",
       "briefing": "**Objective:** Display appointment descriptions (voucher details, points, act descriptions) on client invoices for better billing transparency.\n**Expected Output:** Invoice documents updated to include appointment descriptions.\n**Context:** Currently In Technical Analysis.",
-      "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
-    },
-    {
-      "id": "DH45-04",
-      "name": "Me1st Pre Registration",
-      "effort": 100,
-      "estimated": false,
-      "progress": 0,
-      "deps": [],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1366",
-      "briefing": "**Objective:** Allow new users to pre-register for the me1st wellness app directly from the FH platform.\n**Expected Output:** Pre-registration flow from the FH platform that provisions a linked me1st account for the client.\n**Context:** Bridges FH and me1st platforms; Ready for Development.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
     },
     {
@@ -378,6 +380,18 @@
       "name": "PO",
       "from": "2026-04-22",
       "to": "2026-05-22",
+      "hoursPerDay": 6
+    },
+    {
+      "name": "JR",
+      "from": "2026-09-14",
+      "to": "2026-09-25",
+      "hoursPerDay": 6
+    },
+    {
+      "name": "PO",
+      "from": "2026-08-31",
+      "to": "2026-09-04",
       "hoursPerDay": 6
     }
   ],
