@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-08-24T22:42:51.922Z",
+  "savedAt": "2026-09-04T11:45:08.251Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -123,7 +123,7 @@
       "name": "Configured Last Answer",
       "effort": 40,
       "estimated": false,
-      "progress": 20,
+      "progress": 100,
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/CREQ-132",
@@ -135,7 +135,7 @@
       "name": "Book appointment - improvement",
       "effort": 40,
       "estimated": false,
-      "progress": 25,
+      "progress": 100,
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2407",
@@ -147,7 +147,7 @@
       "name": "VBH F3 improvements",
       "effort": 100,
       "estimated": false,
-      "progress": 60,
+      "progress": 100,
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2461",
@@ -159,12 +159,22 @@
       "name": "CM - Documents view all",
       "effort": 64,
       "estimated": false,
-      "progress": 0,
+      "progress": 100,
       "deps": [],
       "notes": "",
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2340",
       "briefing": "",
       "briefingGeneratedAt": ""
+    },
+    {
+      "id": "DH115",
+      "name": "Call (GoContact Integration)",
+      "effort": 110,
+      "estimated": false,
+      "progress": 100,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2471"
     },
     {
       "id": "DH45-03",
@@ -177,18 +187,6 @@
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1195",
       "briefing": "**Objective:** Make the NIF (tax ID) field optional in the questionnaire table to support clients without a Portuguese NIF.\n**Expected Output:** Updated tuw_questionnaire table with nullable NIF column and all dependent services updated accordingly.\n**Context:** Requires WSDL update and coordination with dependent services; estimated 8h.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
-    },
-    {
-      "id": "DH111",
-      "name": "Review phone number associated to login account",
-      "effort": 32,
-      "estimated": false,
-      "progress": 0,
-      "deps": [],
-      "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2411",
-      "briefing": "",
-      "briefingGeneratedAt": ""
     },
     {
       "id": "DH80",
@@ -225,6 +223,28 @@
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/GDP-1366",
       "briefing": "**Objective:** Allow new users to pre-register for the me1st wellness app directly from the FH platform.\n**Expected Output:** Pre-registration flow from the FH platform that provisions a linked me1st account for the client.\n**Context:** Bridges FH and me1st platforms; Ready for Development.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
+    },
+    {
+      "id": "DH116",
+      "name": "Digital MCDTs - Upload",
+      "effort": 160,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2495"
+    },
+    {
+      "id": "DH111",
+      "name": "Review phone number associated to login account",
+      "effort": 32,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": "",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2411",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH99",
