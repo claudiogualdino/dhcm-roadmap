@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "savedAt": "2026-09-04T11:45:08.251Z",
+  "savedAt": "2026-09-05T00:24:05.897Z",
   "params": {
     "devs": 1.5,
     "hoursPerDev": 90,
@@ -174,7 +174,21 @@
       "progress": 100,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2471"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2471",
+      "briefing": "",
+      "briefingGeneratedAt": ""
+    },
+    {
+      "id": "DH112",
+      "name": "MFA Clinical Management adaptations",
+      "effort": 56,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": "Estimativa oficial: soma de 2 stories com Original Estimate (20h+36h). Requirements/Tests não têm estimativa própria (normal, são companion items).",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2448",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH45-03",
@@ -232,7 +246,9 @@
       "progress": 0,
       "deps": [],
       "notes": "",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2495"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2495",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH111",
@@ -378,7 +394,9 @@
       "progress": 22,
       "deps": [],
       "notes": "Effort = 68.5h oficiais (6 stories com estimativa, 3 já fechadas) + ~48h estimados por Claude para 6 stories substantivas ainda sem estimativa (~8h cada).",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2371"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2371",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH79",
@@ -388,7 +406,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial (Origem da Marcação - Entidade); estimativa alto nível de Claude (~8h). Story com estimativa oficial (5h) está Cancelled, excluída do total.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2293"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2293",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH76",
@@ -398,7 +418,9 @@
       "progress": 0,
       "deps": [],
       "notes": "2 itens sem estimativa oficial (1 story + 1 requirements). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2243"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2243",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH75",
@@ -408,7 +430,9 @@
       "progress": 0,
       "deps": [],
       "notes": "Estimativa oficial: soma de 11 stories, todas com Original Estimate definido no Jira.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2287"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2287",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DHCM-1858",
@@ -418,7 +442,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1858"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1858",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DHCM-2013",
@@ -428,7 +454,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2013"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2013",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DHCM-2018",
@@ -438,7 +466,9 @@
       "progress": 0,
       "deps": [],
       "notes": "2 stories sem estimativa oficial. Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2018"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2018",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DHCM-2033",
@@ -448,7 +478,9 @@
       "progress": 0,
       "deps": [],
       "notes": "Estimativa oficial: soma de 2 stories, ambas com Original Estimate definido no Jira.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2033"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2033",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DHCM-2039",
@@ -458,7 +490,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2039"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2039",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH83",
@@ -468,7 +502,9 @@
       "progress": 0,
       "deps": [],
       "notes": "4 itens sem estimativa oficial (3 stories substantivas + requirements). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2222"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2222",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH103",
@@ -478,7 +514,9 @@
       "progress": 0,
       "deps": [],
       "notes": "5 itens sem estimativa oficial (3 stories substantivas + requirements + tests). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2312"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2312",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH104",
@@ -488,7 +526,9 @@
       "progress": 0,
       "deps": [],
       "notes": "7 itens sem estimativa oficial (4 stories substantivas + requirements/tests/docs). Estimativa alto nível de Claude para integrações nativas iOS/Android.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2323"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2323",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH106",
@@ -498,7 +538,9 @@
       "progress": 0,
       "deps": [],
       "notes": "6 itens sem estimativa oficial (4 stories substantivas + requirements/tests). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2344"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2344",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH25-06",
@@ -508,7 +550,9 @@
       "progress": 0,
       "deps": [],
       "notes": "9 itens sem estimativa oficial (7 stories substantivas + requirements/tests). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2361"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2361",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH108",
@@ -518,7 +562,9 @@
       "progress": 0,
       "deps": [],
       "notes": "5 itens sem estimativa oficial (4 stories substantivas + requirements). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2396"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2396",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH54-02",
@@ -528,7 +574,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2402"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2402",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH107",
@@ -538,7 +586,9 @@
       "progress": 0,
       "deps": [],
       "notes": "Epic ainda em Business Requirements, só tem item Requirements sem estimativa. Estimativa alto nível de Claude para assinatura digital qualificada (integração externa).",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2382"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2382",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH109",
@@ -548,17 +598,9 @@
       "progress": 0,
       "deps": [],
       "notes": "Epic sem stories criadas ainda (em Business Requirements). Estimativa alto nível de Claude para integração com tabela externa Infarmed.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2404"
-    },
-    {
-      "id": "DH112",
-      "name": "MFA Clinical Management adaptations",
-      "effort": 56,
-      "estimated": false,
-      "progress": 0,
-      "deps": [],
-      "notes": "Estimativa oficial: soma de 2 stories com Original Estimate (20h+36h). Requirements/Tests não têm estimativa própria (normal, são companion items).",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2448"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2404",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH86",
@@ -568,7 +610,9 @@
       "progress": 0,
       "deps": [],
       "notes": "Epic só tem item Requirements Definition, sem stories nem estimativa. Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1681"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1681",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH71-02",
@@ -578,7 +622,9 @@
       "progress": 0,
       "deps": [],
       "notes": "37h oficiais (1 story com estimativa) + ~72h estimados por Claude para 6 stories substantivas ainda sem estimativa (~12h cada).",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2092"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2092",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DHCM-2119",
@@ -588,7 +634,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2119"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2119",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH98",
@@ -598,7 +646,9 @@
       "progress": 0,
       "deps": [],
       "notes": "7 itens sem estimativa oficial (6 stories substantivas + requirements). Estimativa alto nível de Claude para integração com rede externa de prestadores.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2123"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2123",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH18-07",
@@ -608,7 +658,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial (no projeto FHNG). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2230"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2230",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH69",
@@ -618,7 +670,9 @@
       "progress": 0,
       "deps": [],
       "notes": "Epic sem stories criadas ainda (Backlog). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2232"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2232",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH82",
@@ -628,7 +682,9 @@
       "progress": 0,
       "deps": [],
       "notes": "19h oficiais (2 stories com estimativa) + ~8h estimados por Claude para 1 story substantiva ainda sem estimativa.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2245"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2245",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH43",
@@ -638,7 +694,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 item sem estimativa oficial (\"Reuniões\", pouco detalhado). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2269"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2269",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH38",
@@ -648,7 +706,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 item sem estimativa oficial (no projeto FHNG). Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2273"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2273",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DHCM-2295",
@@ -658,7 +718,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2295"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2295",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH113",
@@ -668,7 +730,9 @@
       "progress": 0,
       "deps": [],
       "notes": "5 itens sem estimativa oficial (4 stories substantivas + requirements). Estimativa alto nível de Claude para epic de compliance/regulação.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2454"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2454",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH114",
@@ -678,7 +742,9 @@
       "progress": 0,
       "deps": [],
       "notes": "5 itens sem estimativa oficial (4 stories substantivas + requirements). Estimativa alto nível de Claude para instrumentação cross-plataforma.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2463"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2463",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     },
     {
       "id": "DH78-02",
@@ -688,7 +754,9 @@
       "progress": 0,
       "deps": [],
       "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude. Epic está On Hold no Jira.",
-      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1608"
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1608",
+      "briefing": "",
+      "briefingGeneratedAt": ""
     }
   ],
   "absences": [
