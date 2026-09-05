@@ -369,6 +369,326 @@
       "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1748",
       "briefing": "**Objective:** Allow clients to manage health insurance cards in the FHvc Client Portal, including adding, deleting, and setting a preferred card.\n**Expected Output:** Card management section in the Client Portal with full CRUD capabilities for insurance cards.\n**Context:** Estimated 110h; currently In Technical Analysis.",
       "briefingGeneratedAt": "2026-04-14T11:08:48.367669Z"
+    },
+    {
+      "id": "DH25-07",
+      "name": "Health Packs improvements",
+      "effort": 117,
+      "estimated": true,
+      "progress": 22,
+      "deps": [],
+      "notes": "Effort = 68.5h oficiais (6 stories com estimativa, 3 já fechadas) + ~48h estimados por Claude para 6 stories substantivas ainda sem estimativa (~8h cada).",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2371"
+    },
+    {
+      "id": "DH79",
+      "name": "Caretaker appointment (entity) and email",
+      "effort": 8,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial (Origem da Marcação - Entidade); estimativa alto nível de Claude (~8h). Story com estimativa oficial (5h) está Cancelled, excluída do total.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2293"
+    },
+    {
+      "id": "DH76",
+      "name": "Health Assessments restrictions",
+      "effort": 16,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "2 itens sem estimativa oficial (1 story + 1 requirements). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2243"
+    },
+    {
+      "id": "DH75",
+      "name": "Physician Shifts",
+      "effort": 39,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": "Estimativa oficial: soma de 11 stories, todas com Original Estimate definido no Jira.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2287"
+    },
+    {
+      "id": "DHCM-1858",
+      "name": "FHvc Portals Downtime window",
+      "effort": 16,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1858"
+    },
+    {
+      "id": "DHCM-2013",
+      "name": "CM Client Audit & CM Entities Origin",
+      "effort": 24,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2013"
+    },
+    {
+      "id": "DHCM-2018",
+      "name": "Remove Policy from Device Tyto Pro & add policy search",
+      "effort": 16,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "2 stories sem estimativa oficial. Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2018"
+    },
+    {
+      "id": "DHCM-2033",
+      "name": "Caretaker Set Up - Entity concept & Update policy info",
+      "effort": 8,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": "Estimativa oficial: soma de 2 stories, ambas com Original Estimate definido no Jira.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2033"
+    },
+    {
+      "id": "DHCM-2039",
+      "name": "Activate/Inactive Client",
+      "effort": 16,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2039"
+    },
+    {
+      "id": "DH83",
+      "name": "Questionnaire Language Setup",
+      "effort": 60,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "4 itens sem estimativa oficial (3 stories substantivas + requirements). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2222"
+    },
+    {
+      "id": "DH103",
+      "name": "Prevent Duplicate Same-Day Bookings",
+      "effort": 48,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "5 itens sem estimativa oficial (3 stories substantivas + requirements + tests). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2312"
+    },
+    {
+      "id": "DH104",
+      "name": "Health Platform Integration – Apple HealthKit and Google Health Connect",
+      "effort": 120,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "7 itens sem estimativa oficial (4 stories substantivas + requirements/tests/docs). Estimativa alto nível de Claude para integrações nativas iOS/Android.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2323"
+    },
+    {
+      "id": "DH106",
+      "name": "Automate Video Consultation Attendance Declaration",
+      "effort": 80,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "6 itens sem estimativa oficial (4 stories substantivas + requirements/tests). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2344"
+    },
+    {
+      "id": "DH25-06",
+      "name": "Health Pack Offerings Configuration (Clinical Management Frontend)",
+      "effort": 140,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "9 itens sem estimativa oficial (7 stories substantivas + requirements/tests). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2361"
+    },
+    {
+      "id": "DH108",
+      "name": "FHvc Audio Player (Podcasts)",
+      "effort": 100,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "5 itens sem estimativa oficial (4 stories substantivas + requirements). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2396"
+    },
+    {
+      "id": "DH54-02",
+      "name": "Group sessions improvements",
+      "effort": 24,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2402"
+    },
+    {
+      "id": "DH107",
+      "name": "QES signature for clinical documents",
+      "effort": 80,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "Epic ainda em Business Requirements, só tem item Requirements sem estimativa. Estimativa alto nível de Claude para assinatura digital qualificada (integração externa).",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2382"
+    },
+    {
+      "id": "DH109",
+      "name": "Infarmed table integration",
+      "effort": 60,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "Epic sem stories criadas ainda (em Business Requirements). Estimativa alto nível de Claude para integração com tabela externa Infarmed.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2404"
+    },
+    {
+      "id": "DH112",
+      "name": "MFA Clinical Management adaptations",
+      "effort": 56,
+      "estimated": false,
+      "progress": 0,
+      "deps": [],
+      "notes": "Estimativa oficial: soma de 2 stories com Original Estimate (20h+36h). Requirements/Tests não têm estimativa própria (normal, são companion items).",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2448"
+    },
+    {
+      "id": "DH86",
+      "name": "FHvc Manage Campaigns to Appointments, Packs and Devices",
+      "effort": 60,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "Epic só tem item Requirements Definition, sem stories nem estimativa. Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1681"
+    },
+    {
+      "id": "DH71-02",
+      "name": "Prescription request improvements",
+      "effort": 109,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "37h oficiais (1 story com estimativa) + ~72h estimados por Claude para 6 stories substantivas ainda sem estimativa (~12h cada).",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2092"
+    },
+    {
+      "id": "DHCM-2119",
+      "name": "CM - Search Client by Beneficiary Number - Clients Page",
+      "effort": 24,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2119"
+    },
+    {
+      "id": "DH98",
+      "name": "FHvc Provider External Medical Network",
+      "effort": 140,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "7 itens sem estimativa oficial (6 stories substantivas + requirements). Estimativa alto nível de Claude para integração com rede externa de prestadores.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2123"
+    },
+    {
+      "id": "DH18-07",
+      "name": "RMO Disposables sales",
+      "effort": 40,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial (no projeto FHNG). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2230"
+    },
+    {
+      "id": "DH69",
+      "name": "Associate OMR device with Client - review",
+      "effort": 24,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "Epic sem stories criadas ainda (Backlog). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2232"
+    },
+    {
+      "id": "DH82",
+      "name": "Health Assessments Improvements III",
+      "effort": 27,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "19h oficiais (2 stories com estimativa) + ~8h estimados por Claude para 1 story substantiva ainda sem estimativa.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2245"
+    },
+    {
+      "id": "DH43",
+      "name": "FHvc Portal Clinical Contents",
+      "effort": 40,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 item sem estimativa oficial (\"Reuniões\", pouco detalhado). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2269"
+    },
+    {
+      "id": "DH38",
+      "name": "FHvc Digital Archive",
+      "effort": 60,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 item sem estimativa oficial (no projeto FHNG). Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2273"
+    },
+    {
+      "id": "DHCM-2295",
+      "name": "OMR Subscription - Gift",
+      "effort": 32,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2295"
+    },
+    {
+      "id": "DH113",
+      "name": "ICD-10 Adoption & Insurer ICD-9 Mapping",
+      "effort": 140,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "5 itens sem estimativa oficial (4 stories substantivas + requirements). Estimativa alto nível de Claude para epic de compliance/regulação.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2454"
+    },
+    {
+      "id": "DH114",
+      "name": "Platform-wide Access Logging & Audit",
+      "effort": 160,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "5 itens sem estimativa oficial (4 stories substantivas + requirements). Estimativa alto nível de Claude para instrumentação cross-plataforma.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-2463"
+    },
+    {
+      "id": "DH78-02",
+      "name": "Manage offers in FHvc Company (id 63)",
+      "effort": 24,
+      "estimated": true,
+      "progress": 0,
+      "deps": [],
+      "notes": "1 story sem estimativa oficial. Estimativa alto nível de Claude. Epic está On Hold no Jira.",
+      "jiraUrl": "https://future-healthcare.atlassian.net/browse/DHCM-1608"
     }
   ],
   "absences": [

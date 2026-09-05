@@ -134,5 +134,229 @@
     "id": "",
     "name": "Versão guardada",
     "detail": ""
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH25-07",
+    "projectName": "Health Packs improvements",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 117h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH79",
+    "projectName": "Caretaker appointment (entity) and email",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 8h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH76",
+    "projectName": "Health Assessments restrictions",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 16h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH75",
+    "projectName": "Physician Shifts",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort oficial (soma de Original Estimate no Jira): 39h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DHCM-1858",
+    "projectName": "FHvc Portals Downtime window",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 16h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DHCM-2013",
+    "projectName": "CM Client Audit & CM Entities Origin",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 24h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DHCM-2018",
+    "projectName": "Remove Policy from Device Tyto Pro & add policy search",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 16h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DHCM-2033",
+    "projectName": "Caretaker Set Up - Entity concept & Update policy info",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort oficial (soma de Original Estimate no Jira): 8h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DHCM-2039",
+    "projectName": "Activate/Inactive Client",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 16h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH83",
+    "projectName": "Questionnaire Language Setup",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 60h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH103",
+    "projectName": "Prevent Duplicate Same-Day Bookings",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 48h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH104",
+    "projectName": "Health Platform Integration – Apple HealthKit and Google Health Connect",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 120h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH106",
+    "projectName": "Automate Video Consultation Attendance Declaration",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 80h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH25-06",
+    "projectName": "Health Pack Offerings Configuration (Clinical Management Frontend)",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 140h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH108",
+    "projectName": "FHvc Audio Player (Podcasts)",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 100h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH54-02",
+    "projectName": "Group sessions improvements",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 24h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH107",
+    "projectName": "QES signature for clinical documents",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 80h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH109",
+    "projectName": "Infarmed table integration",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 60h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH112",
+    "projectName": "MFA Clinical Management adaptations",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort oficial (soma de Original Estimate no Jira): 56h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH86",
+    "projectName": "FHvc Manage Campaigns to Appointments, Packs and Devices",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 60h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH71-02",
+    "projectName": "Prescription request improvements",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 109h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DHCM-2119",
+    "projectName": "CM - Search Client by Beneficiary Number - Clients Page",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 24h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH98",
+    "projectName": "FHvc Provider External Medical Network",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 140h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH18-07",
+    "projectName": "RMO Disposables sales",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 40h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH69",
+    "projectName": "Associate OMR device with Client - review",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 24h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH82",
+    "projectName": "Health Assessments Improvements III",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 27h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH43",
+    "projectName": "FHvc Portal Clinical Contents",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 40h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH38",
+    "projectName": "FHvc Digital Archive",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 60h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DHCM-2295",
+    "projectName": "OMR Subscription - Gift",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 32h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH113",
+    "projectName": "ICD-10 Adoption & Insurer ICD-9 Mapping",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 140h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH114",
+    "projectName": "Platform-wide Access Logging & Audit",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 160h."
+  },
+  {
+    "action": "ADD",
+    "projectId": "DH78-02",
+    "projectName": "Manage offers in FHvc Company (id 63)",
+    "timestamp": "2026-09-05T00:13:39.920568Z",
+    "note": "Adicionado via Claude a partir de epics DHCM abertos em falta no roadmap. Effort estimado por Claude (alto nível): 24h."
   }
 ]
